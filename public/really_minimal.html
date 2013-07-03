@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Hubo-in-an-iFrame</title>
+  <meta charset='utf-8'>
+</head>
+
+<body>
+  <!-- 
+  This page is meant to be put in an <iframe>. Example usage: 
+  <iframe frameborder="0" height="535px" width="510px" src="http://hubo-js.wmhilton.c9.io/really_minimal.html"></iframe>
+  -->
+  <table border="1">
+    <tr>
+      <td>
+        <div id="hubo_container" style="width: 480px; height: 480px"> <button id="load">Load Hubo</button> </div>
+        <div style="text-align: center;">
+          LEFT button ROTATES. RIGHT button PANS. MIDDLE wheel ZOOMS.
+        </div>
+      </td>
+    </tr>
+  </table>
+  <!-- Used for rendering 3D Hubo -->
+  <script src="js/lib/three/Three.js"></script>
+  <script src="js/lib/three/Detector.js"></script>
+  <script src="js/lib/three/ColladaLoader2.js"></script>
+  <script src="js/lib/three/TrackballControls.js"></script>
+  <!-- Jquery makes life so much easier-->
+  <script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
+  <!-- Our code -->
+  <script src="js/dict.js"></script>
+  <script src="js/WebGLRobots.js"></script>
+  <script>
+    $('#load').click(function() {
+      $(this).html("Loading...");
+      // This code is meant to show the bare minimum needed to add a Hubo to a webpage.
+      // Create a THREE.WebGLRenderer() to host the robot. You can create your own, or use the provided code to generate default setup.
+      c = new WebGLRobots.DefaultCanvas('#hubo_container');
+      // Create a new robot instance.
+      hubo = new WebGLRobots.Robot();
+      // Load the robot using the URDF importer.
+      hubo.loadURDF("hubo-urdf/model.urdf", function callback() {
+        // Once the URDF is completely loaded, this function is run.
+        // Add your robot to the canvas.
+        c.add(hubo);
+        $('#load').hide();
+      });
+    });    
+  </script>
+</body>
+</html>
