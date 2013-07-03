@@ -5,8 +5,9 @@ var util = require('util');
 // Used by utils
 var fs = require('fs');
 
-var app = express();
+var port = process.env.PORT || 8125;
 
+var app = express();
 app.set('views', __dirname + '/views');
 app.set('view engine', 'jade');
 app.use(express.bodyParser());
@@ -15,5 +16,5 @@ app.use(app.router);
 app.use(express.static(path.join(__dirname, 'public')));
 
 var server = http.createServer(app);
-server.listen(8125);
-console.log('Server running at http://localhost:8125/');
+server.listen(port);
+console.log('Server running at http://localhost:' + port + '/');
