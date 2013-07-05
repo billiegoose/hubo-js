@@ -151,7 +151,77 @@ WebGLRobots.Robot = function() {
             links = $(xml).find('robot link');
             // Save the number of links there are total
             _robot.links.expectedCount = $(links).length;
-            // Load each link into memory on the .links object
+            // Due to the asynchronous nature of AJAX file requests, we have to break up 
+            // our code into a bunch of callbacks.
+            var createLink = function(name, node) {
+                node.name = name;
+                _robot.links[name] = node;                
+                console.log("ADD: %s %i", name, _robot.links.count);
+                // When we have loaded all the links...
+                if (_robot.links.count === _robot.links.expectedCount) { 
+                    createJoints();
+                }
+            }
+            // Once ALL the links are loaded, load joints.
+            var createJoints = function() {
+                $(xml).find("robot > joint").each( function() {
+                    // Extract joint information from XML.
+                    console.log("--");
+                    var name = $(this).attr("name");
+                    console.log("joint: " + name);
+                    var child = $(this).find("child").attr("link");
+                    console.log("child: " + child);
+                    var parent = $(this).find("parent").attr("link");
+                    console.log("parent: " + parent);
+                    var coords = $(this).find("origin").attr("xyz");
+                    console.log("coords: " + coords);
+                    var rpy = $(this).find("origin").attr("rpy"); // roll, pitch, yaw
+                    console.log("rpy: " + rpy); 
+                    var axis = $(this).find("axis").attr("xyz");
+                    console.log("axis: " + axis);
+                    var limits = $(this).find("limit");
+                    var lower = $(limits).attr("lower");
+                    var upper = $(limits).attr("upper");
+                    console.log("limits: " + lower + " to " + upper);
+
+                    // Save values to Joint object.
+                    var joint = new _robot.Joint();
+                    joint.name = name;
+                    joint.child = _robot.links[child];
+                    joint.parent = _robot.links[parent];
+                    // TODO: Figure out how to export these Vector3Ds in JSON, hmm.
+                    joint.coords = WebGLRobots.str2vec(coords);
+                    joint.rpy = WebGLRobots.str2vec(rpy);
+                    joint.axis =  WebGLRobots.str2vec(axis);
+                    joint.lower_limit = parseFloat(lower);
+                    joint.upper_limit = parseFloat(upper);
+                    _robot.joints[name] = joint;
+                    // Do stuff
+                    // Because the child link is offset and rotated from the parent link, but the axis of rotation
+                    // for the child link is specified in the child CS, we need to apply a coordinate system transform between
+                    // the child and the parent without disturbing the values of the child's rotation.
+                    // The only way I can think of to do this at the moment of writing is to insert another Object3D in between
+                    // the parent and child and apply the offset to the Object3D.
+                    var obj = new THREE.Object3D();
+                    obj.position = joint.coords;
+                    // This nonsensical conversion is because ObjectExporter.js only saves the .position, .rotation., and .scale
+                    // properties of an object. .eulerOrder, .quaternion, etc are all not preserved. Thus we must convert from
+                    // roll, pitch, yaw 'ZYX' Euler angles to quaternion and then convert from quaternion to 'XYZ' Euler angles
+                    var q = new THREE.Quaternion().setFromEuler(joint.rpy,"ZYX");
+                    obj.rotation.setEulerFromQuaternion(q);
+                    joint.parent.add(obj);
+                    obj.add(joint.child);
+                });
+                // Determine which links have no parent, and thus are the root nodes to add to the scene.
+                _robot.roots = [];
+                _robot.links.asArray().forEach(function(link) {
+                    if (typeof link.parent === 'undefined') {
+                        _robot.roots.push(link);
+                    }
+                });
+                callback();
+            }
+            // Load each link's mesh file
             $(links).each( function() {
                 // We are being passed in a URDF <link> element.
                 var name = $(this).attr("name");
@@ -159,80 +229,22 @@ WebGLRobots.Robot = function() {
                 // TODO: Resolve whether to use the collision or visual geometry by default.
                 // Right now I'm using the collision because it is smaller and looks nicer than the visual geometry for Hubo.
                 var filename = $(this).find("collision geometry mesh").attr("filename");
-                filename = path + filename;
-                console.log(filename);
-                // Load mesh
-                var loader = new ColladaLoader2();
-                loader.setLog(onLoaderLogMessage);
-                loader.load(filename, 
-                    function(collada) {
-                        var node = collada.scene;
-                        //node.eulerOrder = "ZYX"; // Roll, Pitch, Yaw
-                        node.name = name;
-                        _robot.links[name] = node;                
-                        console.log("ADD: %s %i", name, _robot.links.count);
-                        // When we have loaded all the links...
-                        if (_robot.links.count === _robot.links.expectedCount) {                            
-                            $(xml).find("robot > joint").each( function() {
-                                // Extract joint information from XML.
-                                console.log("--");
-                                var name = $(this).attr("name");
-                                console.log("joint: " + name);
-                                var child = $(this).find("child").attr("link");
-                                console.log("child: " + child);
-                                var parent = $(this).find("parent").attr("link");
-                                console.log("parent: " + parent);
-                                var coords = $(this).find("origin").attr("xyz");
-                                console.log("coords: " + coords);
-                                var rpy = $(this).find("origin").attr("rpy"); // roll, pitch, yaw
-                                console.log("rpy: " + rpy); 
-                                var axis = $(this).find("axis").attr("xyz");
-                                console.log("axis: " + axis);
-                                var limits = $(this).find("limit");
-                                var lower = $(limits).attr("lower");
-                                var upper = $(limits).attr("upper");
-                                console.log("limits: " + lower + " to " + upper);
-
-                                // Save values to Joint object.
-                                var joint = new _robot.Joint();
-                                joint.name = name;
-                                joint.child = _robot.links[child];
-                                joint.parent = _robot.links[parent];
-                                // TODO: Figure out how to export these Vector3Ds in JSON, hmm.
-                                joint.coords = WebGLRobots.str2vec(coords);
-                                joint.rpy = WebGLRobots.str2vec(rpy);
-                                joint.axis =  WebGLRobots.str2vec(axis);
-                                joint.lower_limit = parseFloat(lower);
-                                joint.upper_limit = parseFloat(upper);
-                                _robot.joints[name] = joint;
-                                // Do stuff
-                                // Because the child link is offset and rotated from the parent link, but the axis of rotation
-                                // for the child link is specified in the child CS, we need to apply a coordinate system transform between
-                                // the child and the parent without disturbing the values of the child's rotation.
-                                // The only way I can think of to do this at the moment of writing is to insert another Object3D in between
-                                // the parent and child and apply the offset to the Object3D.
-                                var obj = new THREE.Object3D();
-                                obj.position = joint.coords;
-                                // This nonsensical conversion is because ObjectExporter.js only saves the .position, .rotation., and .scale
-                                // properties of an object. .eulerOrder, .quaternion, etc are all not preserved. Thus we must convert from
-                                // roll, pitch, yaw 'ZYX' Euler angles to quaternion and then convert from quaternion to 'XYZ' Euler angles
-                                var q = new THREE.Quaternion().setFromEuler(joint.rpy,"ZYX");
-                                obj.rotation.setEulerFromQuaternion(q);
-                                joint.parent.add(obj);
-                                obj.add(joint.child);
-                            });
-                            // Determine which links have no parent, and thus are the root nodes to add to the scene.
-                            _robot.roots = [];
-                            _robot.links.asArray().forEach(function(link) {
-                                if (typeof link.parent === 'undefined') {
-                                    _robot.roots.push(link);
-                                }
-                            });
-                            callback();
-                        }
-                    }, 
-                    onProgress);
-            })
+                if (typeof filename === 'undefined') {
+                    createLink(name, new THREE.Object3D());
+                } else {
+                    filename = path + filename;
+                    console.log(filename);
+                    // Load mesh
+                    var loader = new ColladaLoader2();
+                    loader.setLog(onLoaderLogMessage);
+                    loader.load(filename, 
+                        function(collada) {
+                            var node = collada.scene;
+                            createLink(name, node);
+                        }, 
+                        onProgress);
+                }
+            });
         })
         .fail(function() { alert("error"); })
     };

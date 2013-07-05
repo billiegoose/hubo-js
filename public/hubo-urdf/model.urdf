@@ -24,8 +24,16 @@
       </geometry>
     </collision>
   </link>
-<!-- <link name="Body_HNR">
-</link> -->
+  <!-- Robots should have necks, dammit! -->
+  <link name="Body_HNY">
+    <collision>
+        <geometry>
+        <mesh filename="./meshes/Body_HNY_col.dae"/>
+      </geometry>
+    </collision>
+  </link>
+  <link name="Body_HNR">
+  </link> 
   <link name="Body_HNP">
     <inertial>
       <mass value="0.374251"/>
@@ -1146,16 +1154,23 @@
       </geometry>
     </collision>
   </link>
-<!--  <joint name="HNR" type="revolute">
-    <origin rpy="0 -0 0" xyz="0.0122581 0.0024526 0.196935"/>
+  <joint name="HNY" type="revolute">
+    <origin rpy="0 -0 0" xyz="0.0137246 0.0 0.1092625"/>
     <parent link="Body_Torso"/>
+    <child link="Body_HNY"/>
+    <axis xyz="0 0 1"/>
+    <limit effort="10.0" lower="-1.5" upper="1.5" velocity="1.0"/>
+  </joint>
+  <joint name="HNR" type="revolute">
+    <origin rpy="0 -0 0" xyz="-0.0014665 0.0024526 0.0876725"/>
+    <parent link="Body_HNY"/>
     <child link="Body_HNR"/>
     <axis xyz="1 0 0"/>
     <limit effort="10.0" lower="-0.523599" upper="0.523599" velocity="1.0"/>
-  </joint> -->
+  </joint>
   <joint name="HNP" type="revolute">
-    <origin rpy="0 -0 0" xyz="0.0122581 0.0024526 0.196935"/>
-    <parent link="Body_Torso"/>
+    <origin rpy="0 -0 0" xyz="0 0 0"/>
+    <parent link="Body_HNR"/>
     <child link="Body_HNP"/>
     <axis xyz="0 1 0"/>
     <limit effort="10.0" lower="-0.523599" upper="0.523599" velocity="1.0"/>
