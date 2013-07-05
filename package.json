@@ -1,18 +1,18 @@
-{ "private" :       true
-, "name" :          "hubo-js"
-, "version" :       "0.0.0"
-, "description" :   ""
-, "main" :          "server.js"
-, "author" :        "William Hilton <wmhilton@gmail.com> (http://github.com/wmhilton)"
-, "license" :       "MIT"
-, "homepage" :      "http://github.com/wmhilton/hubo-js"
-, "repository" : 
-    { "type" :      "git"
-    , "url" :       "http://github.com/isaacs/npm.git"
+{ "private"		: true
+, "name"		: "hubo-js"
+, "version"		: "0.0.0"
+, "description" : ""
+, "main" 		: "server.js"
+, "author" 		: "William Hilton <wmhilton@gmail.com> (http://github.com/wmhilton)"
+, "license" 	: "MIT"
+, "homepage" 	: "http://github.com/wmhilton/hubo-js"
+, "repository"	: 
+    { "type" 	: "git"
+    , "url" 	: "http://github.com/isaacs/npm.git"
     }
-, "dependencies" : 
-    { "express" :   "3.x"
-    , "jade" :      "~0.30"
+, "dependencies": 
+    { "express" 			: "3.x"
+    , "connect-jade-html" 	: "0.0.1"
     }
-, "files" :         ["public","views"]
+, "files" 		: ["public","views"]
 }
