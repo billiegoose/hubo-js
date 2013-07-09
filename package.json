@@ -13,6 +13,7 @@
 , "dependencies": 
     { "express" 			: "3.x"
     , "connect-jade-html" 	: "0.0.1"
+    , "stylus"				: "0.33.1"
     }
 , "files" 		: ["public","views"]
 }
