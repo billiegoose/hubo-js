@@ -1,0 +1,16 @@
+extends templates/regular-layout
+
+block prepend head
+  title Trajectory Playback
+
+block body
+  p This page, "trajectory_playback.html", aims to demonstrate how to load and play back recorded angles over time. E.g. mocap data.
+  table(border='1')
+    tr
+      td
+        #hubo_container  
+        div(style='text-align: center;') LEFT button ROTATES. RIGHT button PANS. MIDDLE wheel ZOOMS.
+
+block append scripts
+  include includes/hubo
+  script(src='js/trajectory_playback.js')
