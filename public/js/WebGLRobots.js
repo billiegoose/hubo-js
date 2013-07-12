@@ -94,6 +94,7 @@ WebGLRobots.DefaultCanvas = function(container) {
             scene.add(obj);
         });
         robot.canvas = this;
+        robot.autorender = true;
         render();
     }
 
@@ -134,7 +135,9 @@ WebGLRobots.Robot = function() {
                     if (!(typeof _robot.canvas === 'undefined')) {
                         var q = new THREE.Quaternion().setFromAxisAngle(this.axis, this._value);
                         this.child.rotation.setEulerFromQuaternion(q);
-                        _robot.canvas.render();
+                        if (_robot.autorender) {
+                            _robot.canvas.render();
+                        }
                     }
                 }
             }
