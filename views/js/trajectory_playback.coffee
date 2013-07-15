@@ -1,3 +1,22 @@
+#
+# GLOBALS
+#
+window.playback = {}
+playback.possible_states = 
+    [ 'NOT_LOADED'
+    , 'LOADING'
+    , 'LOADED'
+    , 'PLAYING'
+    , 'REQUEST_STOP'
+    , 'STOPPED'
+    , 'DONE_PLAYING'
+    ]
+playback.state = 'NOT_LOADED'
+playback.filename = null
+
+#
+# FUNCTIONS
+#
 loadTrajectory = (filename, callback) ->
     # Now load the trajectory file
     console.log 'loadTrajectory'
@@ -30,12 +49,46 @@ loadRobot = () ->
       # Once the URDF is completely loaded, this function is run.
       # Add your robot to the canvas.
       c.add hubo
-      hubo.autorender = false;
+      hubo.autorender = false
 
-loadTrajectory "trajectories/Taichi.traj", (headers,data) -> 
-    console.log(data.length)
-    window.data = data
-    window.headers = headers
+togglePlay = () ->
+    if playback.state == 'DONE_PLAYING' then playback.frame = 0
+    switch playback.state    
+        when 'LOADED', 'STOPPED', 'DONE_PLAYING'
+            playback.state = 'PLAYING'
+            playback.startedTime = window.performance.now() - playback.frame/playback.framerate*1000 # ms
+            requestAnimationFrame( animate )
+            window.numframes = 0
+        when 'PLAYING'
+            playback.state = 'REQUEST_STOP'
     return
+
+animate = (timestamp) ->
+    if playback.state == 'REQUEST_STOP'
+        playback.state = 'STOPPED'
+        return
+    # timestamp is a floating point milleseconds in recent Chrome / Firefox
+    # Calculate time delta and animation frame to use
+    delta = timestamp - playback.startedTime
+    playback.frame = Math.round(delta*playback.framerate/1000)
+    if playback.frame > playback.data.length
+        playback.state = 'DONE_PLAYING'
+        return
+    # Update all joints
+    for prop of playback.working_headers
+        i = playback.working_headers[prop]
+        hubo.joints[prop].value = playback.data[playback.frame][i]
+    # I'm curious how long that process takes actually.
+    delta_post = window.performance.now() - playback.startedTime
+    process_time = delta_post - delta
+    window.numframes++
+    # console.log "Frame: " + playback.frame + ' i: ' + numframes
+    c.render()
+    requestAnimationFrame( animate )
+    return
+
+#
+# MAIN
+#
 
 loadRobot()
