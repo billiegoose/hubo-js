@@ -21,11 +21,14 @@ nk2 = [0;0;0];
 neck1 = zeros(3,1,1);
 neck2 = zeros(3,1,1);
 
-for rd = -90:1:90
+pitch_range = -90:1:90;
+roll_range = -90:1:90;
+
+for rd = roll_range %-90:1:90
     ridx = rd + 91;
     r = rd*pi/180;
     RT = makehgtform('xrotate',r);
-for pd = -90:1:90
+for pd = pitch_range %-90:1:90
     pidx = pd + 91;
     reset_neck_coordinates
     i = i + 1;
@@ -33,7 +36,7 @@ for pd = -90:1:90
     PT = makehgtform('yrotate',p);
     T = PT*RT;
     T2 = RT*PT;
-    assert('T==T2')
+    % assert(T==T2) Well, shucks.
     T = T(1:3, 1:3);
     nk1(:,i) = T*neck1tip_point;
     nk2(:,i) = T*neck2tip_point;
@@ -60,7 +63,11 @@ end
 map1 = squeeze(sqrt(neck1(1,:,:).^2 + neck1(2,:,:).^2 + neck1(3,:,:).^2));
 map2 = squeeze(sqrt(neck2(1,:,:).^2 + neck2(2,:,:).^2 + neck2(3,:,:).^2));
 
-
+data.pitches = pitch_range;
+data.rolls = roll_range;
+data.NK1 = map1;
+data.NK2 = map2;
+save('table.mat','data')
 
 
 

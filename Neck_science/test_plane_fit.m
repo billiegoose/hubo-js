@@ -15,3 +15,4 @@ Z=(A*X)+(B*Y)+C;
 plot3(X(:),Y(:),data(:),'r.'); hold on; grid on;
 surf(X,Y,Z,'FaceColor','g'); alpha(0.5);
 title(['A=',num2str(A),', B=',num2str(B),', C=',num2str(C)]);
+
