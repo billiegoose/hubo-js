@@ -14,6 +14,8 @@ playback.possible_states =
 playback.state = 'NOT_LOADED'
 playback.filename = null
 
+window.param = 30
+
 #
 # FUNCTIONS
 #
@@ -34,7 +36,8 @@ loadTrajectory = (filename, callback) ->
             # Grab remaining lines and convert to numbers
             data = []
             for line in allTextLines
-                data.push (parseFloat(n) for n in line.split('\t'))
+                if line.trim() != "" # skip empty lines
+                    data.push (parseFloat(n) for n in line.split('\t'))
             # Return the headers and the data
             callback headers,data
 
@@ -43,9 +46,7 @@ loadRobot = () ->
     # Create a THREE.WebGLRenderer() to host the robot. You can create your own, or use the provided code to generate default setup.
     window.c = new WebGLRobots.DefaultCanvas('#hubo_container')
     # Create a new robot instance.
-    window.hubo = new WebGLRobots.Robot()
-    # Load the robot using the URDF importer.
-    hubo.loadURDF "hubo-urdf/model.urdf", callback = ->
+    window.hubo = new Hubo 'hubo2', callback = ->
       # Once the URDF is completely loaded, this function is run.
       # Add your robot to the canvas.
       c.add hubo
@@ -77,7 +78,11 @@ animate = (timestamp) ->
     # Update all joints
     for prop of playback.working_headers
         i = playback.working_headers[prop]
-        hubo.joints[prop].value = playback.data[playback.frame][i]
+        # Fingers and neck are... strange. Velocity control or current control or something.
+        if prop[0..1] == "LF" or prop[0..1] == "RF"
+            hubo.motors[prop].value -= playback.data[playback.frame][i] / window.param
+        else
+            hubo.motors[prop].value = playback.data[playback.frame][i]
     # I'm curious how long that process takes actually.
     delta_post = window.performance.now() - playback.startedTime
     process_time = delta_post - delta

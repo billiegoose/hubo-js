@@ -30,7 +30,7 @@ $('#traj_selection').on 'change', (event) ->
         # Find the joints we can actually use
         playback.working_headers = {}
         for id in headers
-            playback.working_headers[id] = headers.indexOf(id) if hubo.joints[id]?
+            playback.working_headers[id] = headers.indexOf(id) if hubo.motors[id]?
         playback.state = 'LOADED'
         playback.frame = 0
         return

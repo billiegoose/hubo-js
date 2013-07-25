@@ -130,11 +130,11 @@ WebGLRobots.Robot = function() {
                     val = this.upper_limit;
                 }
                 this._value = val;
-                console.log('Set value to ' + val);
+                //console.log('Set value to ' + val);
                 if (!(typeof _robot === 'undefined')) {
-                    if (!(typeof _robot.canvas === 'undefined')) {
-                        var q = new THREE.Quaternion().setFromAxisAngle(this.axis, this._value);
-                        this.child.rotation.setEulerFromQuaternion(q);
+                    var q = new THREE.Quaternion().setFromAxisAngle(this.axis, this._value);
+                    this.child.rotation.setEulerFromQuaternion(q);
+                    if (!(typeof _robot.canvas === 'undefined')) {                        
                         if (_robot.autorender) {
                             _robot.canvas.render();
                         }
