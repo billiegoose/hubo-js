@@ -52,9 +52,43 @@ Hubo = (function(_super) {
       _this.addFinger('RF3');
       _this.addFinger('RF4');
       _this.addFinger('RF5');
+      _this.addNeckMotor('NK1');
+      _this.addNeckMotor('NK2');
       return ready_callback();
     });
   }
+
+  Hubo.prototype.addNeckMotor = function(name) {
+    var NK;
+    _robot = this;
+    NK = {};
+    NK.name = name;
+    NK.lower_limit = 85;
+    NK.upper_limit = 105;
+    Object.defineProperties(NK, {
+      value: {
+        get: function() {
+          return this._value;
+        },
+        set: function(val) {
+          var pitch, roll, _ref;
+          if (val < this.lower_limit) {
+            val = this.lower_limit;
+          } else if (val > this.upper_limit) {
+            val = this.upper_limit;
+          }
+          this._value = val;
+          if ((_robot.motors.NK1 != null) && (_robot.motors.NK2 != null)) {
+            _ref = _robot.neckKin(_robot.motors.NK1.value, _robot.motors.NK2.value), pitch = _ref[0], roll = _ref[1];
+            _robot.joints.HNP.value = pitch * Math.PI / 180;
+            return _robot.joints.HNR.value = roll * Math.PI / 180;
+          }
+        }
+      }
+    });
+    NK.value = 95;
+    return this.motors[name] = NK;
+  };
 
   Hubo.prototype.addFinger = function(name) {
     var finger, fingers, hand, motor;
@@ -87,6 +121,13 @@ Hubo = (function(_super) {
     });
     motor.value = 0.9;
     return this.motors[name] = motor;
+  };
+
+  Hubo.prototype.neckKin = function(val1, val2) {
+    var HNP, HNR;
+    HNR = -0.000000 - 1.334032 * val1 + 1.334032 * val2;
+    HNP = -292.813104 + 1.541683 * val1 + 1.541683 * val2;
+    return [HNP, HNR];
   };
 
   return Hubo;

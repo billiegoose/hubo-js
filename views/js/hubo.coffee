@@ -34,8 +34,33 @@ class Hubo extends WebGLRobots.Robot
       @addFinger('RF3')
       @addFinger('RF4')
       @addFinger('RF5')      
+      @addNeckMotor('NK1')
+      @addNeckMotor('NK2')
       # Add your robot to the canvas.
       ready_callback()
+  addNeckMotor: (name) ->
+    _robot = this
+    # Create the neck motors.
+    NK = {}
+    NK.name = name # Either NK1 or NK2
+    NK.lower_limit = 85
+    NK.upper_limit = 105
+    Object.defineProperties NK,
+      value:
+        get: -> return @_value
+        set: (val) ->
+          if val < @lower_limit
+            val = @lower_limit
+          else if val > @upper_limit
+            val = @upper_limit
+          @_value = val
+          # We need both neck motors to calculate the head pose
+          if _robot.motors.NK1? and _robot.motors.NK2?
+            [pitch, roll] = _robot.neckKin(_robot.motors.NK1.value, _robot.motors.NK2.value)
+            _robot.joints.HNP.value = pitch*Math.PI/180
+            _robot.joints.HNR.value = roll*Math.PI/180
+    NK.value = 95 #mm
+    @motors[name] = NK
   addFinger: (name) ->
     _robot = this
     # Add finger motor
@@ -66,3 +91,10 @@ class Hubo extends WebGLRobots.Robot
     motor.value = 0.9 # start with fingers half curled
     # Add to motor collection
     @motors[name] = motor
+  # ATTENTION: This returns values in degrees.
+  neckKin: (val1, val2) ->
+    # This has a fancy derivation. See neck_kin branch. Shouldn't be off by more than a couple degrees
+    # I flipped the equations for R and P, because I suspected they were backwards. TODO: check this.
+    HNR = -0.000000   - 1.334032*val1 + 1.334032*val2
+    HNP = -292.813104 + 1.541683*val1 + 1.541683*val2
+    return [HNP, HNR]
