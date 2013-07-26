@@ -1,5 +1,4 @@
 clear; clc; close all;
-% God what am I getting myself into
 % COORDINATE SYSTEM
 % +X is robot's forward
 % +Y is robot's left
@@ -46,7 +45,6 @@ for pd = pitch_range %-90:1:90
     neck1(:,pidx,ridx) = neck1tip_point - neck1base_point;
     neck2(:,pidx,ridx) = neck2tip_point - neck2base_point;
     
-    
 %     figure(1)
 %     cla
 %     draw_neck
@@ -63,11 +61,11 @@ end
 map1 = squeeze(sqrt(neck1(1,:,:).^2 + neck1(2,:,:).^2 + neck1(3,:,:).^2));
 map2 = squeeze(sqrt(neck2(1,:,:).^2 + neck2(2,:,:).^2 + neck2(3,:,:).^2));
 
-data.pitches = pitch_range;
-data.rolls = roll_range;
-data.NK1 = map1;
-data.NK2 = map2;
-save('table.mat','data')
+save('map1.mat','map1')
+save('map2.mat','map2')
+save('pitch_range.mat','pitch_range')
+save('roll_range.mat','roll_range')
+
 
 
 
