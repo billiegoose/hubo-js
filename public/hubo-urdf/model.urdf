@@ -25,16 +25,16 @@
     </collision>
   </link>
   <!-- Robots should have necks, dammit! -->
-  <link name="Body_HNY">
+  <link name="Body_Neck">
     <collision>
         <geometry>
-        <mesh filename="./meshes/Body_HNY_col.dae"/>
+        <mesh filename="./meshes/Body_Neck_col.dae"/>
       </geometry>
     </collision>
   </link>
-  <link name="Body_HNR">
+  <link name="Body_Head_Empty">
   </link> 
-  <link name="Body_HNP">
+  <link name="Body_Head">
     <inertial>
       <mass value="0.374251"/>
       <inertia ixx="0.00164033" ixy="-1.08171e-07" ixz="-9.53978e-05" iyy="0.00153943" iyz="1.25376e-06" izz="0.00190393"/>
@@ -42,7 +42,7 @@
     </inertial>
     <visual>
       <geometry>
-        <mesh filename="./meshes/Body_HNP_vis.dae"/>
+        <mesh filename="./meshes/Body_Head_vis.dae"/>
       </geometry>
       <material name="random">
         <color rgba="0.800000 0.800000 0.500000 1"/>
@@ -50,7 +50,7 @@
     </visual>
     <collision>
       <geometry>
-        <mesh filename="./meshes/Body_HNP_col.dae"/>
+        <mesh filename="./meshes/Body_Head_col.dae"/>
       </geometry>
     </collision>
   </link>
@@ -1157,22 +1157,22 @@
   <joint name="HNY" type="revolute">
     <origin rpy="0 -0 0" xyz="0.0137246 0.0 0.1092625"/>
     <parent link="Body_Torso"/>
-    <child link="Body_HNY"/>
+    <child link="Body_Neck"/>
     <axis xyz="0 0 1"/>
     <limit effort="10.0" lower="-1.5" upper="1.5" velocity="1.0"/>
   </joint>
-  <joint name="HNR" type="revolute">
-    <origin rpy="0 -0 0" xyz="-0.0014665 0.0024526 0.0876725"/>
-    <parent link="Body_HNY"/>
-    <child link="Body_HNR"/>
-    <axis xyz="1 0 0"/>
-    <limit effort="10.0" lower="-0.523599" upper="0.523599" velocity="1.0"/>
-  </joint>
   <joint name="HNP" type="revolute">
     <origin rpy="0 -0 0" xyz="0 0 0"/>
-    <parent link="Body_HNR"/>
-    <child link="Body_HNP"/>
+    <parent link="Body_Neck"/>
+    <child link="Body_Head_Empty"/>
     <axis xyz="0 1 0"/>
+    <limit effort="10.0" lower="-0.523599" upper="0.523599" velocity="1.0"/>
+  </joint>
+  <joint name="HNR" type="revolute">
+    <origin rpy="0 -0 0" xyz="-0.0014665 0.0024526 0.0876725"/>
+    <parent link="Body_Head_Empty"/>
+    <child link="Body_Head"/>
+    <axis xyz="1 0 0"/>
     <limit effort="10.0" lower="-0.523599" upper="0.523599" velocity="1.0"/>
   </joint>
   <joint name="LSP" type="revolute">
