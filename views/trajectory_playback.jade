@@ -8,13 +8,11 @@ block body
   table(border='1')
     tr
       td
-        #hubo_container  
-        div(style='text-align: center;') LEFT button ROTATES. RIGHT button PANS. MIDDLE wheel ZOOMS.
-      td
-        table
-          tr
-            td
-              select(id="traj_selection")
+        #hubo_container(style="width: 480px; height: 485px") 
+          #panel_load(style="position:absolute")
+            button(id="load") Load Hubo
+          #panel_traj(style="position:absolute")
+            select(id="traj_selection")
                 option(value="") -- Select --
                 option(value="home2walkready.traj") Home 2 Walk Ready
                 option(value="walkready2home.traj") Walk Ready 2 Home
@@ -32,9 +30,9 @@ block body
                 option(value="sign_language.traj") Sign language
                 option(value="speech1.traj") Speech 1
                 option(value="speech2.traj") Speech 2
-          tr
-            td
-              button(id="toggle_play",disabled="disabled") Play
+            br
+            button(id="toggle_play",disabled="disabled") Play
+        div(style='text-align: center;') LEFT button ROTATES. RIGHT button PANS. MIDDLE wheel ZOOMS.
 
 block append scripts
   include includes/hubo

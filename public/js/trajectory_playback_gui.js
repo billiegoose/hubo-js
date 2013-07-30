@@ -48,3 +48,20 @@ $('#traj_selection').on('change', function(event) {
 });
 
 $('#toggle_play').on('click', togglePlay);
+
+$('#load').on('click', function(event) {
+  var callback;
+  $(this).html("Loading...");
+  window.c = new WebGLRobots.DefaultCanvas('#hubo_container');
+  return window.hubo = new Hubo('hubo2', callback = function() {
+    c.add(hubo);
+    hubo.autorender = false;
+    $('#panel_load').hide();
+    return $('#panel_traj').show();
+  });
+});
+
+$(document).ready(function() {
+  $('#panel_traj').hide();
+  return $('#panel_load').show();
+});

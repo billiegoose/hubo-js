@@ -18,11 +18,11 @@ class Hubo extends WebGLRobots.Robot
           @motors[key].upper_limit = @joints[key].upper_limit
           Object.defineProperties @motors[key],
           value:
-            get: -> return @_value
+            get: -> return _robot.joints[@name].value
             set: (val) -> 
-              @_value = val
+              val = clamp(val,this)
               _robot.joints[@name].value = val
-              return
+              return val
           @motors[key].value = 0
       @addFinger('LF1')
       @addFinger('LF2')
@@ -34,8 +34,8 @@ class Hubo extends WebGLRobots.Robot
       @addFinger('RF3')
       @addFinger('RF4')
       @addFinger('RF5')      
-      @addNeckMotor('NK1')
-      @addNeckMotor('NK2')
+      # @addNeckMotor('NK1')
+      # @addNeckMotor('NK2')
       # Add your robot to the canvas.
       ready_callback()
   addNeckMotor: (name) ->
@@ -49,10 +49,7 @@ class Hubo extends WebGLRobots.Robot
       value:
         get: -> return @_value
         set: (val) ->
-          if val < @lower_limit
-            val = @lower_limit
-          else if val > @upper_limit
-            val = @upper_limit
+          val = clamp(val,this)
           @_value = val
           # We need both neck motors to calculate the head pose
           if _robot.motors.NK1? and _robot.motors.NK2?
@@ -77,12 +74,7 @@ class Hubo extends WebGLRobots.Robot
       value:
         get: -> return @_value
         set: (val) -> 
-          if val < @lower_limit
-              #console.warn 'Motor ' + @name + ' tried to violate lower limit: ' + @lower_limit
-              val = @lower_limit
-          else if val > @upper_limit
-              #console.warn 'Joint ' + @name + ' tried to violate upper limit: ' + @upper_limit
-              val = @upper_limit
+          val = clamp(val,this)
           @_value = val              
           _robot.joints[@full_name + 'Knuckle1'].value = val
           _robot.joints[@full_name + 'Knuckle2'].value = val
@@ -93,8 +85,22 @@ class Hubo extends WebGLRobots.Robot
     @motors[name] = motor
   # ATTENTION: This returns values in degrees.
   neckKin: (val1, val2) ->
-    # This has a fancy derivation. See neck_kin branch. Shouldn't be off by more than a couple degrees
-    # I flipped the equations for R and P, because I suspected they were backwards. TODO: check this.
-    HNR = -0.000000   - 1.334032*val1 + 1.334032*val2
-    HNP = -292.813104 + 1.541683*val1 + 1.541683*val2
+    # The code used to derive these equations can be found in the 'neck_kin' branch. 
+    # Short Explanation: The neck forward kinematics has no straightforward analytical solution. Instead, it was solved numerically by
+    # fixing the head pitch and roll, and then finding the lengths of the linear actuators. (Essentially, the inverse kinematics are 
+    # easier to solve.) Using this, a big lookup table was calculated. When plotted, the pitch and roll functions can be seen to be 
+    # non-linear but they are nearly planar 2D functions. The equations used below are the linear best fit of the numerical lookup tables.
+    # It shouldn't be off by more than a couple degrees at worst.    
+    HNP = -294.4 + 1.55*val1 + 1.55*val2
+    HNR =    0.0 - 1.3197*val1 + 1.3197*val2
     return [HNP, HNR]
+
+clamp = (val,joint) ->
+  warn = off
+  if val < joint.lower_limit
+    if warn then console.warn joint.name + ' tried to violate lower limit: ' + joint.lower_limit
+    return joint.lower_limit
+  else if val > joint.upper_limit
+    if warn then console.warn joint.name + ' tried to violate upper limit: ' + joint.upper_limit
+    return joint.upper_limit
+  return val

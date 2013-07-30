@@ -1154,7 +1154,7 @@
       </geometry>
     </collision>
   </link>
-  <joint name="HNY" type="revolute">
+  <joint name="NKY" type="revolute">
     <origin rpy="0 -0 0" xyz="0.0137246 0.0 0.1092625"/>
     <parent link="Body_Torso"/>
     <child link="Body_Neck"/>

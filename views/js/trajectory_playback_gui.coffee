@@ -36,3 +36,24 @@ $('#traj_selection').on 'change', (event) ->
         return
 
 $('#toggle_play').on 'click', togglePlay
+
+$('#load').on 'click', (event)-> 
+    $(this).html "Loading..."
+    # This code is meant to show the bare minimum needed to add a Hubo to a webpage.
+    # Create a THREE.WebGLRenderer() to host the robot. You can create your own, or use the provided code to generate default setup.
+    window.c = new WebGLRobots.DefaultCanvas('#hubo_container')
+    # Create a new robot instance.
+    window.hubo = new Hubo 'hubo2', callback = ->
+      # Once the URDF is completely loaded, this function is run.
+      # Add your robot to the canvas.
+      c.add hubo
+      hubo.autorender = false
+      $('#panel_load').hide();
+      $('#panel_traj').show();
+
+#
+# MAIN
+#
+$( document ).ready () ->
+    $('#panel_traj').hide();
+    $('#panel_load').show();

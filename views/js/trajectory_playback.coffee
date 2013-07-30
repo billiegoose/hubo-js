@@ -15,6 +15,7 @@ playback.state = 'NOT_LOADED'
 playback.filename = null
 
 window.param = 30
+window.param2 = 30
 
 #
 # FUNCTIONS
@@ -31,26 +32,18 @@ loadTrajectory = (filename, callback) ->
             allText = allText.replace('\r\n','\n') # Fix DOS
             allText = allText.replace('\n\r','\n') # Fix Mac
             allTextLines = allText.split('\n')
+            # Split by delimiter
+            delimiter = /[ \t]+/;
             # Grab header (first line)
-            headers = allTextLines.shift().split('\t') # Remove first line, split by tabs
+            headers = allTextLines.shift().split(delimiter) # Remove first line, split by spaces and tabs
             # Grab remaining lines and convert to numbers
             data = []
             for line in allTextLines
-                if line.trim() != "" # skip empty lines
-                    data.push (parseFloat(n) for n in line.split('\t'))
+                line = line.trim()
+                if line != "" # skip empty lines
+                    data.push (parseFloat(n) for n in line.split(delimiter))
             # Return the headers and the data
             callback headers,data
-
-loadRobot = () ->
-    # This code is meant to show the bare minimum needed to add a Hubo to a webpage.
-    # Create a THREE.WebGLRenderer() to host the robot. You can create your own, or use the provided code to generate default setup.
-    window.c = new WebGLRobots.DefaultCanvas('#hubo_container')
-    # Create a new robot instance.
-    window.hubo = new Hubo 'hubo2', callback = ->
-      # Once the URDF is completely loaded, this function is run.
-      # Add your robot to the canvas.
-      c.add hubo
-      hubo.autorender = false
 
 togglePlay = () ->
     if playback.state == 'DONE_PLAYING' then playback.frame = 0
@@ -81,6 +74,10 @@ animate = (timestamp) ->
         # Fingers and neck are... strange. Velocity control or current control or something.
         if prop[0..1] == "LF" or prop[0..1] == "RF"
             hubo.motors[prop].value -= playback.data[playback.frame][i] / window.param
+        else if (prop[0..1] == "NK1") or (prop[0..1] == "NK2")
+            # hubo.motors[prop].value += playback.data[playback.frame][i] / window.param2
+            hubo.motors[prop].value = 95 # not working yet.
+            console.log 'WTF'
         else
             hubo.motors[prop].value = playback.data[playback.frame][i]
     # I'm curious how long that process takes actually.
@@ -91,9 +88,3 @@ animate = (timestamp) ->
     c.render()
     requestAnimationFrame( animate )
     return
-
-#
-# MAIN
-#
-
-loadRobot()
