@@ -57,3 +57,10 @@ $('#load').on 'click', (event)->
 $( document ).ready () ->
     $('#panel_traj').hide();
     $('#panel_load').show();
+
+    window.stats = new Stats();
+    stats.setMode(0); # 0: fps, 1: ms
+    $('#hubo_container').append(stats.domElement)
+    stats.domElement.style.position = 'absolute'
+    stats.domElement.style.left = '400px'
+    stats.domElement.style.top = '0px'

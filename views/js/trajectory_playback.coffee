@@ -14,7 +14,7 @@ playback.possible_states =
 playback.state = 'NOT_LOADED'
 playback.filename = null
 
-window.param = 30
+window.param = 150/200
 window.param2 = 30
 
 #
@@ -58,11 +58,15 @@ togglePlay = () ->
     return
 
 animate = (timestamp) ->
+    # Update FPS - TODO: Figure out how to make this agnostic. What if users don't want FPS monitor?
+    stats.begin()
+
     if playback.state == 'REQUEST_STOP'
         playback.state = 'STOPPED'
         return
     # timestamp is a floating point milleseconds in recent Chrome / Firefox
     # Calculate time delta and animation frame to use
+    playback.lastframe = playback.frame
     delta = timestamp - playback.startedTime
     playback.frame = Math.round(delta*playback.framerate/1000)
     if playback.frame > playback.data.length
@@ -73,13 +77,26 @@ animate = (timestamp) ->
         i = playback.working_headers[prop]
         # Fingers and neck are... strange. Velocity control or current control or something.
         if prop[0..1] == "LF" or prop[0..1] == "RF"
-            hubo.motors[prop].value -= playback.data[playback.frame][i] / window.param
+            # Integrate the data in between the last frame and now
+            tmp = 0
+            for j in [playback.lastframe+1 .. playback.frame]
+                tmp += playback.data[j][i]
+            tmp /= playback.framerate
+            # Apply to finger value
+            hubo.motors[prop].value -= tmp / window.param
         else if (prop[0..1] == "NK1") or (prop[0..1] == "NK2")
             # hubo.motors[prop].value += playback.data[playback.frame][i] / window.param2
             hubo.motors[prop].value = 95 # not working yet.
-            console.log 'WTF'
         else
             hubo.motors[prop].value = playback.data[playback.frame][i]
+    # Rotate the whole shebang so that the foot is the "grounded" object.
+    # for prop of hubo.links
+    #     if hubo.links[prop].applyMatrix?
+    #         hubo.links[prop].applyMatrix(hubo.links.Body_RAR.matrixWorld)
+    a = new THREE.Matrix4
+    a.getInverse(hubo.links.Body_RAR.matrixWorld)
+    hubo.links.Body_Torso.applyMatrix(a)
+    # hubo.links.Body_Torso.matrix.getInverse(hubo.links.Body_RAR.matrixWorld)
     # I'm curious how long that process takes actually.
     delta_post = window.performance.now() - playback.startedTime
     process_time = delta_post - delta
@@ -87,4 +104,7 @@ animate = (timestamp) ->
     # console.log "Frame: " + playback.frame + ' i: ' + numframes
     c.render()
     requestAnimationFrame( animate )
+
+    # Update FPS
+    stats.end();
     return

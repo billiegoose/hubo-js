@@ -9,7 +9,7 @@ playback.state = 'NOT_LOADED';
 
 playback.filename = null;
 
-window.param = 30;
+window.param = 150 / 200;
 
 window.param2 = 30;
 
@@ -67,11 +67,13 @@ togglePlay = function() {
 };
 
 animate = function(timestamp) {
-  var delta, delta_post, i, process_time, prop;
+  var a, delta, delta_post, i, j, process_time, prop, tmp, _i, _ref, _ref1;
+  stats.begin();
   if (playback.state === 'REQUEST_STOP') {
     playback.state = 'STOPPED';
     return;
   }
+  playback.lastframe = playback.frame;
   delta = timestamp - playback.startedTime;
   playback.frame = Math.round(delta * playback.framerate / 1000);
   if (playback.frame > playback.data.length) {
@@ -81,17 +83,25 @@ animate = function(timestamp) {
   for (prop in playback.working_headers) {
     i = playback.working_headers[prop];
     if (prop.slice(0, 2) === "LF" || prop.slice(0, 2) === "RF") {
-      hubo.motors[prop].value -= playback.data[playback.frame][i] / window.param;
+      tmp = 0;
+      for (j = _i = _ref = playback.lastframe + 1, _ref1 = playback.frame; _ref <= _ref1 ? _i <= _ref1 : _i >= _ref1; j = _ref <= _ref1 ? ++_i : --_i) {
+        tmp += playback.data[j][i];
+      }
+      tmp /= playback.framerate;
+      hubo.motors[prop].value -= tmp / window.param;
     } else if ((prop.slice(0, 2) === "NK1") || (prop.slice(0, 2) === "NK2")) {
       hubo.motors[prop].value = 95;
-      console.log('WTF');
     } else {
       hubo.motors[prop].value = playback.data[playback.frame][i];
     }
   }
+  a = new THREE.Matrix4;
+  a.getInverse(hubo.links.Body_RAR.matrixWorld);
+  hubo.links.Body_Torso.applyMatrix(a);
   delta_post = window.performance.now() - playback.startedTime;
   process_time = delta_post - delta;
   window.numframes++;
   c.render();
   requestAnimationFrame(animate);
+  stats.end();
 };

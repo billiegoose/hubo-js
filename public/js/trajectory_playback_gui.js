@@ -63,5 +63,11 @@ $('#load').on('click', function(event) {
 
 $(document).ready(function() {
   $('#panel_traj').hide();
-  return $('#panel_load').show();
+  $('#panel_load').show();
+  window.stats = new Stats();
+  stats.setMode(0);
+  $('#hubo_container').append(stats.domElement);
+  stats.domElement.style.position = 'absolute';
+  stats.domElement.style.left = '400px';
+  return stats.domElement.style.top = '0px';
 });

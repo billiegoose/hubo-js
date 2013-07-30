@@ -8,7 +8,7 @@ block body
   table(border='1')
     tr
       td
-        #hubo_container(style="width: 480px; height: 485px") 
+        #hubo_container(style="width: 480px; height: 485px; position: relative") 
           #panel_load(style="position:absolute")
             button(id="load") Load Hubo
           #panel_traj(style="position:absolute")
@@ -37,6 +37,7 @@ block body
 block append scripts
   include includes/hubo
   script(src='js/lib/watch.min.js')
+  script(src='js/lib/stats.min.js')
   script(src='js/hubo.js')
   script(src='js/trajectory_playback.js')
   script(src='js/trajectory_playback_gui.js')
