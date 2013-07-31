@@ -1469,11 +1469,11 @@
     <axis xyz="0 0 -1"/>
     <limit effort="10.0" lower="0" upper="1.57" velocity="1.0"/>
   </joint>
-  <joint name="HPY" type="revolute">
+  <joint name="WST" type="revolute">
     <origin rpy="0 -0 0" xyz="0.0122662 0.00245974 -0.15262"/>
     <parent link="Body_Torso"/>
     <child link="Body_Hip"/>
-    <axis xyz="0 0 1"/>
+    <axis xyz="0 0 -1"/>
     <limit effort="10.0" lower="-3.14158" upper="3.14158" velocity="1.0"/>
   </joint>
   <joint name="LHY" type="revolute">

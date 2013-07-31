@@ -9,8 +9,6 @@ watch(playback, 'state', function() {
     ui.removeAttr('disabled');
   }
   switch (this.state) {
-    case 'NOT_LOADED':
-      return ui.html('Start');
     case 'PLAYING':
       return ui.html('Pause');
     case 'DONE_PLAYING':
@@ -24,10 +22,12 @@ $('#traj_selection').on('change', function(event) {
   if ($(this).val() === '') {
     return;
   }
-  playback.state = 'NOT_LOADED';
+  playback.state = 'LOADING';
   playback.filename = 'trajectories/' + $(this).val();
+  hubo.reset();
+  c.render();
   return loadTrajectory(playback.filename, function(headers, data) {
-    var id, _i, _len;
+    var i, id, _i, _j, _len, _ref;
     console.log(data.length);
     playback.data = data;
     playback.framerate = 200;
@@ -35,9 +35,13 @@ $('#traj_selection').on('change', function(event) {
     headers[headers.indexOf('RKN')] = 'RKP';
     headers[headers.indexOf('LEB')] = 'LEP';
     headers[headers.indexOf('REB')] = 'REP';
+    for (i = _i = 0, _ref = data.length - 1; 0 <= _ref ? _i <= _ref : _i >= _ref; i = 0 <= _ref ? ++_i : --_i) {
+      data[i][headers.indexOf('LSR')] += 20 / 180 * Math.PI;
+      data[i][headers.indexOf('RSR')] -= 20 / 180 * Math.PI;
+    }
     playback.working_headers = {};
-    for (_i = 0, _len = headers.length; _i < _len; _i++) {
-      id = headers[_i];
+    for (_j = 0, _len = headers.length; _j < _len; _j++) {
+      id = headers[_j];
       if (hubo.motors[id] != null) {
         playback.working_headers[id] = headers.indexOf(id);
       }
@@ -50,20 +54,20 @@ $('#traj_selection').on('change', function(event) {
 $('#toggle_play').on('click', togglePlay);
 
 $('#load').on('click', function(event) {
-  var callback;
-  $(this).html("Loading...");
+  var callback, progress;
+  $(this).html("Loading...").attr('disabled', 'disabled');
   window.c = new WebGLRobots.DefaultCanvas('#hubo_container');
   return window.hubo = new Hubo('hubo2', callback = function() {
     c.add(hubo);
     hubo.autorender = false;
     $('#panel_load').hide();
     return $('#panel_traj').show();
+  }, progress = function(step, total, node) {
+    return $('#load').html("Loading " + step + "/" + total);
   });
 });
 
 $(document).ready(function() {
-  $('#panel_traj').hide();
-  $('#panel_load').show();
   window.stats = new Stats();
   stats.setMode(0);
   $('#hubo_container').append(stats.domElement);

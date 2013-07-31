@@ -145,7 +145,13 @@ WebGLRobots.Robot = function() {
 
     this.links = new Dict();
     this.joints = new Dict();
-    this.loadURDF = function(filename, callback) {
+    this.loadURDF = function(filename, callback, progress) {
+        // A default progress callback - consider it an example.
+        if (typeof progress === "undefined") {
+            progress = function(step,total,node) {
+                console.log("Link %i of %i: %s, %s", step, total, node.name, node.userData.filename);
+            };
+        }
         // Uses jQuery
         $.get(filename, function (data) {
             var path = WebGLRobots.getDirName(filename);
@@ -156,10 +162,12 @@ WebGLRobots.Robot = function() {
             _robot.links.expectedCount = $(links).length;
             // Due to the asynchronous nature of AJAX file requests, we have to break up 
             // our code into a bunch of callbacks.
-            var createLink = function(name, node) {
+            var createLink = function(name, node, filename) {
                 node.name = name;
-                _robot.links[name] = node;                
-                console.log("ADD: %s %i", name, _robot.links.count);
+                node.userData.filename = filename;
+                _robot.links[name] = node;
+                // Report progress
+                progress(_robot.links.count, _robot.links.expectedCount+1, node);
                 // When we have loaded all the links...
                 if (_robot.links.count === _robot.links.expectedCount) { 
                     createJoints();
@@ -228,7 +236,6 @@ WebGLRobots.Robot = function() {
             $(links).each( function() {
                 // We are being passed in a URDF <link> element.
                 var name = $(this).attr("name");
-                console.log(name);
                 // TODO: Resolve whether to use the collision or visual geometry by default.
                 // Right now I'm using the collision because it is smaller and looks nicer than the visual geometry for Hubo.
                 var filename = $(this).find("collision geometry mesh").attr("filename");
@@ -236,14 +243,13 @@ WebGLRobots.Robot = function() {
                     createLink(name, new THREE.Object3D());
                 } else {
                     filename = path + filename;
-                    console.log(filename);
                     // Load mesh
                     var loader = new ColladaLoader2();
                     loader.setLog(onLoaderLogMessage);
                     loader.load(filename, 
                         function(collada) {
                             var node = collada.scene;
-                            createLink(name, node);
+                            createLink(name, node, filename);
                         }, 
                         onProgress);
                 }

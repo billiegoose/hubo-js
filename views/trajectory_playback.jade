@@ -4,14 +4,16 @@ block prepend head
   title Trajectory Playback
 
 block body
-  p This page, "trajectory_playback.html", aims to demonstrate how to load and play back recorded angles over time. E.g. mocap data.
+  p This page demonstrates loading trajectory files containing angles recorded at 200Hz and playing them back at speed.
   table(border='1')
     tr
       td
         #hubo_container(style="width: 480px; height: 485px; position: relative") 
           #panel_load(style="position:absolute")
-            button(id="load") Load Hubo
-          #panel_traj(style="position:absolute")
+            button#load Load Hubo
+          #panel_loading(style="position:absolute; display:none")
+            progress#loading_bar
+          #panel_traj(style="position:absolute; display:none")
             select(id="traj_selection")
                 option(value="") -- Select --
                 option(value="home2walkready.traj") Home 2 Walk Ready

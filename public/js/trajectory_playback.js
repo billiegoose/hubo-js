@@ -3,7 +3,7 @@ var animate, loadTrajectory, togglePlay;
 
 window.playback = {};
 
-playback.possible_states = ['NOT_LOADED', 'LOADING', 'LOADED', 'PLAYING', 'REQUEST_STOP', 'STOPPED', 'DONE_PLAYING'];
+playback.possible_states = ['NOT_LOADED', 'LOADING', 'LOADED', 'PLAYING', 'STOPPED', 'DONE_PLAYING'];
 
 playback.state = 'NOT_LOADED';
 
@@ -49,6 +49,10 @@ loadTrajectory = function(filename, callback) {
 };
 
 togglePlay = function() {
+  if (playback.footMatrix == null) {
+    playback.footMatrix = new THREE.Matrix4;
+    playback.footMatrix.copy(hubo.links.Body_RAR.matrixWorld);
+  }
   if (playback.state === 'DONE_PLAYING') {
     playback.frame = 0;
   }
@@ -62,21 +66,23 @@ togglePlay = function() {
       window.numframes = 0;
       break;
     case 'PLAYING':
-      playback.state = 'REQUEST_STOP';
+      playback.state = 'STOPPED';
   }
 };
 
 animate = function(timestamp) {
-  var a, delta, delta_post, i, j, process_time, prop, tmp, _i, _ref, _ref1;
+  var a, b, delta, delta_post, i, j, process_time, prop, tmp, _i, _j, _ref, _ref1, _ref2, _ref3;
+  if (timestamp == null) {
+    timestamp = window.performance.now();
+  }
   stats.begin();
-  if (playback.state === 'REQUEST_STOP') {
-    playback.state = 'STOPPED';
+  if (playback.state !== 'PLAYING') {
     return;
   }
   playback.lastframe = playback.frame;
   delta = timestamp - playback.startedTime;
   playback.frame = Math.round(delta * playback.framerate / 1000);
-  if (playback.frame > playback.data.length) {
+  if (playback.frame >= playback.data.length) {
     playback.state = 'DONE_PLAYING';
     return;
   }
@@ -89,19 +95,26 @@ animate = function(timestamp) {
       }
       tmp /= playback.framerate;
       hubo.motors[prop].value -= tmp / window.param;
-    } else if ((prop.slice(0, 2) === "NK1") || (prop.slice(0, 2) === "NK2")) {
-      hubo.motors[prop].value = 95;
+    } else if ((prop.slice(0, 3) === "NK1") || (prop.slice(0, 3) === "NK2")) {
+      tmp = 0;
+      for (j = _j = _ref2 = playback.lastframe + 1, _ref3 = playback.frame; _ref2 <= _ref3 ? _j <= _ref3 : _j >= _ref3; j = _ref2 <= _ref3 ? ++_j : --_j) {
+        tmp += playback.data[j][i];
+      }
+      tmp *= window.param2;
+      hubo.motors[prop].value = 10;
     } else {
       hubo.motors[prop].value = playback.data[playback.frame][i];
     }
   }
   a = new THREE.Matrix4;
   a.getInverse(hubo.links.Body_RAR.matrixWorld);
-  hubo.links.Body_Torso.applyMatrix(a);
+  b = new THREE.Matrix4;
+  b.multiplyMatrices(a, playback.footMatrix);
+  hubo.links.Body_Torso.applyMatrix(b);
   delta_post = window.performance.now() - playback.startedTime;
   process_time = delta_post - delta;
   window.numframes++;
   c.render();
-  requestAnimationFrame(animate);
   stats.end();
+  window.setTimeout(animate, 1);
 };

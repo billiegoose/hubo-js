@@ -7,7 +7,7 @@
     <script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
   </head>
   <body>
-    <p>This page, "trajectory_playback.html", aims to demonstrate how to load and play back recorded angles over time. E.g. mocap data.</p>
+    <p>This page demonstrates loading trajectory files containing angles recorded at 200Hz and playing them back at speed.</p>
     <table border="1">
       <tr>
         <td>
@@ -15,7 +15,10 @@
             <div id="panel_load" style="position:absolute">
               <button id="load">Load Hubo</button>
             </div>
-            <div id="panel_traj" style="position:absolute">
+            <div id="panel_loading" style="position:absolute; display:none">
+              <progress id="loading_bar"></progress>
+            </div>
+            <div id="panel_traj" style="position:absolute; display:none">
               <select id="traj_selection">
                 <option value="">-- Select --</option>
                 <option value="home2walkready.traj">Home 2 Walk Ready</option>

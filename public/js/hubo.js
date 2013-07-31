@@ -10,7 +10,7 @@ Hubo = (function(_super) {
 
   _robot = Hubo;
 
-  function Hubo(name, ready_callback) {
+  function Hubo(name, ready_callback, progress_callback) {
     var load_callback,
       _this = this;
     this.name = name;
@@ -24,25 +24,11 @@ Hubo = (function(_super) {
         if (!__hasProp.call(_ref, key)) continue;
         value = _ref[key];
         if (key.length === 3) {
-          _this.motors[key] = {};
-          _this.motors[key].name = key;
-          _this.motors[key].lower_limit = _this.joints[key].lower_limit;
-          _this.motors[key].upper_limit = _this.joints[key].upper_limit;
-          Object.defineProperties(_this.motors[key], {
-            value: {
-              get: function() {
-                return _robot.joints[this.name].value;
-              },
-              set: function(val) {
-                val = clamp(val, this);
-                _robot.joints[this.name].value = val;
-                return val;
-              }
-            }
-          });
-          _this.motors[key].value = 0;
+          _this.addRegularMotor(key);
         }
       }
+      _robot.motors.LSR.default_value = +30 / 180 * Math.PI;
+      _robot.motors.RSR.default_value = -30 / 180 * Math.PI;
       _this.addFinger('LF1');
       _this.addFinger('LF2');
       _this.addFinger('LF3');
@@ -53,18 +39,45 @@ Hubo = (function(_super) {
       _this.addFinger('RF3');
       _this.addFinger('RF4');
       _this.addFinger('RF5');
+      _this.addNeckMotor('NK1');
+      _this.addNeckMotor('NK2');
+      _this.reset();
       return ready_callback();
-    });
+    }, progress_callback);
   }
 
-  Hubo.prototype.addNeckMotor = function(name) {
-    var NK;
+  Hubo.prototype.addRegularMotor = function(name) {
+    var motor;
     _robot = this;
-    NK = {};
-    NK.name = name;
-    NK.lower_limit = 85;
-    NK.upper_limit = 105;
-    Object.defineProperties(NK, {
+    motor = {};
+    motor.name = name;
+    motor.lower_limit = this.joints[name].lower_limit;
+    motor.upper_limit = this.joints[name].upper_limit;
+    Object.defineProperties(motor, {
+      value: {
+        get: function() {
+          return _robot.joints[this.name].value;
+        },
+        set: function(val) {
+          val = clamp(val, this);
+          _robot.joints[this.name].value = val;
+          return val;
+        }
+      }
+    });
+    motor.default_value = 0;
+    motor.value = motor.default_value;
+    return this.motors[name] = motor;
+  };
+
+  Hubo.prototype.addNeckMotor = function(name) {
+    var motor;
+    _robot = this;
+    motor = {};
+    motor.name = name;
+    motor.lower_limit = 0;
+    motor.upper_limit = 20;
+    Object.defineProperties(motor, {
       value: {
         get: function() {
           return this._value;
@@ -74,15 +87,16 @@ Hubo = (function(_super) {
           val = clamp(val, this);
           this._value = val;
           if ((_robot.motors.NK1 != null) && (_robot.motors.NK2 != null)) {
-            _ref = _robot.neckKin(_robot.motors.NK1.value, _robot.motors.NK2.value), pitch = _ref[0], roll = _ref[1];
+            _ref = _robot.neckKin(_robot.motors.NK1.value + 85, _robot.motors.NK2.value + 85), pitch = _ref[0], roll = _ref[1];
             _robot.joints.HNP.value = pitch * Math.PI / 180;
             return _robot.joints.HNR.value = roll * Math.PI / 180;
           }
         }
       }
     });
-    NK.value = 95;
-    return this.motors[name] = NK;
+    motor.default_value = 10;
+    motor.value = motor.default_value;
+    return this.motors[name] = motor;
   };
 
   Hubo.prototype.addFinger = function(name) {
@@ -110,7 +124,8 @@ Hubo = (function(_super) {
         }
       }
     });
-    motor.value = 0.9;
+    motor.default_value = 0.9;
+    motor.value = motor.default_value;
     return this.motors[name] = motor;
   };
 
@@ -119,6 +134,12 @@ Hubo = (function(_super) {
     HNP = -294.4 + 1.55 * val1 + 1.55 * val2;
     HNR = 0.0 - 1.3197 * val1 + 1.3197 * val2;
     return [HNP, HNR];
+  };
+
+  Hubo.prototype.reset = function() {
+    return this.motors.asArray().forEach(function(e) {
+      return e.value = e.default_value;
+    });
   };
 
   return Hubo;

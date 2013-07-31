@@ -1,51 +1,64 @@
 # A custom extension of WebGLRobots.Robot just for Hubo.
 class Hubo extends WebGLRobots.Robot
   _robot = this
-  constructor: (@name, ready_callback) ->
+  constructor: (@name, ready_callback, progress_callback) ->
     # Set this = new WebGLRobots.Robot()
     super()
     _robot = this
     # Motors
     @motors = new Dict()
     # Load the robot using the URDF importer.
-    @loadURDF "hubo-urdf/model.urdf", load_callback = () =>
-      # Once the URDF is completely loaded, this function is run.
-      for own key, value of @joints
-        if key.length == 3
-          @motors[key] = {}
-          @motors[key].name = key
-          @motors[key].lower_limit = @joints[key].lower_limit
-          @motors[key].upper_limit = @joints[key].upper_limit
-          Object.defineProperties @motors[key],
-          value:
-            get: -> return _robot.joints[@name].value
-            set: (val) -> 
-              val = clamp(val,this)
-              _robot.joints[@name].value = val
-              return val
-          @motors[key].value = 0
-      @addFinger('LF1')
-      @addFinger('LF2')
-      @addFinger('LF3')
-      @addFinger('LF4')
-      @addFinger('LF5')
-      @addFinger('RF1')
-      @addFinger('RF2')
-      @addFinger('RF3')
-      @addFinger('RF4')
-      @addFinger('RF5')      
-      # @addNeckMotor('NK1')
-      # @addNeckMotor('NK2')
-      # Add your robot to the canvas.
-      ready_callback()
+    @loadURDF(
+      "hubo-urdf/model.urdf",
+      load_callback = () =>
+        # Once the URDF is completely loaded, this function is run.
+        for own key, value of @joints
+          if key.length == 3
+            @addRegularMotor(key);
+        # Hack for shoulder roll
+        _robot.motors.LSR.default_value = +30/180*Math.PI
+        _robot.motors.RSR.default_value = -30/180*Math.PI
+        @addFinger('LF1')
+        @addFinger('LF2')
+        @addFinger('LF3')
+        @addFinger('LF4')
+        @addFinger('LF5')
+        @addFinger('RF1')
+        @addFinger('RF2')
+        @addFinger('RF3')
+        @addFinger('RF4')
+        @addFinger('RF5')      
+        @addNeckMotor('NK1')
+        @addNeckMotor('NK2')
+        @reset()
+        # Add your robot to the canvas.
+        ready_callback()
+      progress_callback
+    )
+  addRegularMotor: (name) ->
+    _robot = this
+    motor = {}
+    motor.name = name
+    motor.lower_limit = @joints[name].lower_limit
+    motor.upper_limit = @joints[name].upper_limit
+    Object.defineProperties motor,
+    value:
+      get: -> return _robot.joints[@name].value
+      set: (val) -> 
+        val = clamp(val,this)
+        _robot.joints[@name].value = val
+        return val
+    motor.default_value = 0
+    motor.value = motor.default_value
+    @motors[name] = motor
   addNeckMotor: (name) ->
     _robot = this
     # Create the neck motors.
-    NK = {}
-    NK.name = name # Either NK1 or NK2
-    NK.lower_limit = 85
-    NK.upper_limit = 105
-    Object.defineProperties NK,
+    motor = {}
+    motor.name = name # Either NK1 or NK2
+    motor.lower_limit = 0 # mm, Note: linear actuator pitch is 1mm/rev, 128 encoder counts per rev.
+    motor.upper_limit = 20 # mm
+    Object.defineProperties motor,
       value:
         get: -> return @_value
         set: (val) ->
@@ -53,11 +66,13 @@ class Hubo extends WebGLRobots.Robot
           @_value = val
           # We need both neck motors to calculate the head pose
           if _robot.motors.NK1? and _robot.motors.NK2?
-            [pitch, roll] = _robot.neckKin(_robot.motors.NK1.value, _robot.motors.NK2.value)
+            # We add 85mm to the extension of the linear actuator to get the total link length
+            [pitch, roll] = _robot.neckKin(_robot.motors.NK1.value+85, _robot.motors.NK2.value+85)
             _robot.joints.HNP.value = pitch*Math.PI/180
             _robot.joints.HNR.value = roll*Math.PI/180
-    NK.value = 95 #mm
-    @motors[name] = NK
+    motor.default_value = 10 #mm
+    motor.value = motor.default_value
+    @motors[name] = motor
   addFinger: (name) ->
     _robot = this
     # Add finger motor
@@ -80,7 +95,8 @@ class Hubo extends WebGLRobots.Robot
           _robot.joints[@full_name + 'Knuckle2'].value = val
           _robot.joints[@full_name + 'Knuckle3'].value = val
           return
-    motor.value = 0.9 # start with fingers half curled
+    motor.default_value = 0.9 # start with fingers half curled
+    motor.value = motor.default_value
     # Add to motor collection
     @motors[name] = motor
   # ATTENTION: This returns values in degrees.
@@ -94,6 +110,9 @@ class Hubo extends WebGLRobots.Robot
     HNP = -294.4 + 1.55*val1 + 1.55*val2
     HNR =    0.0 - 1.3197*val1 + 1.3197*val2
     return [HNP, HNR]
+  reset: () ->
+    @motors.asArray().forEach (e) ->
+      e.value = e.default_value
 
 clamp = (val,joint) ->
   warn = off

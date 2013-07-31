@@ -7,7 +7,6 @@ playback.possible_states =
     , 'LOADING'
     , 'LOADED'
     , 'PLAYING'
-    , 'REQUEST_STOP'
     , 'STOPPED'
     , 'DONE_PLAYING'
     ]
@@ -46,6 +45,10 @@ loadTrajectory = (filename, callback) ->
             callback headers,data
 
 togglePlay = () ->
+    if not playback.footMatrix?
+        playback.footMatrix = new THREE.Matrix4
+        playback.footMatrix.copy(hubo.links.Body_RAR.matrixWorld)
+
     if playback.state == 'DONE_PLAYING' then playback.frame = 0
     switch playback.state    
         when 'LOADED', 'STOPPED', 'DONE_PLAYING'
@@ -54,22 +57,22 @@ togglePlay = () ->
             requestAnimationFrame( animate )
             window.numframes = 0
         when 'PLAYING'
-            playback.state = 'REQUEST_STOP'
+            playback.state = 'STOPPED'
     return
 
 animate = (timestamp) ->
+    if not timestamp?
+        timestamp = window.performance.now()
     # Update FPS - TODO: Figure out how to make this agnostic. What if users don't want FPS monitor?
     stats.begin()
-
-    if playback.state == 'REQUEST_STOP'
-        playback.state = 'STOPPED'
+    if (playback.state != 'PLAYING')
         return
     # timestamp is a floating point milleseconds in recent Chrome / Firefox
     # Calculate time delta and animation frame to use
     playback.lastframe = playback.frame
     delta = timestamp - playback.startedTime
     playback.frame = Math.round(delta*playback.framerate/1000)
-    if playback.frame > playback.data.length
+    if playback.frame >= playback.data.length
         playback.state = 'DONE_PLAYING'
         return
     # Update all joints
@@ -84,9 +87,16 @@ animate = (timestamp) ->
             tmp /= playback.framerate
             # Apply to finger value
             hubo.motors[prop].value -= tmp / window.param
-        else if (prop[0..1] == "NK1") or (prop[0..1] == "NK2")
-            # hubo.motors[prop].value += playback.data[playback.frame][i] / window.param2
-            hubo.motors[prop].value = 95 # not working yet.
+        else if (prop[0..2] == "NK1") or (prop[0..2] == "NK2")
+            # Integrate the data in between the last frame and now
+            tmp = 0
+            for j in [playback.lastframe+1 .. playback.frame]
+                tmp += playback.data[j][i]
+            # tmp /= 128 # 128 encoder ticks per rev
+            # tmp /= Math.PI # 1mm pitch per rev
+            tmp *= window.param2
+            #hubo.motors[prop].value += tmp
+            hubo.motors[prop].value = 10 # Disable because the trajectory files are missing NK2. Oops!
         else
             hubo.motors[prop].value = playback.data[playback.frame][i]
     # Rotate the whole shebang so that the foot is the "grounded" object.
@@ -95,7 +105,9 @@ animate = (timestamp) ->
     #         hubo.links[prop].applyMatrix(hubo.links.Body_RAR.matrixWorld)
     a = new THREE.Matrix4
     a.getInverse(hubo.links.Body_RAR.matrixWorld)
-    hubo.links.Body_Torso.applyMatrix(a)
+    b = new THREE.Matrix4
+    b.multiplyMatrices(a,playback.footMatrix)
+    hubo.links.Body_Torso.applyMatrix(b)
     # hubo.links.Body_Torso.matrix.getInverse(hubo.links.Body_RAR.matrixWorld)
     # I'm curious how long that process takes actually.
     delta_post = window.performance.now() - playback.startedTime
@@ -103,8 +115,8 @@ animate = (timestamp) ->
     window.numframes++
     # console.log "Frame: " + playback.frame + ' i: ' + numframes
     c.render()
-    requestAnimationFrame( animate )
-
     # Update FPS
-    stats.end();
+    stats.end()
+    #requestAnimationFrame( animate )
+    window.setTimeout(animate, 1)
     return
