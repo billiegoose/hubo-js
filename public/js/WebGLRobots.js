@@ -162,7 +162,13 @@ WebGLRobots.Robot = function() {
             _robot.links.expectedCount = $(links).length;
             // Due to the asynchronous nature of AJAX file requests, we have to break up 
             // our code into a bunch of callbacks.
-            var createLink = function(name, node, filename) {
+            var createLink = function(name, node, filename) {                
+                // Improve appearance for canvas rendering.
+                if (!Detector.webgl) {
+                    if (node.children[0]) {
+                        node.children[0].material.overdraw = true;
+                    }
+                }
                 node.name = name;
                 node.userData.filename = filename;
                 _robot.links[name] = node;
