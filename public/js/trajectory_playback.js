@@ -62,7 +62,7 @@ togglePlay = function() {
     case 'DONE_PLAYING':
       playback.state = 'PLAYING';
       playback.startedTime = window.performance.now() - playback.frame / playback.framerate * 1000;
-      requestAnimationFrame(animate);
+      window.setTimeout(animate, 1);
       window.numframes = 0;
       break;
     case 'PLAYING':
