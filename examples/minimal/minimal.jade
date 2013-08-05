@@ -1,4 +1,4 @@
-extends templates/regular-layout
+extends /jade/templates/regular-layout
 
 block prepend head
   title Introducing WebGLRobots.js
@@ -15,7 +15,7 @@ block body
         div(style='text-align: center;') LEFT button ROTATES. RIGHT button PANS. MIDDLE wheel ZOOMS.
 
 block append scripts
-  include includes/hubo
+  include /jade/includes/hubo
   script.
     // This code is meant to show the bare minimum needed to add a Hubo to a webpage.
     // Create a THREE.WebGLRenderer() to host the robot. You can create your own, or use the provided code to generate default setup.
@@ -23,7 +23,7 @@ block append scripts
     // Create a new robot instance.
     hubo = new WebGLRobots.Robot();
     // Load the robot using the URDF importer.
-    hubo.loadURDF("hubo-urdf/model.urdf", function callback() {
+    hubo.loadURDF("/data/hubo-urdf/model.urdf", function callback() {
     // Once the URDF is completely loaded, this function is run.
     // Add your robot to the canvas.
     c.add(hubo);

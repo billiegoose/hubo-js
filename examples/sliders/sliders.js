@@ -5,7 +5,7 @@ c = new WebGLRobots.DefaultCanvas("#hubo_container");
 
 hubo = new WebGLRobots.Robot();
 
-hubo.loadURDF("hubo-urdf/model.urdf", callback = function() {
+hubo.loadURDF("/data/hubo-urdf/model.urdf", callback = function() {
   c.add(hubo);
   return $(".joint").each(function() {
     var id, lower, upper;

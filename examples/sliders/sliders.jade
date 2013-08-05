@@ -1,9 +1,9 @@
-extends templates/regular-layout
+extends /jade/templates/regular-layout
 
 block prepend head
   title Introducing WebGLRobots.js
 block append head
-  link(rel='stylesheet', type='text/css', href='/css/dark.css')
+  link(rel='stylesheet', type='text/css', href='dark.css')
 
 block body
   table
@@ -93,7 +93,7 @@ block body
                   span.joint_txt
 
 block append scripts
-  include includes/hubo
+  include /jade/includes/hubo
   // Used for UI elements 
-  script(src='js/lib/jquery-ui.custom.min.js')
-  script(src='js/sliders.js')
+  script(src='/lib/jquery-ui/jquery-ui.custom.min.js')
+  script(src='sliders.js')

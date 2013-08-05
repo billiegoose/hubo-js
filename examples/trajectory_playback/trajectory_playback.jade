@@ -1,4 +1,4 @@
-extends templates/regular-layout
+extends /jade/templates/regular-layout
 
 block prepend head
   title Trajectory Playback
@@ -37,9 +37,9 @@ block body
         div(style='text-align: center;') LEFT button ROTATES. RIGHT button PANS. MIDDLE wheel ZOOMS.
 
 block append scripts
-  include includes/hubo
-  script(src='js/lib/watch.min.js')
-  script(src='js/lib/stats.min.js')
-  script(src='js/hubo.js')
-  script(src='js/trajectory_playback.js')
-  script(src='js/trajectory_playback_gui.js')
+  include /jade/includes/hubo
+  script(src='/lib/watch/watch.min.js')
+  script(src='/lib/stats/stats.min.js')
+  script(src='/src/hubo.js')
+  script(src='trajectory_playback.js')
+  script(src='trajectory_playback_gui.js')

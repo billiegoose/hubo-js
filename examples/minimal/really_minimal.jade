@@ -1,4 +1,4 @@
-extends templates/regular-layout
+extends /jade/templates/regular-layout
 
 block prepend head
   title Hubo-in-an-iFrame
@@ -13,7 +13,7 @@ block body
         div(style='text-align: center;') LEFT button ROTATES. RIGHT button PANS. MIDDLE wheel ZOOMS.
 
 block append scripts
-  include includes/hubo
+  include /jade/includes/hubo
   script  
     $('#load').click(function() {
       $(this).html("Loading...");
@@ -23,7 +23,7 @@ block append scripts
       // Create a new robot instance.
       hubo = new WebGLRobots.Robot();
       // Load the robot using the URDF importer.
-      hubo.loadURDF("hubo-urdf/model.urdf", function callback() {
+      hubo.loadURDF("/data/hubo-urdf/model.urdf", function callback() {
         // Once the URDF is completely loaded, this function is run.
         // Add your robot to the canvas.
         c.add(hubo);

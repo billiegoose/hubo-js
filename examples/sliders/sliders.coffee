@@ -1,6 +1,6 @@
 c = new WebGLRobots.DefaultCanvas("#hubo_container")
 hubo = new WebGLRobots.Robot()
-hubo.loadURDF "hubo-urdf/model.urdf", callback = ->
+hubo.loadURDF "/data/hubo-urdf/model.urdf", callback = ->
   c.add hubo  
   # Make joint sliders
   $(".joint").each ->

@@ -19,13 +19,13 @@
       </tr>
     </table>
     <!-- Used for rendering 3D Hubo -->
-    <script src="js/lib/three/three.min.js"></script>
-    <script src="js/lib/three/Detector.js"></script>
-    <script src="js/lib/three/ColladaLoader2.js"></script>
-    <script src="js/lib/three/TrackballControls.js"></script>
+    <script src="/lib/three/three.min.js"></script>
+    <script src="/lib/three/Detector.js"></script>
+    <script src="/lib/three/ColladaLoader2.js"></script>
+    <script src="/lib/three/TrackballControls.js"></script>
     <!-- Our code -->
-    <script src="js/dict.js"></script>
-    <script src="js/WebGLRobots.js"></script>
+    <script src="/lib/dict/dict.js"></script>
+    <script src="/src/WebGLRobots.js"></script>
     <script>
       // This code is meant to show the bare minimum needed to add a Hubo to a webpage.
       // Create a THREE.WebGLRenderer() to host the robot. You can create your own, or use the provided code to generate default setup.
@@ -33,7 +33,7 @@
       // Create a new robot instance.
       hubo = new WebGLRobots.Robot();
       // Load the robot using the URDF importer.
-      hubo.loadURDF("hubo-urdf/model.urdf", function callback() {
+      hubo.loadURDF("/data/hubo-urdf/model.urdf", function callback() {
       // Once the URDF is completely loaded, this function is run.
       // Add your robot to the canvas.
       c.add(hubo);
