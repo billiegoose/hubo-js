@@ -17,7 +17,7 @@ Hubo = (function(_super) {
     Hubo.__super__.constructor.call(this);
     _robot = this;
     this.motors = new Dict();
-    this.loadURDF("/data/hubo-urdf/model.urdf", load_callback = function() {
+    this.loadURDF("" + local_root + "data/hubo-urdf/model.urdf", load_callback = function() {
       var key, value, _ref;
       _ref = _this.joints;
       for (key in _ref) {

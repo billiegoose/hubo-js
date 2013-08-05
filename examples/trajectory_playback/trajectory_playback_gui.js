@@ -23,7 +23,7 @@ $('#traj_selection').on('change', function(event) {
     return;
   }
   playback.state = 'LOADING';
-  playback.filename = '/data/trajectories/' + $(this).val();
+  playback.filename = ("" + local_root + "data/trajectories/") + $(this).val();
   hubo.reset();
   c.render();
   return loadTrajectory(playback.filename, function(headers, data) {

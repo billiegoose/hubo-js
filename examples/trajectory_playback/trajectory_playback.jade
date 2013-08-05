@@ -38,8 +38,8 @@ block body
 
 block append scripts
   include /jade/includes/hubo
-  script(src='/lib/watch/watch.min.js')
-  script(src='/lib/stats/stats.min.js')
-  script(src='/src/hubo.js')
+  script(src='#{local_root}lib/watch/watch.min.js')
+  script(src='#{local_root}lib/stats/stats.min.js')
+  script(src='#{local_root}src/hubo.js')
   script(src='trajectory_playback.js')
   script(src='trajectory_playback_gui.js')

@@ -23,7 +23,7 @@ block append scripts
     // Create a new robot instance.
     hubo = new WebGLRobots.Robot();
     // Load the robot using the URDF importer.
-    hubo.loadURDF("/data/hubo-urdf/model.urdf", function callback() {
+    hubo.loadURDF("#{local_root}data/hubo-urdf/model.urdf", function callback() {
     // Once the URDF is completely loaded, this function is run.
     // Add your robot to the canvas.
     c.add(hubo);
