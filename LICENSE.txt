@@ -1,12 +1,6 @@
-The following MIT License (http://opensource.org/licenses/MIT) applies by 
-default to any code in this repository, except for files or directories 
-that explicitly list an author(s) other than the one(s) listed below.
-I choose the MIT License because it is used by both jQuery and three.js.
-
-
 The MIT License (MIT)
 
-Copyright (c) 2013, William Hilton (wmhilton@gmail.com)
+Copyright (c) 2013 William Hilton (wmhilton@gmail.com)
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
