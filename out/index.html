@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Hubo-in-the-Browser: Index</title>
+    <meta charset="utf-8">
+    <!-- Jquery makes life so much easier. Load it before everything else!-->
+    <script src="http://code.jquery.com/jquery-1.10.1.min.js"></script><meta http-equiv="X-Powered-By" content="DocPad v6.49.1"/>
+<style >html.wait {
+	cursor: wait !important;
+	opacity: 0;
+	transition: opacity 0.5s ease;
+}</style>
+
+  </head>
+  <body>
+    <p>TODO: Insert a description. </p>
+    <p>TODO: Maybe make this the same as README.md?</p>
+    <p>
+      If you are at this page, I assume you are looking for the demos. Since it's all HTML/JavaScript you can see 
+      the code for how it works as well. Some of the libraries are written in CoffeeScript, a little language
+      that compiles to JavaScript. That source is more easily seen in the Github repository.
+    </p>
+    <p>
+      These demos are in reverse chronological order of their development (newest demos are at the top). At some point,
+      I intend to update the older demos so they have the same nice "Loading..." button as the latest demo.
+    </p>
+    <ul>
+      <li>Play back Rainbox, Inc mocap demos: <a href="./examples/trajectory_playback/trajectory_playback.html">link</a></li>
+      <li>Position upper body joints with slider controls: <a href="./examples/sliders/sliders.html">link</a></li>
+      <li>Minimalistic demo with single joint movement: <a href="./examples/minimal/minimal.html">link</a></li>
+      <li>Embed hubo in an &lt;iframe&gt;: <a href="./examples/minimal/really_minimal.html">link</a></li>
+    </ul><script >(function(){
+	/* Did we just livereload? */
+var log = !!(localStorage && console && console.log && true);
+if ( log && localStorage.getItem('/docpad-livereload/reloaded') === 'yes' ) {
+	localStorage.removeItem('/docpad-livereload/reloaded');
+	console.log('LiveReload completed at', new Date())
+}
+
+/* Listen for the regenerated event and perform a reload of the page when the event occurs */
+var listen = function(){
+	var primus = new Primus('/docpad-livereload');
+	primus.on('data', function(data){
+		if ( data && data.message ) {
+			if ( data.message === 'generateBefore' ) {
+				if ( log ) {
+					console.log('LiveReload started at', new Date());
+				}
+				if ( typeof document.getElementsByTagName !== 'undefined' ) {
+	document.getElementsByTagName('html')[0].className += ' wait';
+}
+			}
+			else if ( data.message === 'generateAfter' ) {
+				if ( log ) {
+					localStorage.setItem('/docpad-livereload/reloaded', 'yes');
+				}
+				document.location.reload();
+			}
+		}
+	});
+};
+	/* Inject socket into our page */
+var inject = function(){
+	var t = document.createElement('script');
+	t.type = 'text/javascript';
+	t.async = 'async';
+	t.src = '/primus/primus.js';
+	t.onload = listen;
+	var s = document.getElementsByTagName('script')[0];
+	s.parentNode.insertBefore(t, s);
+};
+	if ( typeof Primus !== 'undefined' ) {
+		listen();
+	} else {
+		inject();
+	}
+})();</script>
+    <script>window.local_root = './'</script>
+  </body>
+</html>

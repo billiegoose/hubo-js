@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Introducing WebGLRobots.js</title>
+    <meta charset="utf-8">
+    <!-- Jquery makes life so much easier. Load it before everything else!-->
+    <script src="http://code.jquery.com/jquery-1.10.1.min.js"></script><meta http-equiv="X-Powered-By" content="DocPad v6.49.1"/>
+<style >html.wait {
+	cursor: wait !important;
+	opacity: 0;
+	transition: opacity 0.5s ease;
+}</style>
+
+    <link rel="stylesheet" type="text/css" href="dark.css">
+  </head>
+  <body>
+    <table>
+      <tr>
+        <td>
+          <div id="hubo_container" style="position:relative">
+            <div id="load" style="position:absolute"></div>
+          </div>
+          <div style="text-align: center;">LEFT button ROTATES. RIGHT button PANS. MIDDLE wheel ZOOMS.</div>
+        </td>
+        <td>
+          <div id="controls">
+            <table>
+              <tr>
+                <td>
+                  <div data-name="NKY" class="joint">
+                    <div>Neck Yaw: </div>
+                    <div class="joint_slider"></div><span class="joint_txt"></span>
+                  </div>
+                </td>
+                <td></td>
+                <!--  .joint(data-name='HNP')-->
+                <!--    div Neck Pitch: -->
+                <!--    .joint_slider-->
+                <!--    span.joint_txt-->
+              </tr>
+              <tr>
+                <td>
+                  <div data-name="LSP" class="joint">
+                    <div>Left Shoulder Pitch: </div>
+                    <div class="joint_slider"></div><span class="joint_txt"></span>
+                  </div>
+                </td>
+                <td>
+                  <div data-name="RSP" class="joint">
+                    <div>Right Shoulder Pitch: </div>
+                    <div class="joint_slider"></div><span class="joint_txt"></span>
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <div data-name="LSY" class="joint">
+                    <div>Left Shoulder Yaw: </div>
+                    <div class="joint_slider"></div><span class="joint_txt"></span>
+                  </div>
+                </td>
+                <td>
+                  <div data-name="RSY" class="joint">
+                    <div>Right Shoulder Yaw: </div>
+                    <div class="joint_slider"></div><span class="joint_txt"></span>
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <div data-name="LSR" class="joint">
+                    <div>Left Shoulder Roll: </div>
+                    <div class="joint_slider"></div><span class="joint_txt"></span>
+                  </div>
+                </td>
+                <td>
+                  <div data-name="RSR" class="joint">
+                    <div>Right Shoulder Roll: </div>
+                    <div class="joint_slider"></div><span class="joint_txt"></span>
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <div data-name="LEP" class="joint">
+                    <div>Left Elbow Pitch: </div>
+                    <div class="joint_slider"></div><span class="joint_txt"></span>
+                  </div>
+                </td>
+                <td>
+                  <div data-name="REP" class="joint">
+                    <div>Right Elbow Pitch: </div>
+                    <div class="joint_slider"></div><span class="joint_txt"></span>
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <div data-name="LWY" class="joint">
+                    <div>Left Wrist Yaw: </div>
+                    <div class="joint_slider"></div><span class="joint_txt"></span>
+                  </div>
+                </td>
+                <td>
+                  <div data-name="RWY" class="joint">
+                    <div>Right Wrist Yaw: </div>
+                    <div class="joint_slider"></div><span class="joint_txt"></span>
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <div data-name="LWP" class="joint">
+                    <div>Left Wrist Pitch: </div>
+                    <div class="joint_slider"></div><span class="joint_txt"></span>
+                  </div>
+                </td>
+                <td>
+                  <div data-name="RWP" class="joint">
+                    <div>Right Wrist Pitch: </div>
+                    <div class="joint_slider"></div><span class="joint_txt"></span>
+                  </div>
+                </td>
+              </tr>
+            </table>
+          </div>
+        </td>
+      </tr>
+    </table><script >(function(){
+	/* Did we just livereload? */
+var log = !!(localStorage && console && console.log && true);
+if ( log && localStorage.getItem('/docpad-livereload/reloaded') === 'yes' ) {
+	localStorage.removeItem('/docpad-livereload/reloaded');
+	console.log('LiveReload completed at', new Date())
+}
+
+/* Listen for the regenerated event and perform a reload of the page when the event occurs */
+var listen = function(){
+	var primus = new Primus('/docpad-livereload');
+	primus.on('data', function(data){
+		if ( data && data.message ) {
+			if ( data.message === 'generateBefore' ) {
+				if ( log ) {
+					console.log('LiveReload started at', new Date());
+				}
+				if ( typeof document.getElementsByTagName !== 'undefined' ) {
+	document.getElementsByTagName('html')[0].className += ' wait';
+}
+			}
+			else if ( data.message === 'generateAfter' ) {
+				if ( log ) {
+					localStorage.setItem('/docpad-livereload/reloaded', 'yes');
+				}
+				document.location.reload();
+			}
+		}
+	});
+};
+	/* Inject socket into our page */
+var inject = function(){
+	var t = document.createElement('script');
+	t.type = 'text/javascript';
+	t.async = 'async';
+	t.src = '/primus/primus.js';
+	t.onload = listen;
+	var s = document.getElementsByTagName('script')[0];
+	s.parentNode.insertBefore(t, s);
+};
+	if ( typeof Primus !== 'undefined' ) {
+		listen();
+	} else {
+		inject();
+	}
+})();</script>
+    <script>window.local_root = '../../'</script>
+    <!-- Used for rendering 3D Hubo -->
+    <script src="../../lib/three/three.min.js"></script>
+    <script src="../../lib/three/Detector.js"></script>
+    <script src="../../lib/three/ColladaLoader2.js"></script>
+    <script src="../../lib/three/TrackballControls.js"></script>
+    <!-- Our code -->
+    <script src="../../lib/dict/dict.js"></script>
+    <script src="../../src/WebGLRobots.js"></script>
+    <script src="../../src/hubo.js"></script>
+    <!-- Used for UI elements -->
+    <script src="../../lib/jquery-ui/jquery-ui.custom.min.js"></script>
+    <script src="sliders.js"></script>
+  </body>
+</html>

@@ -1,0 +1,19 @@
+!!! 5
+//- Calculate how many times to repeat '../' to get from here to root dir.
+//- var local_path = locals.filename.substring(process.cwd().length);
+//- var local_count = local_path.match(/\\/g).length;
+//- var local_root = Array(local_count).join("../");
+html(lang='en')
+  head
+    block head
+      meta(charset='utf-8')
+      // Jquery makes life so much easier. Load it before everything else!
+      script(src='http://code.jquery.com/jquery-1.10.1.min.js')
+      != getBlock("meta").toHTML() + '\n'
+      != getBlock("styles").toHTML() + '\n'
+  body
+    block body
+    != getBlock('scripts').toHTML()
+    block scripts
+      script.
+        window.local_root = '{local_root}'

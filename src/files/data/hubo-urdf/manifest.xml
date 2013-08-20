@@ -1,0 +1,13 @@
+<?xml version='1.0'?>
+<model>
+  <name>Hubo</name>
+  <version>0.1.0</version>
+  <author>
+    <name>Bharadwaj Ramesh</name>
+    <email>br375@drexel.edu</email>
+  </author>
+  <sdf>model.urdf</sdf>
+  <description>
+    This model approximates the hubo robot.
+  </description>
+</model>

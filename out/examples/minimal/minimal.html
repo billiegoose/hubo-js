@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Minimal Example | Hubo-js</title>
+    <meta charset="utf-8">
+    <!-- Jquery makes life so much easier. Load it before everything else!-->
+    <script src="http://code.jquery.com/jquery-1.10.1.min.js"></script><meta http-equiv="X-Powered-By" content="DocPad v6.49.1"/>
+<style >html.wait {
+	cursor: wait !important;
+	opacity: 0;
+	transition: opacity 0.5s ease;
+}</style>
+
+  </head>
+  <body>
+    <p>This page, "minimal.html", aims to demonstrate the bare minimum needed to add Hubo to a webpage.Take a look at the page's source to see what JavaScript to include. </p>
+    <p>You will also need to have the URDF model and COLLADA files on your server.</p>
+    <p>Hubo should load below within a minute, if you're running NodeJS locally.<a id="move_link" href="#" style="display: none;">Move LSP</a></p>
+    <table border="1">
+      <tr>
+        <td>
+          <div id="hubo_container" style="position:relative">
+            <div id="load" style="position:absolute"></div>
+          </div>
+          <div style="text-align: center;">LEFT button ROTATES. RIGHT button PANS. MIDDLE wheel ZOOMS.</div>
+        </td>
+      </tr>
+    </table><script >(function(){
+	/* Did we just livereload? */
+var log = !!(localStorage && console && console.log && true);
+if ( log && localStorage.getItem('/docpad-livereload/reloaded') === 'yes' ) {
+	localStorage.removeItem('/docpad-livereload/reloaded');
+	console.log('LiveReload completed at', new Date())
+}
+
+/* Listen for the regenerated event and perform a reload of the page when the event occurs */
+var listen = function(){
+	var primus = new Primus('/docpad-livereload');
+	primus.on('data', function(data){
+		if ( data && data.message ) {
+			if ( data.message === 'generateBefore' ) {
+				if ( log ) {
+					console.log('LiveReload started at', new Date());
+				}
+				if ( typeof document.getElementsByTagName !== 'undefined' ) {
+	document.getElementsByTagName('html')[0].className += ' wait';
+}
+			}
+			else if ( data.message === 'generateAfter' ) {
+				if ( log ) {
+					localStorage.setItem('/docpad-livereload/reloaded', 'yes');
+				}
+				document.location.reload();
+			}
+		}
+	});
+};
+	/* Inject socket into our page */
+var inject = function(){
+	var t = document.createElement('script');
+	t.type = 'text/javascript';
+	t.async = 'async';
+	t.src = '/primus/primus.js';
+	t.onload = listen;
+	var s = document.getElementsByTagName('script')[0];
+	s.parentNode.insertBefore(t, s);
+};
+	if ( typeof Primus !== 'undefined' ) {
+		listen();
+	} else {
+		inject();
+	}
+})();</script>
+    <script>window.local_root = '../../'</script>
+    <!-- Used for rendering 3D Hubo -->
+    <script src="../../lib/three/three.min.js"></script>
+    <script src="../../lib/three/Detector.js"></script>
+    <script src="../../lib/three/ColladaLoader2.js"></script>
+    <script src="../../lib/three/TrackballControls.js"></script>
+    <!-- Our code -->
+    <script src="../../lib/dict/dict.js"></script>
+    <script src="../../src/WebGLRobots.js"></script>
+    <script src="../../src/hubo.js"></script>
+    <script>
+      // This code is meant to show the bare minimum needed to add a Hubo to a webpage.
+      // Create a THREE.WebGLRenderer() to host the robot. You can create your own, or use the provided code to generate default setup.
+      c = new WebGLRobots.DefaultCanvas('#hubo_container');
+      // Create a new robot instance.
+      window.hubo = new Hubo('hubo2',
+        function callback() {
+          // Once the URDF is completely loaded, this function is run.
+          // Add your robot to the canvas.
+          c.add(hubo);
+          $('#load').hide();
+          // That is all that is needed! But you're probably wondering how to move Hubo's joints so here's a quick example.
+          // Note: I'm adding an click event listener using JQuery syntax.
+          $('#move_link').click( function(event) {
+            hubo.motors['LSP'].value = hubo.motors['LSP'].value - 0.1;
+          }).show();
+        },
+        function progress(step,total,node) {
+          $('#load').html("Loading " + step + "/" + total);
+        }
+      );
+    </script>
+  </body>
+</html>
