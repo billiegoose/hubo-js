@@ -10,9 +10,11 @@ docpadConfig = {
     jade:
       jadeOptions:
         basedir: 'src/layouts'
+        pretty: on
     coffeescript:
       compileOptions:
         bare: on
+        header: on
 
   # =================================
   # DocPad Events

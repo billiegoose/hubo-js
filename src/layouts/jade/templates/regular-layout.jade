@@ -9,8 +9,8 @@ html(lang='en')
       meta(charset='utf-8')
       // Jquery makes life so much easier. Load it before everything else!
       script(src='http://code.jquery.com/jquery-1.10.1.min.js')
-      != getBlock("meta").toHTML() + '\n'
-      != getBlock("styles").toHTML() + '\n'
+      != getBlock("meta").toHTML()
+      != getBlock("styles").toHTML()
   body
     block body
     != getBlock('scripts').toHTML()
