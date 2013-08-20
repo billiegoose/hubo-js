@@ -1,0 +1,100 @@
+extends /jade/templates/regular-layout
+
+block prepend head
+  title Introducing WebGLRobots.js
+block append head
+  link(rel='stylesheet', type='text/css', href='dark.css')
+
+block body
+  table
+    tr
+      td
+        #hubo_container(style='position:relative')
+          #load(style='position:absolute')
+        div(style='text-align: center;') LEFT button ROTATES. RIGHT button PANS. MIDDLE wheel ZOOMS.
+      td
+        #controls
+          table
+            tr
+              td
+                .joint(data-name='NKY')
+                  div Neck Yaw: 
+                  .joint_slider
+                  span.joint_txt
+              td
+              //  .joint(data-name='HNP')
+              //    div Neck Pitch: 
+              //    .joint_slider
+              //    span.joint_txt
+            tr
+              td
+                .joint(data-name='LSP')
+                  div Left Shoulder Pitch: 
+                  .joint_slider
+                  span.joint_txt
+              td
+                .joint(data-name='RSP')
+                  div Right Shoulder Pitch: 
+                  .joint_slider
+                  span.joint_txt
+            tr
+              td
+                .joint(data-name='LSY')
+                  div Left Shoulder Yaw: 
+                  .joint_slider
+                  span.joint_txt
+              td
+                .joint(data-name='RSY')
+                  div Right Shoulder Yaw: 
+                  .joint_slider
+                  span.joint_txt
+            tr
+              td
+                .joint(data-name='LSR')
+                  div Left Shoulder Roll: 
+                  .joint_slider
+                  span.joint_txt
+              td
+                .joint(data-name='RSR')
+                  div Right Shoulder Roll: 
+                  .joint_slider
+                  span.joint_txt
+            tr
+              td
+                .joint(data-name='LEP')
+                  div Left Elbow Pitch: 
+                  .joint_slider
+                  span.joint_txt
+              td
+                .joint(data-name='REP')
+                  div Right Elbow Pitch: 
+                  .joint_slider
+                  span.joint_txt
+            tr
+              td
+                .joint(data-name='LWY')
+                  div Left Wrist Yaw: 
+                  .joint_slider
+                  span.joint_txt
+              td
+                .joint(data-name='RWY')
+                  div Right Wrist Yaw: 
+                  .joint_slider
+                  span.joint_txt
+            tr
+              td
+                .joint(data-name='LWP')
+                  div Left Wrist Pitch: 
+                  .joint_slider
+                  span.joint_txt
+              td
+                .joint(data-name='RWP')
+                  div Right Wrist Pitch: 
+                  .joint_slider
+                  span.joint_txt
+
+block append scripts
+  include /jade/includes/hubo
+  // Used for UI elements 
+  script(src='/lib/jquery-ui/jquery-ui.custom.min.js')
+  script(src='sliders.js')

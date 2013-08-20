@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Trajectory Playback</title>
+    <meta charset="utf-8">
+    <!-- Jquery makes life so much easier. Load it before everything else!-->
+    <script src="http://code.jquery.com/jquery-1.10.1.min.js"></script><meta http-equiv="X-Powered-By" content="DocPad v6.49.1"/>
+  </head>
+  <body>
+    <p>This page demonstrates loading trajectory files containing angles recorded at 200Hz and playing them back at speed.</p>
+    <table border="1">
+      <tr> 
+        <td>
+          <div id="hubo_container" style="width: 480px; height: 485px; position: relative"> 
+            <div id="panel_load" style="position:absolute">
+              <button id="load">Load Hubo</button>
+            </div>
+            <div id="panel_loading" style="position:absolute; display:none">
+              <progress id="loading_bar"></progress>
+            </div>
+            <div id="panel_traj" style="position:absolute; display:none">
+              <select id="traj_selection">
+                <option value="">-- Select --</option>
+                <option value="home2walkready.traj">Home 2 Walk Ready</option>
+                <option value="walkready2home.traj">Walk Ready 2 Home</option>
+                <option value="Taichi.traj">Taichi</option>
+                <option value="Bow.traj">Bow</option>
+                <option value="welcome.traj">Welcome</option>
+                <option value="goodbye.traj">Goodbye</option>
+                <option value="Hand_wave.traj">Hand wave</option>
+                <option value="Left_hand_head.traj">Left hand head</option>
+                <option value="Right_hand_head.traj">Right hand head</option>
+                <option value="safeDance1.traj">Dance 1</option>
+                <option value="safeDance2.traj">Dance 2</option>
+                <option value="safeDance3.traj">Dance 3</option>
+                <option value="safeDance4.traj">Dance 4                </option>
+                <option value="sign_language.traj">Sign language</option>
+                <option value="speech1.traj">Speech 1</option>
+                <option value="speech2.traj">Speech 2</option>
+              </select><br>
+              <button id="toggle_play" disabled="disabled">Play</button>
+            </div>
+          </div>
+          <div style="text-align: center;">LEFT button ROTATES. RIGHT button PANS. MIDDLE wheel ZOOMS.</div>
+        </td>
+      </tr>
+    </table>
+    <script>window.local_root = '../../'</script>
+    <!-- Used for rendering 3D Hubo -->
+    <script src="../../lib/three/three.min.js"></script>
+    <script src="../../lib/three/Detector.js"></script>
+    <script src="../../lib/three/ColladaLoader2.js"></script>
+    <script src="../../lib/three/TrackballControls.js"></script>
+    <!-- Our code -->
+    <script src="../../lib/dict/dict.js"></script>
+    <script src="../../src/WebGLRobots.js"></script>
+    <script src="../../src/hubo.js"></script>
+    <script src="../../lib/watch/watch.min.js"></script>
+    <script src="../../lib/stats/stats.min.js"></script>
+    <script src="trajectory_playback.js"></script>
+    <script src="trajectory_playback_gui.js"></script>
+  </body>
+</html>

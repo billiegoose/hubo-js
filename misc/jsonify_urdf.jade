@@ -1,0 +1,43 @@
+!!! 5
+html(lang='en')
+head
+    title Load URDF and Write JSON
+    meta(charset='utf-8')
+    meta(name='viewport', content='width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0')
+    link(rel='stylesheet', type='text/css', href='css/style.css')
+    link(rel='stylesheet', type='text/css', href='css/jquery-ui.custom.css')
+    // Used for pretty login button 
+    link(rel='stylesheet', href='css/persona-buttons.css')
+  body
+    // <a href="#" class="persona-button orange"><span>Sign in with your Email</span></a> 
+    // loading dialog 
+    #loading.modal
+      #percentloaded 0%
+      h2 Loading Hubo Vision...
+    table
+      tr
+        td
+          button#load_urdf Load URDF
+          button#save_json Save JSON
+      tr
+        td
+          #hubo_container
+          div(style='text-align: center;') LEFT button ROTATES. RIGHT button PANS. MIDDLE wheel ZOOMS.
+    // Used for rendering 3D Hubo 
+    script(src='js/lib/three/Three.js')
+    script(src='js/lib/three/Detector.js')
+    script(src='js/lib/three/ColladaLoader2.js')
+    script(src='js/lib/three/TrackballControls.js')
+    script(src='js/lib/three/AxisHelper.js')
+    script(src='js/lib/three/ObjectLoader.js')
+    script(src='js/lib/three/SceneExporter.js')
+    // Dependencies of SceneExporter.js
+    script(src='js/lib/three/MaterialExporter.js')
+    script(src='js/lib/three/ObjectExporter.js')
+    script(src='js/lib/three/GeometryExporter.js')
+    // Jquery makes life so much easier
+    script(src='//ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js')
+    // Used to help parse the URDF 
+    script(src='js/lib/xml2json.js')
+    // Our code 
+    script(src='js/utils/jsonify_urdf.js')
