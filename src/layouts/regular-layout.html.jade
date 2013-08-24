@@ -7,7 +7,7 @@ html(lang='en')
       // Jquery makes life so much easier. Load it before everything else!
       script(src='http://code.jquery.com/jquery-1.10.1.min.js')
       != getBlock("meta").toHTML()
-      != getBlock("styles").toHTML()
+      != getBlock("styles").add(['/regular-layout.css']).toHTML()
   body
     block body
       != content
