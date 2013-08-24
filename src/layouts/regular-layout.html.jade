@@ -1,0 +1,17 @@
+!!! 5
+html(lang='en')
+  head
+    block head
+      title= document.title + " | Hubo-js"
+      meta(charset='utf-8')
+      // Jquery makes life so much easier. Load it before everything else!
+      script(src='http://code.jquery.com/jquery-1.10.1.min.js')
+      != getBlock("meta").toHTML()
+      != getBlock("styles").toHTML()
+  body
+    block body
+      != content
+    != getBlock('scripts').add(document.scripts, {defer: false}).toHTML()
+    block scripts
+      script.
+        window.local_root = '{local_root}'

@@ -2,7 +2,7 @@
 , "name"        : "hubo-js"
 , "version"     : "0.0.0"
 , "description" : ""
-, "main"        : "server.js"
+, "main"        : "node node_modules\\docpad\\bin\\docpad run"
 , "author"      : "William Hilton <wmhilton@gmail.com> (http://github.com/wmhilton)"
 , "license"     : "MIT"
 , "homepage"    : "http://github.com/wmhilton/hubo-js"
@@ -25,5 +25,6 @@
 , "main": "node node_modules\\docpad\\bin\\docpad run"
 , "scripts": 
 	{ "start": "node node_modules\\docpad\\bin\\docpad run"
+  , "test" : "node node_modules\\docpad\\bin\\docpad generate --env static"
 	}
 }
