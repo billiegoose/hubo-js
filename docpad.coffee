@@ -15,6 +15,8 @@ docpadConfig = {
       compileOptions:
         bare: on
         header: on
+    stylus:
+      compress: off
 
   # =================================
   # DocPad Events
