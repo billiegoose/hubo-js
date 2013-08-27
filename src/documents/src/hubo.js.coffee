@@ -16,8 +16,8 @@ class Hubo extends WebGLRobots.Robot
           if key.length == 3
             @addRegularMotor(key);
         # Hack for shoulder roll
-        _robot.motors.LSR.default_value = +30/180*Math.PI
-        _robot.motors.RSR.default_value = -30/180*Math.PI
+        _robot.motors.LSR.default_value = +20/180*Math.PI
+        _robot.motors.RSR.default_value = -20/180*Math.PI
         @addFinger('LF1')
         @addFinger('LF2')
         @addFinger('LF3')

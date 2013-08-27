@@ -1,7 +1,7 @@
 extends /jade/templates/regular-layout
 
 block prepend head
-  title Trajectory Playback
+  title Trajectory Playback | Hubo-js
 
 block body
   p This page demonstrates loading trajectory files containing angles recorded at 200Hz and playing them back at speed.
@@ -16,6 +16,7 @@ block body
           #panel_traj(style="position:absolute; display:none")
             select(id="traj_selection")
                 option(value="") -- Select --
+                option(value="testure.traj") Maestro Testure
                 option(value="home2walkready.traj") Home 2 Walk Ready
                 option(value="walkready2home.traj") Walk Ready 2 Home
                 option(value="Taichi.traj") Taichi

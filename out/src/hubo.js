@@ -27,8 +27,8 @@ Hubo = (function(_super) {
           _this.addRegularMotor(key);
         }
       }
-      _robot.motors.LSR.default_value = +30 / 180 * Math.PI;
-      _robot.motors.RSR.default_value = -30 / 180 * Math.PI;
+      _robot.motors.LSR.default_value = +20 / 180 * Math.PI;
+      _robot.motors.RSR.default_value = -20 / 180 * Math.PI;
       _this.addFinger('LF1');
       _this.addFinger('LF2');
       _this.addFinger('LF3');
