@@ -1,4 +1,4 @@
-@import '/lib/jquery-ui/jquery-ui.custom.css';
+@import '../../lib/jquery-ui/jquery-ui.custom.css';
 body {
   font-family: Monospace;
   background-color: #000;
