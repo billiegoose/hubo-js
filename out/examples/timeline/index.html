@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Timeline Animation | Hubo-js</title>
+    <meta charset="utf-8">
+    <!-- Jquery makes life so much easier. Load it before everything else!-->
+    <script src="../../lib/jquery/jquery.min.js"></script><meta http-equiv="X-Powered-By" content="DocPad v6.49.1"/>
+  </head>
+  <body>
+    <table border="1">
+      <tr>
+        <td>
+          <div id="hubo_container" style="position:relative">
+            <div id="load" style="position:absolute"></div>
+          </div>
+          <div style="text-align: center;">LEFT button ROTATES. RIGHT button PANS. MIDDLE wheel ZOOMS.</div>
+        </td>
+      </tr>
+    </table>
+    <script>window.local_root = '../../'</script>
+    <!-- Used for rendering 3D Hubo -->
+    <script src="../../lib/three/three.min.js"></script>
+    <script src="../../lib/three/Detector.js"></script>
+    <script src="../../lib/three/ColladaLoader2.js"></script>
+    <script src="../../lib/three/TrackballControls.js"></script>
+    <!-- Our code -->
+    <script src="../../lib/dict/dict.js"></script>
+    <script src="../../src/WebGLRobots.js"></script>
+    <script src="../../src/hubo.js"></script>
+    <script src="../../lib/timeline/timeline.js"></script>
+    <script src="../../lib/timeline/timeline-gui.js"></script>
+    <script src="index.js"></script>
+  </body>
+</html>

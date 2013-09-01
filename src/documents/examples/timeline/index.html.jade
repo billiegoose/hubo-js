@@ -1,0 +1,18 @@
+extends /jade/templates/regular-layout
+
+block prepend head
+  title Timeline Animation | Hubo-js
+
+block body
+  table(border='1')
+    tr
+      td
+        #hubo_container(style='position:relative')
+          #load(style='position:absolute')
+        div(style='text-align: center;') LEFT button ROTATES. RIGHT button PANS. MIDDLE wheel ZOOMS.
+
+block append scripts
+  include /jade/includes/hubo
+  script(src="/lib/timeline/timeline.js")
+  script(src="/lib/timeline/timeline-gui.js")
+  script(src="index.js")
