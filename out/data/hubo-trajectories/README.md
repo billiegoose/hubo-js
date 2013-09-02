@@ -1,7 +1,7 @@
 hubo-trajectories
 =================
 
-Trajectory files for use with hubo-read-trajectory. They are pretty and the columns are perfectly aligned, so you can easily read and debug them in a text editor. (E.g. all the numbers are signed, so if you have to flip the signs of a column, you can do that with some find & replace magic and still have all your columns beautifully aligned.)
+A collection of trajectory files for use with hubo-read-trajectory, starting with everyone's favorite Rainbow, Inc demo gestures. They are pretty and the columns are perfectly aligned, so you can easily read and debug them in a text editor. (E.g. all the numbers are signed, so if you have to flip the signs of a column, you can do that with some find & replace magic and still have all your columns beautifully aligned.)
 
 If you want to implement code to read them, know that:
 

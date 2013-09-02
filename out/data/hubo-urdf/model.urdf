@@ -1162,14 +1162,14 @@
     <limit effort="10.0" lower="-1.5" upper="1.5" velocity="1.0"/>
   </joint>
   <joint name="HNP" type="revolute">
-    <origin rpy="0 -0 0" xyz="0 0 0"/>
+    <origin rpy="0 -0 0" xyz="-0.0014665 0.0024526 0.0876725"/>
     <parent link="Body_Neck"/>
     <child link="Body_Head_Empty"/>
     <axis xyz="0 1 0"/>
     <limit effort="10.0" lower="-0.523599" upper="0.523599" velocity="1.0"/>
   </joint>
   <joint name="HNR" type="revolute">
-    <origin rpy="0 -0 0" xyz="-0.0014665 0.0024526 0.0876725"/>
+    <origin rpy="0 -0 0" xyz="0 0 0"/>
     <parent link="Body_Head_Empty"/>
     <child link="Body_Head"/>
     <axis xyz="1 0 0"/>
