@@ -1,0 +1,3 @@
+[submodule "src/files/data/hubo-trajectories"]
+	path = src/files/data/hubo-trajectories
+	url = http://github.com/wmhilton/hubo-trajectories

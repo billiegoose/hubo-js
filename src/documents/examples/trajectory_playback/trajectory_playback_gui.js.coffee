@@ -16,7 +16,7 @@ watch playback, 'state', () ->
 $('#traj_selection').on 'change', (event) ->
   return if $(this).val() is '' 
   playback.state = 'LOADING'  # This is important because of the asynchronicity
-  playback.filename = "#{local_root}data/trajectories/" + $(this).val()
+  playback.filename = "#{local_root}data/hubo-trajectories/" + $(this).val()
   hubo.reset() # Fix any missing limbs... caused by setting joints to NaN. Too bad this isn't the walk-ready pose.
   c.render()
   loadTrajectory playback.filename, (headers,data) -> 
