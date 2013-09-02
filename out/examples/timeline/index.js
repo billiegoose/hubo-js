@@ -16,7 +16,8 @@ wrapProp = function(src, prop, dest, name) {
 populateTracks = function() {
   var d, newKey, p, t, _i, _j, _len, _len1, _ref, _ref1;
   t = Timeline.getGlobalInstance();
-  _ref = t.displayedTracks;
+  console.log('t.tracks[0].propertyTracks.length = ' + t.tracks[0].propertyTracks.length);
+  _ref = t.tracks;
   for (_i = 0, _len = _ref.length; _i < _len; _i++) {
     d = _ref[_i];
     _ref1 = d.propertyTracks;
@@ -31,15 +32,18 @@ populateTracks = function() {
       p.keys.push(newKey);
     }
   }
-  t.rebuildSelectedTracks();
 };
 
-c = new WebGLRobots.DefaultCanvas('#hubo_container');
+c = new WebGLRobots.DefaultCanvas('#hubo_container', 480, 300);
 
 window.hubo = new Hubo('hubo2', callback = function() {
-  var larm;
+  var head, larm, lleg, rarm, rleg;
   c.add(hubo);
   $('#load').hide();
+  head = {};
+  wrapProp(hubo.motors.NKY, 'value', head, 'NKY');
+  wrapProp(hubo.motors.NK1, 'value', head, 'NK1');
+  wrapProp(hubo.motors.NK2, 'value', head, 'NK2');
   larm = {};
   wrapProp(hubo.motors.LSP, 'value', larm, 'LSP');
   wrapProp(hubo.motors.LSR, 'value', larm, 'LSR');
@@ -47,9 +51,38 @@ window.hubo = new Hubo('hubo2', callback = function() {
   wrapProp(hubo.motors.LEP, 'value', larm, 'LEP');
   wrapProp(hubo.motors.LWP, 'value', larm, 'LWP');
   wrapProp(hubo.motors.LWY, 'value', larm, 'LWY');
+  rarm = {};
+  wrapProp(hubo.motors.RSP, 'value', rarm, 'RSP');
+  wrapProp(hubo.motors.RSR, 'value', rarm, 'RSR');
+  wrapProp(hubo.motors.RSY, 'value', rarm, 'RSY');
+  wrapProp(hubo.motors.REP, 'value', rarm, 'REP');
+  wrapProp(hubo.motors.RWP, 'value', rarm, 'RWP');
+  wrapProp(hubo.motors.RWY, 'value', rarm, 'RWY');
+  lleg = {};
+  wrapProp(hubo.motors.LHY, 'value', lleg, 'LHY');
+  wrapProp(hubo.motors.LHR, 'value', lleg, 'LHR');
+  wrapProp(hubo.motors.LHP, 'value', lleg, 'LHP');
+  wrapProp(hubo.motors.LKP, 'value', lleg, 'LKP');
+  wrapProp(hubo.motors.LAR, 'value', lleg, 'LAR');
+  wrapProp(hubo.motors.LAP, 'value', lleg, 'LAP');
+  rleg = {};
+  wrapProp(hubo.motors.RHY, 'value', rleg, 'RHY');
+  wrapProp(hubo.motors.RHR, 'value', rleg, 'RHR');
+  wrapProp(hubo.motors.RHP, 'value', rleg, 'RHP');
+  wrapProp(hubo.motors.RKP, 'value', rleg, 'RKP');
+  wrapProp(hubo.motors.RAR, 'value', rleg, 'RAR');
+  wrapProp(hubo.motors.RAP, 'value', rleg, 'RAP');
+  window.dummy = {};
+  anim("Head", head);
   anim("Left Arm", larm);
+  anim("Right Arm", rarm);
+  anim("Left Leg", lleg);
+  anim("Right Leg", rleg);
+  anim("Dummy", dummy);
   Timeline.getGlobalInstance().loop(-1);
-  return Timeline.getGlobalInstance().start();
+  Timeline.getGlobalInstance().start();
+  populateTracks();
+  return Timeline.getGlobalInstance().stop();
 }, progress = function(step, total, node) {
   return $('#load').html("Loading " + step + "/" + total);
 });
