@@ -23,7 +23,7 @@ WebGLRobots.DefaultCanvas = function(container) {
     var display_height = display_width;
 
     // renderer
-    var renderer = Detector.webgl? new THREE.WebGLRenderer(): new THREE.CanvasRenderer();
+    var renderer = Detector.webgl? new THREE.WebGLRenderer({antialias: true}): new THREE.CanvasRenderer();
     renderer.setSize(display_width, display_height);
     $(container).append(renderer.domElement);
 
