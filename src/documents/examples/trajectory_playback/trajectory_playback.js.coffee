@@ -19,30 +19,35 @@ window.param2 = 30
 #
 # FUNCTIONS
 #
-loadTrajectory = (filename, callback) ->
+loadTrajectoryString = (allText, callback) ->  
+    if (not callback? and parent_callback?) 
+        callback = parent_callback
+    # Split by line
+    allText = allText.replace('\r\n','\n') # Fix DOS
+    allText = allText.replace('\n\r','\n') # Fix Mac
+    allTextLines = allText.split('\n')
+    # Split by delimiter
+    delimiter = /[ \t]+/;
+    # Grab header (first line)
+    headers = allTextLines.shift().split(delimiter) # Remove first line, split by spaces and tabs
+    # Grab remaining lines and convert to numbers
+    data = []
+    for line in allTextLines
+        line = line.trim()
+        if line != "" # skip empty lines
+            data.push (parseFloat(n) for n in line.split(delimiter))
+    # Return the headers and the data
+    callback headers,data
+
+loadTrajectoryFile = (filename, callback) ->
     # Now load the trajectory file
     console.log 'loadTrajectory'
     $.ajax
         type: "GET"
         url: filename
         dataType: "text"
-        success: (allText) ->  
-            # Split by line
-            allText = allText.replace('\r\n','\n') # Fix DOS
-            allText = allText.replace('\n\r','\n') # Fix Mac
-            allTextLines = allText.split('\n')
-            # Split by delimiter
-            delimiter = /[ \t]+/;
-            # Grab header (first line)
-            headers = allTextLines.shift().split(delimiter) # Remove first line, split by spaces and tabs
-            # Grab remaining lines and convert to numbers
-            data = []
-            for line in allTextLines
-                line = line.trim()
-                if line != "" # skip empty lines
-                    data.push (parseFloat(n) for n in line.split(delimiter))
-            # Return the headers and the data
-            callback headers,data
+        success: (data) -> 
+            loadTrajectoryString(data, callback)
 
 togglePlay = () ->
     if not playback.footMatrix?

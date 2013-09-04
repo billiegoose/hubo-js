@@ -5,13 +5,23 @@
     <meta charset="utf-8">
     <!-- Jquery makes life so much easier. Load it before everything else!-->
     <script src="../../lib/jquery/jquery.min.js"></script><meta http-equiv="X-Powered-By" content="DocPad v6.49.1"/>
+    <link rel="stylesheet" type="text/css" href="../../lib/jquery-ui/jquery-ui.custom.css">
   </head>
   <body>
+    <div id="paste_traj_dialog" title="Paste file">
+      <p>Paste the trajectory file here.</p>
+      <textarea id="traj_input" rows="4" style="width:100%; -moz-box-sizing:border-box; box-sizing:border-box"></textarea>
+    </div>
+    <div id="mouse_info_dialog" title="Mouse Navigation">
+      <p>Rotate = LEFT mouse button</p>
+      <p>Zoom = MIDDLE mouse wheel</p>
+      <p>Pan = RIGHT mouse button</p>
+    </div>
     <p>This page demonstrates loading trajectory files containing angles recorded at 200Hz and playing them back at speed.</p>
     <table border="1">
       <tr> 
         <td>
-          <div id="hubo_container" style="width: 480px; height: 485px; position: relative"> 
+          <div id="hubo_container" style="width: 480px; height: 480px; position: relative"> 
             <div id="panel_load" style="position:absolute">
               <button id="load">Load Hubo</button>
             </div>
@@ -21,6 +31,7 @@
             <div id="panel_traj" style="position:absolute; display:none">
               <select id="traj_selection">
                 <option value="">-- Select --</option>
+                <option value="clipboard">Paste from Clipboard</option>
                 <option value="testure.traj">Maestro Testure</option>
                 <option value="home2walkready.traj">Home 2 Walk Ready</option>
                 <option value="walkready2home.traj">Walk Ready 2 Home</option>
@@ -41,11 +52,13 @@
               </select><br>
               <button id="toggle_play" disabled="disabled">Play</button>
             </div>
+            <div id="mouse_info_button" style="position: absolute; top: 464px; left:0px"><img src="../../img/info.png"></div>
           </div>
-          <div style="text-align: center;">LEFT button ROTATES. RIGHT button PANS. MIDDLE wheel ZOOMS.</div>
         </td>
       </tr>
     </table>
+    <p><i>NEW!</i> Drag and drop a trajectory file to load it.</p>
+    <p><i>Almost as new!</i> Select "Paste from Clipboard" in the Dropdown menu.</p>
     <script>window.local_root = '../../'</script>
     <!-- Used for rendering 3D Hubo -->
     <script src="../../lib/three/three.min.js"></script>
@@ -58,6 +71,7 @@
     <script src="../../src/hubo.js"></script>
     <script src="../../lib/watch/watch.min.js"></script>
     <script src="../../lib/stats/stats.min.js"></script>
+    <script src="../../lib/jquery-ui/jquery-ui.custom.min.js"></script>
     <script src="trajectory_playback.js"></script>
     <script src="trajectory_playback_gui.js"></script>
   </body>

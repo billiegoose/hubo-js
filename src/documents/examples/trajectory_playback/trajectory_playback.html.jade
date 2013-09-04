@@ -2,13 +2,22 @@ extends /jade/templates/regular-layout
 
 block prepend head
   title Trajectory Playback | Hubo-js
+block append head
+  link(rel='stylesheet', type='text/css', href='/lib/jquery-ui/jquery-ui.custom.css')
 
 block body
+  #paste_traj_dialog(title='Paste file')
+    p Paste the trajectory file here.
+    textarea#traj_input(rows='4', style="width:100%; -moz-box-sizing:border-box; box-sizing:border-box")
+  #mouse_info_dialog(title='Mouse Navigation')
+    p Rotate = LEFT mouse button
+    p Zoom = MIDDLE mouse wheel
+    p Pan = RIGHT mouse button
   p This page demonstrates loading trajectory files containing angles recorded at 200Hz and playing them back at speed.
   table(border='1')
     tr 
       td
-        #hubo_container(style="width: 480px; height: 485px; position: relative") 
+        #hubo_container(style="width: 480px; height: 480px; position: relative") 
           #panel_load(style="position:absolute")
             button#load Load Hubo
           #panel_loading(style="position:absolute; display:none")
@@ -16,6 +25,7 @@ block body
           #panel_traj(style="position:absolute; display:none")
             select(id="traj_selection")
                 option(value="") -- Select --
+                option(value="clipboard") Paste from Clipboard
                 option(value="testure.traj") Maestro Testure
                 option(value="home2walkready.traj") Home 2 Walk Ready
                 option(value="walkready2home.traj") Walk Ready 2 Home
@@ -35,11 +45,15 @@ block body
                 option(value="speech2.traj") Speech 2
             br
             button(id="toggle_play",disabled="disabled") Play
-        div(style='text-align: center;') LEFT button ROTATES. RIGHT button PANS. MIDDLE wheel ZOOMS.
+          #mouse_info_button(style="position: absolute; top: 464px; left:0px")
+            img(src="/img/info.png")
+  p <i>NEW!</i> Drag and drop a trajectory file to load it.
+  p <i>Almost as new!</i> Select "Paste from Clipboard" in the Dropdown menu.
 
 block append scripts
   include /jade/includes/hubo
   script(src='/lib/watch/watch.min.js')
   script(src='/lib/stats/stats.min.js')
+  script(src='/lib/jquery-ui/jquery-ui.custom.min.js')
   script(src='trajectory_playback.js')
   script(src='trajectory_playback_gui.js')
