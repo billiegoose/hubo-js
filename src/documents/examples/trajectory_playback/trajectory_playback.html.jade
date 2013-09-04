@@ -6,10 +6,10 @@ block append head
   link(rel='stylesheet', type='text/css', href='/lib/jquery-ui/jquery-ui.custom.css')
 
 block body
-  #paste_traj_dialog(title='Paste file')
+  #paste_traj_dialog(title='Paste file', style="display:none")
     p Paste the trajectory file here.
     textarea#traj_input(rows='4', style="width:100%; -moz-box-sizing:border-box; box-sizing:border-box")
-  #mouse_info_dialog(title='Mouse Navigation')
+  #mouse_info_dialog(title='Mouse Navigation', style="display:none")
     p Rotate = LEFT mouse button
     p Zoom = MIDDLE mouse wheel
     p Pan = RIGHT mouse button
