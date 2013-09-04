@@ -27,9 +27,18 @@ loadTrajectoryString = (allText, callback) ->
     allText = allText.replace('\n\r','\n') # Fix Mac
     allTextLines = allText.split('\n')
     # Split by delimiter
-    delimiter = /[ \t]+/;
+    delimiter = /[ \t,]+/;
     # Grab header (first line)
     headers = allTextLines.shift().split(delimiter) # Remove first line, split by spaces and tabs
+    # TODO: Remove this "convenience" hack for trajectories with unlabeled headers
+    if isNumber(headers[0])
+        this_many = headers.length - 1
+        # Whooops, it ain't no header. Put it back. 
+        allTextLines.unshift(headers.join(' '))
+        # Let's use these values instead.
+        headers = "RHY RHR RHP RKN RAP RAR LHY LHR LHP LKN LAP LAR RSP RSR RSY REB RWY RWR RWP LSP LSR LSY LEB LWY LWR LWP NKY NK1 NK2 WST RF1 RF2 RF3 RF4 RF5 LF1 LF2 LF3 LF4 LF5"
+        headers = headers.split(delimiter)
+        headers = headers[0..this_many] # Trim off unused headers, often the fingers.
     # Grab remaining lines and convert to numbers
     data = []
     for line in allTextLines
@@ -126,3 +135,9 @@ animate = (timestamp) ->
     #requestAnimationFrame( animate )
     window.setTimeout(animate, 1)
     return
+
+#
+# HELPERS
+#
+isNumber = (n) ->
+  return !isNaN(parseFloat(n)) && isFinite(n)

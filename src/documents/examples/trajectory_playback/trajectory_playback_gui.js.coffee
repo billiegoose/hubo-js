@@ -76,6 +76,7 @@ applyTrajectory = (headers, data) ->
       playback.working_headers[id] = headers.indexOf(id) if hubo.motors[id]?
     playback.state = 'LOADED'
     playback.frame = 0
+    togglePlay()
     return
 
 $('#traj_selection').on 'change', (event) ->

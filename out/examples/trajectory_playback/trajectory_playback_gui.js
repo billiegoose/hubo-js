@@ -96,6 +96,7 @@ applyTrajectory = function(headers, data) {
   }
   playback.state = 'LOADED';
   playback.frame = 0;
+  togglePlay();
 };
 
 $('#traj_selection').on('change', function(event) {
