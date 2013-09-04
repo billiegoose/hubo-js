@@ -48,6 +48,7 @@ class Hubo extends WebGLRobots.Robot
         val = clamp(val,this)
         _robot.joints[@name].value = val
         return val
+      enumerable: true
     motor.default_value = 0
     motor.value = motor.default_value
     @motors[name] = motor

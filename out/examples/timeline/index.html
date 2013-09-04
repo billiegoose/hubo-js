@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Timeline Animation | Hubo-js</title>
+    <meta charset="utf-8">
+    <!-- Jquery makes life so much easier. Load it before everything else!-->
+    <script src="../../lib/jquery/jquery.min.js"></script><meta http-equiv="X-Powered-By" content="DocPad v6.49.1"/>
+  </head>
+  <body>
+    <table border="1">
+      <tr>
+        <td>
+          <div id="hubo_container" style="position:relative">
+            <div id="load" style="position:absolute"></div>
+          </div>
+          <div style="text-align: center;">LEFT button ROTATES. RIGHT button PANS. MIDDLE wheel ZOOMS.</div>
+        </td>
+        <td style="vertical-align:top;">       
+          <p>Instructions: </p>
+          <ol>
+            <li>Scroll through the tracks in the timeline using the right-hand side scrollbar.</li>
+            <li>Double click in a track to insert a new keyframe there.</li>
+            <li>Single click on a keyframe to open an awful dialog for editing the value of the joint at that keyframe.</li>
+            <li>Change the value to something like "-1" or "1" or "1.57".</li>
+            <li>Click OK to close that awful dialog that I didn't design.</li>
+            <li>Click the Play button on the left. Your animation should loop!</li>
+            <li>You can move your keyframe by clicking and dragging it.</li>
+            <li>Repeat as necessary to make a cool animation, <b>BUT</b></li>
+            <li>Don't waste too much time, because you can't save anything yet. It's not my bug, I'm trying to fix it.</li>
+          </ol>
+          <p>
+            This is a clumsy hack. But imagine something similar, but less buggy, 
+            with great performance (this version seems to get slower as you add keyframes) 
+            and that saves your work automatically so you can restart your browser and it will all still be there, 
+            and there is an "Export to hubo-read-trajectory" button.
+            
+            
+          </p>
+        </td>
+      </tr>
+    </table>
+    <script>window.local_root = '../../'</script>
+    <!-- Used for rendering 3D Hubo -->
+    <script src="../../lib/three/three.min.js"></script>
+    <script src="../../lib/three/Detector.js"></script>
+    <script src="../../lib/three/ColladaLoader2.js"></script>
+    <script src="../../lib/three/TrackballControls.js"></script>
+    <!-- Our code -->
+    <script src="../../lib/dict/dict.js"></script>
+    <script src="../../src/WebGLRobots.js"></script>
+    <script src="../../src/hubo.js"></script>
+    <script src="../../lib/timeline/timeline.js"></script>
+    <script src="../../lib/timeline/timeline-gui.js"></script>
+    <script src="index.js"></script>
+  </body>
+</html>

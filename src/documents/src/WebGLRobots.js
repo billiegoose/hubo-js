@@ -18,9 +18,9 @@ WebGLRobots.getDirName = function(filename) {
     return filename.replace(/[^\/\\]*$/,"");
 }
 
-WebGLRobots.DefaultCanvas = function(container) {
-    var display_width = 480; //Math.min(max_display_height, window.innerHeight*.9);
-    var display_height = display_width;
+WebGLRobots.DefaultCanvas = function(container, display_width, display_height) {
+    if (display_width == null) {display_width = 480;};
+    if (display_height == null) {display_height = display_width;};
 
     // renderer
     var renderer = Detector.webgl? new THREE.WebGLRenderer({antialias: true}): new THREE.CanvasRenderer();

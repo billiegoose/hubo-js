@@ -62,7 +62,8 @@ Hubo = (function(_super) {
           val = clamp(val, this);
           _robot.joints[this.name].value = val;
           return val;
-        }
+        },
+        enumerable: true
       }
     });
     motor.default_value = 0;

@@ -1,0 +1,36 @@
+extends /jade/templates/regular-layout
+
+block prepend head
+  title Timeline Animation | Hubo-js
+
+block body
+  table(border='1')
+    tr
+      td
+        #hubo_container(style='position:relative')
+          #load(style='position:absolute')
+        div(style='text-align: center;') LEFT button ROTATES. RIGHT button PANS. MIDDLE wheel ZOOMS.
+      td(style='vertical-align:top;')        
+        p Instructions: 
+        ol
+          li Scroll through the tracks in the timeline using the right-hand side scrollbar.
+          li Double click in a track to insert a new keyframe there.
+          li Single click on a keyframe to open an awful dialog for editing the value of the joint at that keyframe.
+          li Change the value to something like "-1" or "1" or "1.57".
+          li Click OK to close that awful dialog that I didn't design.
+          li Click the Play button on the left. Your animation should loop!
+          li You can move your keyframe by clicking and dragging it.
+          li Repeat as necessary to make a cool animation, <b>BUT</b>
+          li Don't waste too much time, because you can't save anything yet. It's not my bug, I'm trying to fix it.
+        p.
+          This is a clumsy hack. But imagine something similar, but less buggy, 
+          with great performance (this version seems to get slower as you add keyframes) 
+          and that saves your work automatically so you can restart your browser and it will all still be there, 
+          and there is an "Export to hubo-read-trajectory" button.
+
+
+block append scripts
+  include /jade/includes/hubo
+  script(src="/lib/timeline/timeline.js")
+  script(src="/lib/timeline/timeline-gui.js")
+  script(src="index.js")
