@@ -980,7 +980,7 @@ button.ui-button::-moz-focus-inner { border: 0; padding: 0; } /* reset extra pad
 .ui-dialog .ui-dialog-titlebar-close span { 
   display: block; 
   margin: 1px;
-  text-indent: 9999px;
+  /*text-indent: 9999px;*/
 }
 
 .ui-dialog .ui-dialog-titlebar-close:hover, .ui-dialog .ui-dialog-titlebar-close:focus { padding: 1px;   filter: alpha(opacity=90);
@@ -1410,8 +1410,11 @@ textarea,
 
 
 /***Dialog fixes**/
+.ui-dialog-buttonset .ui-button:last-child{
+  margin-right:0;
+}
 
-.ui-dialog-buttonset .ui-button:nth-child(2){
+.ui-dialog-buttonset .ui-button:not(:last-child){
   cursor: pointer;
   display: inline-block;
   background-color: #e6e6e6;
