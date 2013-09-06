@@ -114,6 +114,27 @@ class Hubo extends WebGLRobots.Robot
   reset: () ->
     @motors.asArray().forEach (e) ->
       e.value = e.default_value
+  outputPoseHeader: () ->
+    return 'RHY         RHR         RHP         RKP         RAP         RAR         LHY         LHR         LHP         LKP         LAP         LAR         RSP         RSR         RSY         REP         RWY         RWR         RWP         LSP         LSR         LSY         LEP         LWY         LWR         LWP         NKY         NK1         NK2         WST         RF1         RF2         RF3         RF4         RF5         LF1         LF2         LF3         LF4         LF5         '
+  outputPose: () ->
+    str = ''
+    names = @outputPoseHeader().trim().split( /\W+/ )
+    for name in names
+      if hubo.motors[name]?        
+        v = hubo.motors[name].value
+      else
+        # We need to support ignoring columns (wrist roll, specifically) in order to be compatible 
+        # with hubo-read-trajectory
+        v = 0       
+      vstr = v.toFixed(6)
+      vstr = (if v>=0 then "+" else "") + vstr
+      # if v >= 0 
+      #   vstr = "+" + vstr
+      # else
+      #   vstr = "-" + vstr
+      vstr = rpad(vstr,11,' ') + ' '
+      str += vstr
+    return str
 
 clamp = (val,joint) ->
   warn = off
@@ -124,3 +145,15 @@ clamp = (val,joint) ->
     if warn then console.warn joint.name + ' tried to violate upper limit: ' + joint.upper_limit
     return joint.upper_limit
   return val
+
+
+lpad = (originalstr, length, strToPad) ->
+    while (originalstr.length < length)
+        originalstr = strToPad + originalstr
+    return originalstr
+
+ 
+rpad = (originalstr, length, strToPad) ->
+    while (originalstr.length < length)
+        originalstr = originalstr + strToPad
+    return originalstr
