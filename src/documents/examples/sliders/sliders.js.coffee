@@ -1,3 +1,5 @@
+$('#controls').tabs()
+
 c = new WebGLRobots.DefaultCanvas("#hubo_container")
 hubo = new Hubo 'hubo2',
   callback = ->
@@ -10,7 +12,7 @@ hubo = new Hubo 'hubo2',
       id = $(this).attr("data-name")
       makeSlider(id)
       # Set with initial text
-      $("[data-name=" + id + "] .joint_txt").html hubo.joints[id].value.toFixed(2)
+      $("[data-name=" + id + "] .joint_txt").html hubo.motors[id].value.toFixed(2)
       
   progress = (step,total,node) ->
     $('#load').html("Loading " + step + "/" + total)
@@ -21,10 +23,10 @@ hubo = new Hubo 'hubo2',
 makeSlider = (id) ->
   s = $("[data-name=" + id + "] .joint_slider")
   s.slider
-    min: parseFloat(hubo.joints[id].lower_limit)
-    max: parseFloat(hubo.joints[id].upper_limit)
+    min: parseFloat(hubo.motors[id].lower_limit)
+    max: parseFloat(hubo.motors[id].upper_limit)
     step: 0.01
-    value: hubo.joints[id].value
+    value: hubo.motors[id].value
 
   # Update text display
   s.on "slide", (event, ui) ->
@@ -32,7 +34,7 @@ makeSlider = (id) ->
   
   # Update Hubo model
   s.on "slide", (event, ui) ->
-    hubo.joints[id].value = ui.value
+    hubo.motors[id].value = ui.value
 
 sign = (x) ->
   (if x then (if x < 0 then -1 else 1) else 0)

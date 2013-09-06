@@ -3,7 +3,7 @@ extends /jade/templates/regular-layout
 block prepend head
   title Sliders | Hubo-js
 block append head
-  link(rel='stylesheet', type='text/css', href='dark.css')
+  link(rel='stylesheet', type='text/css', href='light.css')
 
 block body
   table
@@ -14,84 +14,233 @@ block body
         div(style='text-align: center;') LEFT button ROTATES. RIGHT button PANS. MIDDLE wheel ZOOMS.
       td
         #controls
-          table
-            tr
-              td
-                .joint(data-name='NKY')
-                  div Neck Yaw: 
-                  .joint_slider
-                  span.joint_txt
-              td
-              //  .joint(data-name='HNP')
-              //    div Neck Pitch: 
-              //    .joint_slider
-              //    span.joint_txt
-            tr
-              td
-                .joint(data-name='LSP')
-                  div Left Shoulder Pitch: 
-                  .joint_slider
-                  span.joint_txt
-              td
-                .joint(data-name='RSP')
-                  div Right Shoulder Pitch: 
-                  .joint_slider
-                  span.joint_txt
-            tr
-              td
-                .joint(data-name='LSY')
-                  div Left Shoulder Yaw: 
-                  .joint_slider
-                  span.joint_txt
-              td
-                .joint(data-name='RSY')
-                  div Right Shoulder Yaw: 
-                  .joint_slider
-                  span.joint_txt
-            tr
-              td
-                .joint(data-name='LSR')
-                  div Left Shoulder Roll: 
-                  .joint_slider
-                  span.joint_txt
-              td
-                .joint(data-name='RSR')
-                  div Right Shoulder Roll: 
-                  .joint_slider
-                  span.joint_txt
-            tr
-              td
-                .joint(data-name='LEP')
-                  div Left Elbow Pitch: 
-                  .joint_slider
-                  span.joint_txt
-              td
-                .joint(data-name='REP')
-                  div Right Elbow Pitch: 
-                  .joint_slider
-                  span.joint_txt
-            tr
-              td
-                .joint(data-name='LWY')
-                  div Left Wrist Yaw: 
-                  .joint_slider
-                  span.joint_txt
-              td
-                .joint(data-name='RWY')
-                  div Right Wrist Yaw: 
-                  .joint_slider
-                  span.joint_txt
-            tr
-              td
-                .joint(data-name='LWP')
-                  div Left Wrist Pitch: 
-                  .joint_slider
-                  span.joint_txt
-              td
-                .joint(data-name='RWP')
-                  div Right Wrist Pitch: 
-                  .joint_slider
-                  span.joint_txt
+          ul
+            li 
+              a(href="#upper_body") Upper Body
+            li
+              a(href="#lower_body") Lower Body
+            li
+              a(href="#neck_waist") Neck / Waist
+            li 
+              a(href="#fingers") Fingers
+          #upper_body
+            table
+              tr
+                td
+                  .joint(data-name='RSP')
+                    div Right Shoulder Pitch: 
+                    .joint_slider
+                    span.joint_txt
+                td
+                  .joint(data-name='LSP')
+                    div Left Shoulder Pitch: 
+                    .joint_slider
+                    span.joint_txt
+              tr
+                td
+                  .joint(data-name='RSR')
+                    div Right Shoulder Roll: 
+                    .joint_slider
+                    span.joint_txt
+                td
+                  .joint(data-name='LSR')
+                    div Left Shoulder Roll: 
+                    .joint_slider
+                    span.joint_txt
+              tr
+                td
+                  .joint(data-name='RSY')
+                    div Right Shoulder Yaw: 
+                    .joint_slider
+                    span.joint_txt
+                td
+                  .joint(data-name='LSY')
+                    div Left Shoulder Yaw: 
+                    .joint_slider
+                    span.joint_txt
+              tr
+                td
+                  .joint(data-name='REP')
+                    div Right Elbow Pitch: 
+                    .joint_slider
+                    span.joint_txt
+                td
+                  .joint(data-name='LEP')
+                    div Left Elbow Pitch: 
+                    .joint_slider
+                    span.joint_txt
+              tr
+                td
+                  .joint(data-name='RWY')
+                    div Right Wrist Yaw: 
+                    .joint_slider
+                    span.joint_txt
+                td
+                  .joint(data-name='LWY')
+                    div Left Wrist Yaw: 
+                    .joint_slider
+                    span.joint_txt
+              tr
+                td
+                  .joint(data-name='RWP')
+                    div Right Wrist Pitch: 
+                    .joint_slider
+                    span.joint_txt
+                td
+                  .joint(data-name='LWP')
+                    div Left Wrist Pitch: 
+                    .joint_slider
+                    span.joint_txt
+          #lower_body
+            table
+              tr
+                td
+                  .joint(data-name='RHY')
+                    div Right Hip Yaw: 
+                    .joint_slider
+                    span.joint_txt
+                td
+                  .joint(data-name='LHY')
+                    div Left Hip Yaw: 
+                    .joint_slider
+                    span.joint_txt
+              tr
+                td
+                  .joint(data-name='RHR')
+                    div Right Hip Roll: 
+                    .joint_slider
+                    span.joint_txt
+                td
+                  .joint(data-name='LHR')
+                    div Left Hip Roll: 
+                    .joint_slider
+                    span.joint_txt
+              tr
+                td
+                  .joint(data-name='RHP')
+                    div Right Hip Pitch: 
+                    .joint_slider
+                    span.joint_txt
+                td
+                  .joint(data-name='LHP')
+                    div Left Hip Pitch: 
+                    .joint_slider
+                    span.joint_txt
+              tr
+                td
+                  .joint(data-name='RKP')
+                    div Right Knee Pitch: 
+                    .joint_slider
+                    span.joint_txt
+                td
+                  .joint(data-name='LKP')
+                    div Left Knee Pitch: 
+                    .joint_slider
+                    span.joint_txt
+              tr
+                td
+                  .joint(data-name='RAP')
+                    div Right Ankle Pitch: 
+                    .joint_slider
+                    span.joint_txt
+                td
+                  .joint(data-name='LAP')
+                    div Left Ankle Pitch: 
+                    .joint_slider
+                    span.joint_txt
+              tr
+                td
+                  .joint(data-name='RAR')
+                    div Right Ankle Roll: 
+                    .joint_slider
+                    span.joint_txt
+                td
+                  .joint(data-name='LAR')
+                    div Left Ankle Roll: 
+                    .joint_slider
+                    span.joint_txt
+          #neck_waist
+            table
+              tr
+                td
+                  .joint(data-name='NKY')
+                    div Neck Yaw: 
+                    .joint_slider
+                    span.joint_txt
+                td
+                  .joint(data-name='WST')
+                    div Waist: 
+                    .joint_slider
+                    span.joint_txt
+              tr
+                td
+                  .joint(data-name='NK1')
+                    div Neck 1: 
+                    .joint_slider
+                    span.joint_txt                    
+                td
+                  .joint(data-name='NK2')
+                    div Neck 2: 
+                    .joint_slider
+                    span.joint_txt
+          #fingers
+            table
+              tr
+                td
+                  .joint(data-name='RF1')
+                    div Right Finger 1: 
+                    .joint_slider
+                    span.joint_txt                    
+                td
+                  .joint(data-name='LF1')
+                    div Left Finger 1: 
+                    .joint_slider
+                    span.joint_txt                    
+              tr
+                td
+                  .joint(data-name='RF2')
+                    div Right Finger 2: 
+                    .joint_slider
+                    span.joint_txt                    
+                td
+                  .joint(data-name='LF2')
+                    div Left Finger 2: 
+                    .joint_slider
+                    span.joint_txt
+              tr
+                td
+                  .joint(data-name='RF3')
+                    div Right Finger 3: 
+                    .joint_slider
+                    span.joint_txt                    
+                td
+                  .joint(data-name='LF3')
+                    div Left Finger 3: 
+                    .joint_slider
+                    span.joint_txt
+              tr
+                td
+                  .joint(data-name='RF4')
+                    div Right Finger 4: 
+                    .joint_slider
+                    span.joint_txt                    
+                td
+                  .joint(data-name='LF4')
+                    div Left Finger 4: 
+                    .joint_slider
+                    span.joint_txt
+              tr
+                td
+                  .joint(data-name='RF5')
+                    div Right Finger 5: 
+                    .joint_slider
+                    span.joint_txt                    
+                td
+                  .joint(data-name='LF5')
+                    div Left Finger 5: 
+                    .joint_slider
+                    span.joint_txt
+
 
 block append scripts
   include /jade/includes/hubo
