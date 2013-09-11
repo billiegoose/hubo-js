@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Insert Title Here | Hubo-js</title>
+    <meta charset="utf-8">
+    <!-- Jquery makes life so much easier. Load it before everything else!-->
+    <script src="../../lib/jquery/jquery.min.js"></script><meta http-equiv="X-Powered-By" content="DocPad v6.49.1"/>
+    <link rel="stylesheet" type="text/css" href="../../lib/jquery-ui/jquery-ui.custom.css">
+  </head>
+  <body>
+    <div id="mouse_info_dialog" title="Mouse Navigation" style="display:none">
+      <p>Rotate = LEFT mouse button</p>
+      <p>Zoom = MIDDLE mouse wheel</p>
+      <p>Pan = RIGHT mouse button</p>
+    </div>
+    <p>This page demonstrates [put some text here].</p>
+    <table border="1">
+      <tr> 
+        <td>
+          <div id="hubo_container" style="width: 480px; height: 480px; position: relative"> 
+            <div id="load" style="position:absolute"></div>
+            <div id="mouse_info_button" style="position: absolute; top: 464px; left:0px"><img src="../../img/info.png"></div>
+          </div>
+        </td>
+      </tr>
+    </table>
+    <script>window.local_root = '../../'</script>
+    <!-- Used for rendering 3D Hubo -->
+    <script src="../../lib/three/three.min.js"></script>
+    <script src="../../lib/three/Detector.js"></script>
+    <script src="../../lib/three/ColladaLoader2.js"></script>
+    <script src="../../lib/three/TrackballControls.js"></script>
+    <!-- Our code -->
+    <script src="../../lib/dict/dict.js"></script>
+    <script src="../../src/WebGLRobots.js"></script>
+    <script src="../../src/hubo.js"></script>
+    <script src="../../lib/jquery-ui/jquery-ui.custom.min.js"></script>
+    <script src="main.js"></script>
+  </body>
+</html>
