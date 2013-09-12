@@ -132,8 +132,7 @@ WebGLRobots.Robot = function() {
                 this._value = val;
                 //console.log('Set value to ' + val);
                 if (!(typeof _robot === 'undefined')) {
-                    var q = new THREE.Quaternion().setFromAxisAngle(this.axis, this._value);
-                    this.child.rotation.setEulerFromQuaternion(q);
+                    this.child.setRotationFromAxisAngle(this.axis, this._value);
                     if (!(typeof _robot.canvas === 'undefined')) {                        
                         if (_robot.autorender) {
                             _robot.canvas.render();
@@ -221,11 +220,7 @@ WebGLRobots.Robot = function() {
                     // the parent and child and apply the offset to the Object3D.
                     var obj = new THREE.Object3D();
                     obj.position = joint.coords;
-                    // This nonsensical conversion is because ObjectExporter.js only saves the .position, .rotation., and .scale
-                    // properties of an object. .eulerOrder, .quaternion, etc are all not preserved. Thus we must convert from
-                    // roll, pitch, yaw 'ZYX' Euler angles to quaternion and then convert from quaternion to 'XYZ' Euler angles
-                    var q = new THREE.Quaternion().setFromEuler(joint.rpy,"ZYX");
-                    obj.rotation.setEulerFromQuaternion(q);
+                    obj.rotation.set(joint.rpy.x, joint.rpy.y, joint.rpy.z, "ZYX");
                     joint.parent.add(obj);
                     obj.add(joint.child);
                 });
@@ -250,8 +245,7 @@ WebGLRobots.Robot = function() {
                 } else {
                     filename = path + filename;
                     // Load mesh
-                    var loader = new ColladaLoader2();
-                    loader.setLog(onLoaderLogMessage);
+                    var loader = new THREE.ColladaLoader();
                     loader.load(filename, 
                         function(collada) {
                             var node = collada.scene;
@@ -263,12 +257,7 @@ WebGLRobots.Robot = function() {
         })
         .fail(function() { alert("error"); })
     };
-        
-    function onLoaderLogMessage(msg, type) {
-        // Overloading the default (which is to console.log messages) to make it shut up.
-        // var typeStr = ColladaLoader2.messageTypes[type];
-        // console.log(typeStr + ": " + msg);
-    }
+    
     // TODO: Figure out how to show progress more effectively.
     function onProgress(data) {
         // data.total might be null if the server does not set the Content-Length header
