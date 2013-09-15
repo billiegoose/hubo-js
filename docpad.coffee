@@ -3,6 +3,8 @@
 
 # Define the DocPad Configuration
 docpadConfig = {
+  # Ignore GIMP files
+  ignoreCustomPatterns: /\.ignore/
 
   # Configure Plugins
   # Should contain the plugin short names on the left, and the configuration to pass the plugin on the right
