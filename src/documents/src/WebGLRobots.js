@@ -161,7 +161,7 @@ WebGLRobots.Robot = function() {
             _robot.links.expectedCount = $(links).length;
             // Due to the asynchronous nature of AJAX file requests, we have to break up 
             // our code into a bunch of callbacks.
-            var createLink = function(name, node, filename) {                
+            var createLink = function(name, node, filename, color) {                
                 // Improve appearance for canvas rendering.
                 if (!Detector.webgl) {
                     if (node.children[0]) {
@@ -170,6 +170,23 @@ WebGLRobots.Robot = function() {
                 }
                 node.name = name;
                 node.userData.filename = filename;
+                node.userData.color = color;
+                if ((typeof color !== 'undefined') && (color !== null)) {
+                    var arColor = str2floats(color);
+                    console.log(arColor);
+                    node.children[0].material.color.setRGB(arColor[0],arColor[1],arColor[2]);
+                }
+                node.userData.highlight = function() {
+                    node.children[0].material.color.setRGB(1,1,0);
+                };
+                node.userData.unhighlight = function() {
+                    var color = node.userData.color;
+                    if ((typeof color !== 'undefined') && (color !== null)) {
+                        var arColor = str2floats(color);
+                        console.log(arColor);
+                        node.children[0].material.color.setRGB(arColor[0],arColor[1],arColor[2]);
+                    }
+                };
                 _robot.links[name] = node;
                 // Report progress
                 progress(_robot.links.count, _robot.links.expectedCount+1, node);
@@ -182,23 +199,23 @@ WebGLRobots.Robot = function() {
             var createJoints = function() {
                 $(xml).find("robot > joint").each( function() {
                     // Extract joint information from XML.
-                    console.log("--");
+                    //console.log("--");
                     var name = $(this).attr("name");
-                    console.log("joint: " + name);
+                    //console.log("joint: " + name);
                     var child = $(this).find("child").attr("link");
-                    console.log("child: " + child);
+                    //console.log("child: " + child);
                     var parent = $(this).find("parent").attr("link");
-                    console.log("parent: " + parent);
+                    //console.log("parent: " + parent);
                     var coords = $(this).find("origin").attr("xyz");
-                    console.log("coords: " + coords);
+                    //console.log("coords: " + coords);
                     var rpy = $(this).find("origin").attr("rpy"); // roll, pitch, yaw
-                    console.log("rpy: " + rpy); 
+                    //console.log("rpy: " + rpy); 
                     var axis = $(this).find("axis").attr("xyz");
-                    console.log("axis: " + axis);
+                    //console.log("axis: " + axis);
                     var limits = $(this).find("limit");
                     var lower = $(limits).attr("lower");
                     var upper = $(limits).attr("upper");
-                    console.log("limits: " + lower + " to " + upper);
+                    //console.log("limits: " + lower + " to " + upper);
 
                     // Save values to Joint object.
                     var joint = new _robot.Joint();
@@ -238,6 +255,7 @@ WebGLRobots.Robot = function() {
                 // We are being passed in a URDF <link> element.
                 var name = $(this).attr("name");
                 // TODO: Resolve whether to use the collision or visual geometry by default.
+                var color = $(this).find("material color").attr("rgba");
                 // Right now I'm using the collision because it is smaller and looks nicer than the visual geometry for Hubo.
                 var filename = $(this).find("collision geometry mesh").attr("filename");
                 if (typeof filename === 'undefined') {
@@ -249,7 +267,7 @@ WebGLRobots.Robot = function() {
                     loader.load(filename, 
                         function(collada) {
                             var node = collada.scene;
-                            createLink(name, node, filename);
+                            createLink(name, node, filename, color);
                         }, 
                         onProgress);
                 }
@@ -268,6 +286,20 @@ WebGLRobots.Robot = function() {
         //     console.log("Load progress: " + data.loaded + " bytes");
         //     document.getElementById('percentloaded').innerHTML = data.loaded;
         // }   
+    }
+    function str2floats(str) {
+        var arr = str.split(' ');
+        for (var i = arr.length - 1; i >= 0; i--) {
+            arr[i] = parseFloat(arr[i]);
+        };
+        return arr;
+    }
+    // TODO: Come up with a better name than this!
+    function floats2ints(arr) {
+        for (var i = arr.length - 1; i >= 0; i--) {
+            arr[i] = Math.floor(arr[i]*255);
+        };
+        return arr;
     }
 };
 
