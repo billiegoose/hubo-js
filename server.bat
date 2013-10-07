@@ -1,1 +1,1 @@
-cmd /k npm start
+cmd /k node_modules\.bin\docpad run
