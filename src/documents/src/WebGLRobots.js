@@ -167,24 +167,35 @@ WebGLRobots.Robot = function() {
                     if (node.children[0]) {
                         node.children[0].material.overdraw = true;
                     }
-                }
+                }                
+                // TODO: We really need links to be their own class.
                 node.name = name;
                 node.userData.filename = filename;
                 node.userData.color = color;
-                if ((typeof color !== 'undefined') && (color !== null)) {
+                // TODO: Eliminate the need for such ugly checks.
+                if ((typeof node.children !== 'undefined') && (node.children !== null) && 
+                    (typeof node.children[0] !== 'undefined') && (node.children[0] !== null) &&
+                    (typeof color !== 'undefined') && (color !== null)) {
+                    node.color = node.children[0].material.color;
+                    // Set color
                     var arColor = str2floats(color);
                     console.log(arColor);
-                    node.children[0].material.color.setRGB(arColor[0],arColor[1],arColor[2]);
+                    node.color.setRGB(arColor[0],arColor[1],arColor[2]);
+                } else {
+                    node.color = new THREE.Color();
                 }
-                node.userData.highlight = function() {
-                    node.children[0].material.color.setRGB(1,1,0);
+                // Extend link with custom functionality
+                node.highlight = function() {
+                    node.color.setRGB(1,1,0);
                 };
-                node.userData.unhighlight = function() {
+                node.unhighlight = function() {
                     var color = node.userData.color;
-                    if ((typeof color !== 'undefined') && (color !== null)) {
+                    if ((typeof node.children !== 'undefined') && (node.children !== null) && 
+                        (typeof node.children[0] !== 'undefined') && (node.children[0] !== null) &&
+                        (typeof color !== 'undefined') && (color !== null)) {
                         var arColor = str2floats(color);
                         console.log(arColor);
-                        node.children[0].material.color.setRGB(arColor[0],arColor[1],arColor[2]);
+                        node.color.setRGB(arColor[0],arColor[1],arColor[2]);
                     }
                 };
                 _robot.links[name] = node;
