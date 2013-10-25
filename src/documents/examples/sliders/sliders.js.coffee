@@ -1,3 +1,5 @@
+footMatrix = null
+
 $('#controls').tabs()
 
 c = new WebGLRobots.DefaultCanvas("#hubo_container")
@@ -13,7 +15,14 @@ hubo = new Hubo 'hubo2',
       makeSlider(id)
       # Set with initial text
       $("[data-name=" + id + "] .joint_txt").html hubo.motors[id].value.toFixed(2)
-      
+    $('#footanchor').on 'change', (event) ->
+      console.log(event)
+      if this.checked
+        # WARNING! Global variable.
+        footMatrix = new THREE.Matrix4
+        footMatrix.copy(hubo.links.Body_LAR.matrixWorld)
+      else
+        footMatrix = null
   progress = (step,total,node) ->
     $('#load').html("Loading " + step + "/" + total)
 
@@ -35,6 +44,17 @@ makeSlider = (id) ->
   # Update Hubo model
   s.on "slide", (event, ui) ->
     hubo.motors[id].value = ui.value
+    if footMatrix?
+      console.log("Fix foot")
+      # Rotate the whole shebang so that the foot is the "grounded" object.
+      # for prop of hubo.links
+      #     if hubo.links[prop].applyMatrix?
+      #         hubo.links[prop].applyMatrix(hubo.links.Body_RAR.matrixWorld)
+      a = new THREE.Matrix4
+      a.getInverse(hubo.links.Body_LAR.matrixWorld)
+      b = new THREE.Matrix4
+      b.multiplyMatrices(a,footMatrix)
+      hubo.links.Body_Torso.applyMatrix(b)
 
 sign = (x) ->
   (if x then (if x < 0 then -1 else 1) else 0)
