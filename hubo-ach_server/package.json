@@ -1,0 +1,9 @@
+{ "name": "hubo-js_live-display"
+, "description": "Broadcast an actual Hubo's state information to a website."
+, "version": "0.0.1"
+, "private": true
+, "dependencies": 
+  { "express": "3.x"
+  , "firebase": "0.6.7"
+  }
+}
