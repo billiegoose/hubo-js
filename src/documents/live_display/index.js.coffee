@@ -15,16 +15,23 @@ c = new WebGLRobots.DefaultCanvas("#hubo_container")
 #  new THREE.MeshNormalMaterial())
 # c.scene.add(rayx)
 # TODO: Make this a class
-ft_axis = () ->
-  # TODO: Use cylinder to make it thicker?
-  @m_x = new THREE.ArrowHelper(new THREE.Vector3(1,0,0), new THREE.Vector3(0,0,0),0.1,0xFF0000)
-  @m_y = new THREE.ArrowHelper(new THREE.Vector3(0,1,0), new THREE.Vector3(0,0,0),0.1,0x00FF00)
-  @f_z = new THREE.ArrowHelper(new THREE.Vector3(0,0,-1), new THREE.Vector3(0,0,0),0.1,0x00FF00)
-  @axis = new THREE.Object3D()
-  @axis.add(@m_x)
-  @axis.add(@m_y)
-  @axis.add(@f_z)
-  return @axis
+class FT_Axis
+  constructor: (@name) ->
+    # TODO: Use cylinder to make it thicker?
+    @m_x = new THREE.ArrowHelper(new THREE.Vector3(1,0,0), new THREE.Vector3(0,0,0),0.1,0xFF0000)
+    @m_y = new THREE.ArrowHelper(new THREE.Vector3(0,1,0), new THREE.Vector3(0,0,0),0.1,0x00FF00)
+    @f_z = new THREE.ArrowHelper(new THREE.Vector3(0,0,-1), new THREE.Vector3(0,0,0),0.1,0x00FF00)
+    @axis = new THREE.Object3D()
+    @axis.add(@m_x)
+    @axis.add(@m_y)
+    @axis.add(@f_z)
+    return @axis
+  updateColor: () ->
+    # Get mx_min, mx_max
+    # Get value
+    # Scale to get color
+    # Set color
+    # Repeat for m_y, f_z
 
 window.hubo = new Hubo("hubo2", callback = ->
   
@@ -36,10 +43,10 @@ window.hubo = new Hubo("hubo2", callback = ->
   # Create FT display axes
   if not hubo.displays?
     hubo.displays = {}
-  hubo.displays.FT_R_HAND = ft_axis()
-  hubo.displays.FT_L_HAND = ft_axis()
-  hubo.displays.FT_R_FOOT = ft_axis()
-  hubo.displays.FT_L_FOOT = ft_axis()
+  hubo.displays.FT_R_HAND = new FT_Axis("FT_R_HAND")
+  hubo.displays.FT_L_HAND = new FT_Axis("FT_L_HAND")
+  hubo.displays.FT_R_FOOT = new FT_Axis("FT_R_FOOT")
+  hubo.displays.FT_L_FOOT = new FT_Axis("FT_L_FOOT")
 
   # Add the hand FT sensors to the wrist pitch links
   hubo.links.Body_RWP.add(hubo.displays.FT_R_HAND)

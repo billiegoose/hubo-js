@@ -18,6 +18,59 @@ block body
           #load(style='position:absolute')
           #mouse_info_button(style="position: absolute; top: 464px; left:0px")
             img(src="/img/info.png")
+      td
+        p#controls
+          p#FT_R_HAND 
+            table
+              tr 
+                th FT_R_HAND:
+              tr
+                td m_x min:
+                td 
+                  input#_m_x_min(type='text')
+                td m_x max:
+                td
+                  input#_m_x_max(type='text')
+              tr
+                td m_y min:
+                td
+                  input#_m_y_min(type='text')
+                td m_y max:
+                td
+                  input#_m_y_max(type='text')
+              tr
+                td f_z min:
+                td
+                  input#_f_z_min(type='text')
+                td f_z max:
+                td
+                  input#_f_z_max(type='text')
+          p#FT_L_HAND
+            table
+              tr
+                th FT_L_HAND:
+              tr
+                td m_x min:
+                td 
+                  input#_m_x_min(type='text')
+                td m_x max:
+                td
+                  input#_m_x_max(type='text')
+              tr
+                td m_y min:
+                td
+                  input#_m_y_min(type='text')
+                td m_y max:
+                td
+                  input#_m_y_max(type='text')
+              tr
+                td f_z min:
+                td
+                  input#_f_z_min(type='text')
+                td f_z max:
+                td
+                  input#_f_z_max(type='text')
+            
 
 block append scripts
   include /jade/includes/hubo
