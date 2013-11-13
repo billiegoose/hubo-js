@@ -19,57 +19,107 @@ block body
           #mouse_info_button(style="position: absolute; top: 464px; left:0px")
             img(src="/img/info.png")
       td
-        p#controls
-          p#FT_R_HAND 
+        #controls
+          #HUBO_FT_R_HAND 
             table
               tr 
                 th FT_R_HAND:
               tr
                 td m_x min:
                 td 
-                  input#_m_x_min(type='text')
+                  input.m_x_min(type='number', value='-1')
                 td m_x max:
                 td
-                  input#_m_x_max(type='text')
+                  input.m_x_max(type='number', value='1')
               tr
                 td m_y min:
                 td
-                  input#_m_y_min(type='text')
+                  input.m_y_min(type='number', value='-1')
                 td m_y max:
                 td
-                  input#_m_y_max(type='text')
+                  input.m_y_max(type='number', value='1')
               tr
                 td f_z min:
                 td
-                  input#_f_z_min(type='text')
+                  input.f_z_min(type='number', value='-10')
                 td f_z max:
                 td
-                  input#_f_z_max(type='text')
-          p#FT_L_HAND
+                  input.f_z_max(type='number', value='10')
+          #HUBO_FT_L_HAND
             table
               tr
                 th FT_L_HAND:
               tr
                 td m_x min:
                 td 
-                  input#_m_x_min(type='text')
+                  input.m_x_min(type='number', value='-1')
                 td m_x max:
                 td
-                  input#_m_x_max(type='text')
+                  input.m_x_max(type='number', value='1')
               tr
                 td m_y min:
                 td
-                  input#_m_y_min(type='text')
+                  input.m_y_min(type='number', value='-1')
                 td m_y max:
                 td
-                  input#_m_y_max(type='text')
+                  input.m_y_max(type='number', value='1')
               tr
                 td f_z min:
                 td
-                  input#_f_z_min(type='text')
+                  input.f_z_min(type='number', value='-10')
                 td f_z max:
                 td
-                  input#_f_z_max(type='text')
+                  input.f_z_max(type='number', value='10')
+          #HUBO_FT_R_FOOT
+            table
+              tr
+                th FT_R_FOOT:
+              tr
+                td m_x min:
+                td 
+                  input.m_x_min(type='number', value='-1')
+                td m_x max:
+                td
+                  input.m_x_max(type='number', value='1')
+              tr
+                td m_y min:
+                td
+                  input.m_y_min(type='number', value='-1')
+                td m_y max:
+                td
+                  input.m_y_max(type='number', value='1')
+              tr
+                td f_z min:
+                td
+                  input.f_z_min(type='number', value='-10')
+                td f_z max:
+                td
+                  input.f_z_max(type='number', value='10')
+          #HUBO_FT_L_FOOT
+            table
+              tr
+                th FT_L_FOOT:
+              tr
+                td m_x min:
+                td 
+                  input.m_x_min(type='number', value='-1')
+                td m_x max:
+                td
+                  input.m_x_max(type='number', value='1')
+              tr
+                td m_y min:
+                td
+                  input.m_y_min(type='number', value='-1')
+                td m_y max:
+                td
+                  input.m_y_max(type='number', value='1')
+              tr
+                td f_z min:
+                td
+                  input.f_z_min(type='number', value='-10')
+                td f_z max:
+                td
+                  input.f_z_max(type='number', value='10')
             
 
 block append scripts

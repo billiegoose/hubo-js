@@ -3,6 +3,7 @@
 #
 window.huboRef = new Firebase('https://hubo-firebase.firebaseIO.com')
 window.jointRef = huboRef.child('joints')
+window.ftRef = huboRef.child('ft')
 
 #
 # Setup Hubo-in-the-Browser
@@ -15,23 +16,51 @@ c = new WebGLRobots.DefaultCanvas("#hubo_container")
 #  new THREE.MeshNormalMaterial())
 # c.scene.add(rayx)
 # TODO: Make this a class
-class FT_Axis
+class FT_Sensor
   constructor: (@name) ->
     # TODO: Use cylinder to make it thicker?
-    @m_x = new THREE.ArrowHelper(new THREE.Vector3(1,0,0), new THREE.Vector3(0,0,0),0.1,0xFF0000)
-    @m_y = new THREE.ArrowHelper(new THREE.Vector3(0,1,0), new THREE.Vector3(0,0,0),0.1,0x00FF00)
-    @f_z = new THREE.ArrowHelper(new THREE.Vector3(0,0,-1), new THREE.Vector3(0,0,0),0.1,0x00FF00)
+    @m_x_obj = new THREE.ArrowHelper(new THREE.Vector3(1,0,0), new THREE.Vector3(0,0,0),0.1,0xFF0000)
+    @m_y_obj = new THREE.ArrowHelper(new THREE.Vector3(0,1,0), new THREE.Vector3(0,0,0),0.1,0x00FF00)
+    @f_z_obj = new THREE.ArrowHelper(new THREE.Vector3(0,0,-1), new THREE.Vector3(0,0,0),0.1,0x00FF00)
     @axis = new THREE.Object3D()
-    @axis.add(@m_x)
-    @axis.add(@m_y)
-    @axis.add(@f_z)
-    return @axis
+    @axis.add(@m_x_obj)
+    @axis.add(@m_y_obj)
+    @axis.add(@f_z_obj)
   updateColor: () ->
-    # Get mx_min, mx_max
-    # Get value
-    # Scale to get color
-    # Set color
-    # Repeat for m_y, f_z
+    # Get mx_min, mx_max, etc
+    mx_min = $("##{ @name } .m_x_min").val()
+    mx_max = $("##{ @name } .m_x_max").val()
+    # console.log("mx_min: #{mx_min}")
+    # console.log("mx_max: #{mx_max}")
+    my_min = $("##{ @name } .m_y_min").val()
+    my_max = $("##{ @name } .m_y_max").val()
+    fz_min = $("##{ @name } .f_z_min").val()
+    fz_max = $("##{ @name } .f_z_max").val()
+    # Scale 
+    mx_gradient = interpColor(mx_min, mx_max, 0, @m_x)
+    # console.log("mx_gradient: #{mx_gradient}")
+    my_gradient = interpColor(my_min, my_max, 0, @m_y)
+    fz_gradient = interpColor(fz_min, fz_max, 0, @f_z)
+    # Set colors
+    temp = new THREE.Color()
+    temp.setRGB(mx_gradient,(1-mx_gradient),0)
+    @axis.children[0].setColor(temp.getHex())
+
+    temp.setRGB(my_gradient,(1-my_gradient),0)
+    @axis.children[1].setColor(temp.getHex())
+
+    temp.setRGB(fz_gradient,(1-fz_gradient),0)
+    @axis.children[2].setColor(temp.getHex())
+
+interpColor = (min,max,zero,t) ->
+  if t > max
+    t = max
+  if t < min
+    t = min
+  if t < zero
+    return Math.min((zero-t)/(zero-min),1)
+  else
+    return Math.min((t-zero)/(max-zero),1)
 
 window.hubo = new Hubo("hubo2", callback = ->
   
@@ -41,24 +70,24 @@ window.hubo = new Hubo("hubo2", callback = ->
   $("#load").hide()
 
   # Create FT display axes
-  if not hubo.displays?
-    hubo.displays = {}
-  hubo.displays.FT_R_HAND = new FT_Axis("FT_R_HAND")
-  hubo.displays.FT_L_HAND = new FT_Axis("FT_L_HAND")
-  hubo.displays.FT_R_FOOT = new FT_Axis("FT_R_FOOT")
-  hubo.displays.FT_L_FOOT = new FT_Axis("FT_L_FOOT")
+  if not hubo.ft?
+    hubo.ft = {}
+  hubo.ft.HUBO_FT_R_HAND = new FT_Sensor("HUBO_FT_R_HAND")
+  hubo.ft.HUBO_FT_L_HAND = new FT_Sensor("HUBO_FT_L_HAND")
+  hubo.ft.HUBO_FT_R_FOOT = new FT_Sensor("HUBO_FT_R_FOOT")
+  hubo.ft.HUBO_FT_L_FOOT = new FT_Sensor("HUBO_FT_L_FOOT")
 
   # Add the hand FT sensors to the wrist pitch links
-  hubo.links.Body_RWP.add(hubo.displays.FT_R_HAND)
-  hubo.links.Body_LWP.add(hubo.displays.FT_L_HAND)
-  hubo.links.Body_RAR.add(hubo.displays.FT_R_FOOT)
-  hubo.links.Body_LAR.add(hubo.displays.FT_L_FOOT)
+  hubo.links.Body_RWP.add(hubo.ft.HUBO_FT_R_HAND.axis)
+  hubo.links.Body_LWP.add(hubo.ft.HUBO_FT_L_HAND.axis)
+  hubo.links.Body_RAR.add(hubo.ft.HUBO_FT_R_FOOT.axis)
+  hubo.links.Body_LAR.add(hubo.ft.HUBO_FT_L_FOOT.axis)
   # The origin of wrist pitch link is in the middle of the wrist, so we will
   # offset the axis a bit so it is in the middle of the hand.
-  hubo.displays.FT_R_HAND.position = new THREE.Vector3(0,0,-0.1)
-  hubo.displays.FT_L_HAND.position = new THREE.Vector3(0,0,-0.1)
-  hubo.displays.FT_R_FOOT.position = new THREE.Vector3(-0.05,0,-0.11)
-  hubo.displays.FT_L_FOOT.position = new THREE.Vector3(-0.05,0,-0.11)
+  hubo.ft.HUBO_FT_R_HAND.axis.position = new THREE.Vector3(0,0,-0.1)
+  hubo.ft.HUBO_FT_L_HAND.axis.position = new THREE.Vector3(0,0,-0.1)
+  hubo.ft.HUBO_FT_R_FOOT.axis.position = new THREE.Vector3(-0.05,0,-0.11)
+  hubo.ft.HUBO_FT_L_FOOT.axis.position = new THREE.Vector3(-0.05,0,-0.11)
 
 
   # jointRef.once('value', (data) ->
@@ -73,6 +102,21 @@ window.hubo = new Hubo("hubo2", callback = ->
     joint = snapshot.val()
     hubo.motors[name].value = joint.pos
   )
+
+  # Create the Firebase update
+  ftRef.on('child_changed', (snapshot) ->
+    name = snapshot.name()
+    ft = snapshot.val()
+    console.log('name: '+ name)
+    console.log(ft)
+    # TODO: Make part of class. Add setters/getters
+    hubo.ft[name].m_x = ft.m_x
+    hubo.ft[name].m_y = ft.m_y
+    hubo.ft[name].f_z = ft.f_z
+    hubo.ft[name].updateColor()
+    hubo.canvas.render()
+  )
+
   # Update the rendering to reflect any changes to Hubo.
   c.render()
 , progress = (step, total, node) ->
