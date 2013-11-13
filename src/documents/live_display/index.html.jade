@@ -1,0 +1,129 @@
+extends /jade/templates/regular-layout
+
+block prepend head
+  title Hubo Live Display | Hubo-js
+block append head
+  link(rel='stylesheet', type='text/css', href='/lib/jquery-ui/jquery-ui.custom.css')
+
+block body
+  #mouse_info_dialog(title='Mouse Navigation', style="display:none")
+    p Rotate = LEFT mouse button
+    p Zoom = MIDDLE mouse wheel
+    p Pan = RIGHT mouse button
+  p This page demonstrates [put some text here].
+  table(border='1')
+    tr 
+      td
+        #hubo_container(style="width: 480px; height: 480px; position: relative") 
+          #load(style='position:absolute')
+          #mouse_info_button(style="position: absolute; top: 464px; left:0px")
+            img(src="/img/info.png")
+      td
+        #controls
+          #HUBO_FT_R_HAND 
+            table
+              tr 
+                th FT_R_HAND:
+              tr
+                td m_x min:
+                td 
+                  input.m_x_min(type='number', value='-1')
+                td m_x max:
+                td
+                  input.m_x_max(type='number', value='1')
+              tr
+                td m_y min:
+                td
+                  input.m_y_min(type='number', value='-1')
+                td m_y max:
+                td
+                  input.m_y_max(type='number', value='1')
+              tr
+                td f_z min:
+                td
+                  input.f_z_min(type='number', value='-10')
+                td f_z max:
+                td
+                  input.f_z_max(type='number', value='10')
+          #HUBO_FT_L_HAND
+            table
+              tr
+                th FT_L_HAND:
+              tr
+                td m_x min:
+                td 
+                  input.m_x_min(type='number', value='-1')
+                td m_x max:
+                td
+                  input.m_x_max(type='number', value='1')
+              tr
+                td m_y min:
+                td
+                  input.m_y_min(type='number', value='-1')
+                td m_y max:
+                td
+                  input.m_y_max(type='number', value='1')
+              tr
+                td f_z min:
+                td
+                  input.f_z_min(type='number', value='-10')
+                td f_z max:
+                td
+                  input.f_z_max(type='number', value='10')
+          #HUBO_FT_R_FOOT
+            table
+              tr
+                th FT_R_FOOT:
+              tr
+                td m_x min:
+                td 
+                  input.m_x_min(type='number', value='-1')
+                td m_x max:
+                td
+                  input.m_x_max(type='number', value='1')
+              tr
+                td m_y min:
+                td
+                  input.m_y_min(type='number', value='-1')
+                td m_y max:
+                td
+                  input.m_y_max(type='number', value='1')
+              tr
+                td f_z min:
+                td
+                  input.f_z_min(type='number', value='-10')
+                td f_z max:
+                td
+                  input.f_z_max(type='number', value='10')
+          #HUBO_FT_L_FOOT
+            table
+              tr
+                th FT_L_FOOT:
+              tr
+                td m_x min:
+                td 
+                  input.m_x_min(type='number', value='-1')
+                td m_x max:
+                td
+                  input.m_x_max(type='number', value='1')
+              tr
+                td m_y min:
+                td
+                  input.m_y_min(type='number', value='-1')
+                td m_y max:
+                td
+                  input.m_y_max(type='number', value='1')
+              tr
+                td f_z min:
+                td
+                  input.f_z_min(type='number', value='-10')
+                td f_z max:
+                td
+                  input.f_z_max(type='number', value='10')
+            
+
+block append scripts
+  include /jade/includes/hubo
+  script(src='/lib/jquery-ui/jquery-ui.custom.min.js')
+  script(src='https://cdn.firebase.com/v0/firebase.js')
+  script(src='index.js')
