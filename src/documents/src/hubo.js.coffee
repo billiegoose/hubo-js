@@ -15,9 +15,11 @@ class Hubo extends WebGLRobots.Robot
         for own key, value of @joints
           if key.length == 3
             @addRegularMotor(key);
-        # Hack for shoulder roll
-        _robot.motors.LSR.default_value = +20/180*Math.PI
-        _robot.motors.RSR.default_value = -20/180*Math.PI
+        # Offsets for shoulder roll and elbow pitch (values taken from huboplus.kinbody.xml "<initial>" fields)
+        _robot.motors.LSR.offset = +15/180*Math.PI
+        _robot.motors.RSR.offset = -15/180*Math.PI
+        _robot.motors.LEP.offset = -10/180*Math.PI
+        _robot.motors.REP.offset = -10/180*Math.PI
         @addFinger('LF1')
         @addFinger('LF2')
         @addFinger('LF3')
@@ -41,16 +43,19 @@ class Hubo extends WebGLRobots.Robot
     motor.name = name
     motor.lower_limit = @joints[name].lower_limit
     motor.upper_limit = @joints[name].upper_limit
+    motor.default_value = 0
+    motor.offset = 0
+    motor.value = motor.default_value
     Object.defineProperties motor,
     value:
-      get: -> return _robot.joints[@name].value
+      get: -> return _robot.joints[@name].value - _robot.motors[@name].offset
       set: (val) -> 
         val = clamp(val,this)
+        console.log('_robot.joints[@name].offset' + _robot.motors[@name].offset)
+        val = val + _robot.motors[@name].offset
         _robot.joints[@name].value = val
         return val
       enumerable: true
-    motor.default_value = 0
-    motor.value = motor.default_value
     @motors[name] = motor
   addNeckMotor: (name) ->
     _robot = this

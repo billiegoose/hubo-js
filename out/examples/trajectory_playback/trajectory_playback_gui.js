@@ -75,7 +75,7 @@ watch(playback, 'state', function() {
 });
 
 applyTrajectory = function(headers, data) {
-  var i, id, _i, _j, _len, _ref;
+  var id, _i, _len;
   console.log(data.length);
   playback.data = data;
   playback.framerate = 200;
@@ -83,13 +83,9 @@ applyTrajectory = function(headers, data) {
   headers[headers.indexOf('RKN')] = 'RKP';
   headers[headers.indexOf('LEB')] = 'LEP';
   headers[headers.indexOf('REB')] = 'REP';
-  for (i = _i = 0, _ref = data.length - 1; 0 <= _ref ? _i <= _ref : _i >= _ref; i = 0 <= _ref ? ++_i : --_i) {
-    data[i][headers.indexOf('LSR')] += 20 / 180 * Math.PI;
-    data[i][headers.indexOf('RSR')] -= 20 / 180 * Math.PI;
-  }
   playback.working_headers = {};
-  for (_j = 0, _len = headers.length; _j < _len; _j++) {
-    id = headers[_j];
+  for (_i = 0, _len = headers.length; _i < _len; _i++) {
+    id = headers[_i];
     if (hubo.motors[id] != null) {
       playback.working_headers[id] = headers.indexOf(id);
     }
