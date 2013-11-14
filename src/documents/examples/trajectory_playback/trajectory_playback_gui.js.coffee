@@ -66,10 +66,6 @@ applyTrajectory = (headers, data) ->
     headers[headers.indexOf('RKN')] = 'RKP'
     headers[headers.indexOf('LEB')] = 'LEP'
     headers[headers.indexOf('REB')] = 'REP'
-    # Hack to add 20 degrees to shoulder roll.
-    for i in [0..data.length-1]
-      data[i][headers.indexOf('LSR')] += 20/180*Math.PI
-      data[i][headers.indexOf('RSR')] -= 20/180*Math.PI
     # Find the joints we can actually use
     playback.working_headers = {}
     for id in headers
