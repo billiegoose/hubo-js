@@ -1,130 +1,139 @@
 console.log('Started ' + __filename);
 
-var path = require('path');
-
-// Init globals
-pose_header = 'RHY         RHR         RHP         RKP         RAP         RAR         LHY         LHR         LHP         LKP         LAP         LAR         RSP         RSR         RSY         REP         RWY         RWR         RWP         LSP         LSR         LSY         LEP         LWY         LWR         LWP         NKY         NK1         NK2         WST         RF1         RF2         RF3         RF4         RF5         LF1         LF2         LF3         LF4         LF5         ';
-joint_names = pose_header.trim().split(/\s+/);
-ach_status = "ACH_OK";
-
 // NOTE: The limitations of a free developer Firebase account: 5 GB Data Transfer, 50 Max Connections, 100 MB Data Storage
 var Firebase = require('firebase');
 // Open Firebase connection
 var huboRef = new Firebase('https://hubo-firebase.firebaseIO.com');
-var jointRef = huboRef.child('joints');
-var ftRef = huboRef.child('ft');
+
+// Communicate with ACH
+var hubo_ach = require('hubo-ach-readonly');
+
+// var path = require('path');
 
 // var util = require('util');
 //var coffeescript = require('connect-coffee-script');
 // var fs = require('fs');
-
-// Communicate with ACH
-var spawn = require('child_process').spawn;
-var exec = require('child_process').exec;
-var jointControl = spawn('python', ['ach_node_bridge_readonly.py']);
-
-// This event is run when the Python bridge writes to its standard out, which 
-// we read in an interpret.
-jointControl.stdout.on('data', function(data) {
-    var lines = data.toString().split('\n');
-    for (i=0; i<lines.length; i++) {
-        var line = lines[i].trim();
-        // Skip empty lines.
-        if (line == "") {
-            continue;
-        }
-        // Parse line
-        line = line.split(':');
-        // console.log('Joint Control: ' + line);
-        var key = line[0].trim();
-        var value = line[1].trim();
-        // Update model
-        switch(key) {
-            case "status":
-                console.log("status = " + value);
-                ach_status = value;
-                break;
-            case "pos":
-                // if (ach_status == "ACH_OK") {
-                    console.log("\nPOSE = " + value);
-                    setPos(string_to_pose(value));
-                // }
-                break;
-            case "ref":
-                // if (ach_status == "ACH_OK") {
-                    console.log("\nREF = " + value);
-                    setRef(string_to_pose(value));
-                // }
-                break;
-            case "HUBO_FT_R_HAND":
-                setFT("HUBO_FT_R_HAND", value);
-                break;
-            case "HUBO_FT_L_HAND":
-                setFT("HUBO_FT_L_HAND", value);
-                break;
-            case "HUBO_FT_R_FOOT":
-                setFT("HUBO_FT_R_FOOT", value);
-                break;
-            case "HUBO_FT_L_FOOT":
-                setFT("HUBO_FT_L_FOOT", value);
-                break;
-        }
+var state = {}
+var updateID = null;
+var main = function() {
+    var r = hubo_ach.init();
+    if (!r) {
+        console.log("Error initializing hubo-ach-readonly module. Likely cause: hubo-daemon is not running.")
+        return
     }
-    jointControl.stdin.write('ok\n');
-});
-
-// This let's us know if the Python bridge crashes. :-(
-jointControl.on('exit', function(code) {
-    console.log('Joint Control exited with code ' + code);
-});
-
-function string_to_pose(pose_string) {
-    return pose_string.trim().split(/\s+/);
+    updateID = setInterval(update,1000);
 }
 
-function setPos(pose) {
-    if (notZeros(pose)) {
-        for (var i = 0; i < joint_names.length; i++) {
-            jointRef.child(joint_names[i]).child("pos").set(parseFloat(pose[i]));
-        }
-    }
+var update = function() {
+    state = hubo_ach.getState()
+    console.log('RSP: ' + state.joint[11].ref);
+    huboRef.child('state').set(state);
 }
 
-function setRef(pose) {
-    for (var i = 0; i < joint_names.length; i++) {
-        jointRef.child(joint_names[i]).child("ref").set(parseFloat(pose[i]));
-    }
-}
+main();
 
-function setFT(ft_name, ft_string) {
-    // TODO: Re-write this so if the string to parse is not valid, it will not crash whole server.
-    var tokens = ft_string.split(',');
-    ftRef.child(ft_name).child('m_x').set(parseFloat(tokens[0]));
-    ftRef.child(ft_name).child('m_y').set(parseFloat(tokens[1]));
-    ftRef.child(ft_name).child('f_z').set(parseFloat(tokens[2]));
-}
+// // This event is run when the Python bridge writes to its standard out, which 
+// // we read in an interpret.
+// jointControl.stdout.on('data', function(data) {
+//     var lines = data.toString().split('\n');
+//     for (i=0; i<lines.length; i++) {
+//         var line = lines[i].trim();
+//         // Skip empty lines.
+//         if (line == "") {
+//             continue;
+//         }
+//         // Parse line
+//         line = line.split(':');
+//         // console.log('Joint Control: ' + line);
+//         var key = line[0].trim();
+//         var value = line[1].trim();
+//         // Update model
+//         switch(key) {
+//             case "status":
+//                 console.log("status = " + value);
+//                 ach_status = value;
+//                 break;
+//             case "pos":
+//                 // if (ach_status == "ACH_OK") {
+//                     console.log("\nPOSE = " + value);
+//                     setPos(string_to_pose(value));
+//                 // }
+//                 break;
+//             case "ref":
+//                 // if (ach_status == "ACH_OK") {
+//                     console.log("\nREF = " + value);
+//                     setRef(string_to_pose(value));
+//                 // }
+//                 break;
+//             case "HUBO_FT_R_HAND":
+//                 setFT("HUBO_FT_R_HAND", value);
+//                 break;
+//             case "HUBO_FT_L_HAND":
+//                 setFT("HUBO_FT_L_HAND", value);
+//                 break;
+//             case "HUBO_FT_R_FOOT":
+//                 setFT("HUBO_FT_R_FOOT", value);
+//                 break;
+//             case "HUBO_FT_L_FOOT":
+//                 setFT("HUBO_FT_L_FOOT", value);
+//                 break;
+//         }
+//     }
+//     jointControl.stdin.write('ok\n');
+// });
 
-// For some reason, ACH likes to return frames with ALL ZEROS, even when the status is ACH_OK sometimes.
-// Since this is highly undesireable behavior, I'm checking and discarding such frames.
-function notZeros(pose) {
-    for (var i = 0; i < pose.length; i++) {
-        if (pose[i] != 0) {
-            return true;
-        }
-    }
-    return false;
-}
+// // This let's us know if the Python bridge crashes. :-(
+// jointControl.on('exit', function(code) {
+//     console.log('Joint Control exited with code ' + code);
+// });
+
+// function string_to_pose(pose_string) {
+//     return pose_string.trim().split(/\s+/);
+// }
+
+// function setPos(pose) {
+//     if (notZeros(pose)) {
+//         for (var i = 0; i < joint_names.length; i++) {
+//             jointRef.child(joint_names[i]).child("pos").set(parseFloat(pose[i]));
+//         }
+//     }
+// }
+
+// function setRef(pose) {
+//     for (var i = 0; i < joint_names.length; i++) {
+//         jointRef.child(joint_names[i]).child("ref").set(parseFloat(pose[i]));
+//     }
+// }
+
+// function setFT(ft_name, ft_string) {
+//     // TODO: Re-write this so if the string to parse is not valid, it will not crash whole server.
+//     var tokens = ft_string.split(',');
+//     ftRef.child(ft_name).child('m_x').set(parseFloat(tokens[0]));
+//     ftRef.child(ft_name).child('m_y').set(parseFloat(tokens[1]));
+//     ftRef.child(ft_name).child('f_z').set(parseFloat(tokens[2]));
+// }
+
+// // For some reason, ACH likes to return frames with ALL ZEROS, even when the status is ACH_OK sometimes.
+// // Since this is highly undesireable behavior, I'm checking and discarding such frames.
+// function notZeros(pose) {
+//     for (var i = 0; i < pose.length; i++) {
+//         if (pose[i] != 0) {
+//             return true;
+//         }
+//     }
+//     return false;
+// }
 
 
 
-// Setup server
-var express = require('express'); // this is the webserver
-var app = express();
-app.use(express.bodyParser());
-app.use(express.methodOverride());
-app.use(app.router);
-// Serve static files out of the /out directory generated by Docpad. (Clever!)
-app.use(express.static(path.join(__dirname, '../out')));
+// // Setup server
+// var express = require('express'); // this is the webserver
+// var app = express();
+// app.use(express.bodyParser());
+// app.use(express.methodOverride());
+// app.use(app.router);
+// // Serve static files out of the /out directory generated by Docpad. (Clever!)
+// app.use(express.static(path.join(__dirname, '../out')));
 
 
 // app.set('views', __dirname + '/views');
@@ -287,4 +296,4 @@ app.use(express.static(path.join(__dirname, '../out')));
 
 
 
-app.listen(3000);
+// app.listen(3000);

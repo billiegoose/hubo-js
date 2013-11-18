@@ -1,9 +1,7 @@
 #
 # Init Firebase
 #
-window.huboRef = new Firebase('https://hubo-firebase.firebaseIO.com')
-window.jointRef = huboRef.child('joints')
-window.ftRef = huboRef.child('ft')
+window.stateRef = new Firebase('https://hubo-firebase.firebaseIO.com/state')
 
 #
 # Setup Hubo-in-the-Browser
@@ -97,25 +95,134 @@ window.hubo = new Hubo("hubo2", callback = ->
   # });
 
   # Create the Firebase update
-  jointRef.on('child_changed', (snapshot) ->
-    name = snapshot.name()
-    joint = snapshot.val()
-    hubo.motors[name].value = joint.pos
+  stateRef.on('value', (snapshot) ->
+    state = snapshot.val()
+
+    # TODO: In the future, make this a loop rather than hard-coded.
+    hubo.ft["HUBO_FT_R_HAND"].m_x = state.ft[0].m_x
+    hubo.ft["HUBO_FT_R_HAND"].m_y = state.ft[0].m_y
+    hubo.ft["HUBO_FT_R_HAND"].f_z = state.ft[0].f_z
+    hubo.ft["HUBO_FT_R_HAND"].updateColor()
+    hubo.ft["HUBO_FT_L_HAND"].m_x = state.ft[1].m_x
+    hubo.ft["HUBO_FT_L_HAND"].m_y = state.ft[1].m_y
+    hubo.ft["HUBO_FT_L_HAND"].f_z = state.ft[1].f_z
+    hubo.ft["HUBO_FT_L_HAND"].updateColor()
+    hubo.ft["HUBO_FT_R_FOOT"].m_x = state.ft[2].m_x
+    hubo.ft["HUBO_FT_R_FOOT"].m_y = state.ft[2].m_y
+    hubo.ft["HUBO_FT_R_FOOT"].f_z = state.ft[2].f_z
+    hubo.ft["HUBO_FT_R_FOOT"].updateColor()
+    hubo.ft["HUBO_FT_L_FOOT"].m_x = state.ft[3].m_x
+    hubo.ft["HUBO_FT_L_FOOT"].m_y = state.ft[3].m_y
+    hubo.ft["HUBO_FT_L_FOOT"].f_z = state.ft[3].f_z
+    hubo.ft["HUBO_FT_L_FOOT"].updateColor()
+
+    j2i = { "WST": 0
+          , "NKY": 1
+          , "NK1": 2
+          , "NK2": 3
+          , "LSP": 4
+          , "LSR": 5
+          , "LSY": 6
+          , "LEB": 7
+          , "LWY": 8
+          , "LWR": 9
+          , "LWP": 10
+          , "RSP": 11
+          , "RSR": 12
+          , "RSY": 13
+          , "REB": 14
+          , "RWY": 15
+          , "RWR": 16
+          , "RWP": 17 #mind the gap
+          , "LHY": 19
+          , "LHR": 20
+          , "LHP": 21
+          , "LKN": 22
+          , "LAP": 23
+          , "LAR": 24 #mind the gap
+          , "RHY": 26
+          , "RHR": 27
+          , "RHP": 28
+          , "RKN": 29
+          , "RAP": 30
+          , "RAR": 31
+          , "RF1": 32
+          , "RF2": 33
+          , "RF3": 34
+          , "RF4": 35
+          , "RF5": 36
+          , "LF1": 37
+          , "LF2": 38
+          , "LF3": 39
+          , "LF4": 40
+          , "LF5": 41
+          }
+    hubo.motors["WST"].value = state.joint[0].ref
+    hubo.motors["NKY"].value = state.joint[1].ref
+    hubo.motors["NK1"].value = state.joint[2].ref
+    hubo.motors["NK2"].value = state.joint[3].ref
+    hubo.motors["LSP"].value = state.joint[4].ref
+    hubo.motors["LSR"].value = state.joint[5].ref
+    hubo.motors["LSY"].value = state.joint[6].ref
+    hubo.motors["LEP"].value = state.joint[7].ref
+    hubo.motors["LWY"].value = state.joint[8].ref
+    # hubo.motors["LWR"].value = state.joint[9].ref
+    hubo.motors["LWP"].value = state.joint[10].ref
+    hubo.motors["RSP"].value = state.joint[11].ref
+    hubo.motors["RSR"].value = state.joint[12].ref
+    hubo.motors["RSY"].value = state.joint[13].ref
+    hubo.motors["REP"].value = state.joint[14].ref
+    hubo.motors["RWY"].value = state.joint[15].ref
+    # hubo.motors["RWR"].value = state.joint[16].ref
+    hubo.motors["RWP"].value = state.joint[17].ref
+    # mind the gap
+    hubo.motors["LHY"].value = state.joint[19].ref
+    hubo.motors["LHR"].value = state.joint[20].ref
+    hubo.motors["LHP"].value = state.joint[21].ref
+    hubo.motors["LKP"].value = state.joint[22].ref
+    hubo.motors["LAP"].value = state.joint[23].ref
+    hubo.motors["LAR"].value = state.joint[24].ref
+    # mind the gap
+    hubo.motors["RHY"].value = state.joint[26].ref
+    hubo.motors["RHR"].value = state.joint[27].ref
+    hubo.motors["RHP"].value = state.joint[28].ref
+    hubo.motors["RKP"].value = state.joint[29].ref
+    hubo.motors["RAP"].value = state.joint[30].ref
+    hubo.motors["RAR"].value = state.joint[31].ref
+    hubo.motors["RF1"].value = state.joint[32].ref
+    hubo.motors["RF2"].value = state.joint[33].ref
+    hubo.motors["RF3"].value = state.joint[34].ref    
+    hubo.motors["RF4"].value = state.joint[35].ref
+    hubo.motors["RF5"].value = state.joint[36].ref
+    hubo.motors["LF1"].value = state.joint[37].ref
+    hubo.motors["LF2"].value = state.joint[38].ref
+    hubo.motors["LF3"].value = state.joint[39].ref
+    hubo.motors["LF4"].value = state.joint[40].ref
+    hubo.motors["LF5"].value = state.joint[41].ref
+    # Needed for FT sensor updates. TODO: Make FT sensor updates run render themselves.
+    hubo.canvas.render();
   )
 
-  # Create the Firebase update
-  ftRef.on('child_changed', (snapshot) ->
-    name = snapshot.name()
-    ft = snapshot.val()
-    console.log('name: '+ name)
-    console.log(ft)
-    # TODO: Make part of class. Add setters/getters
-    hubo.ft[name].m_x = ft.m_x
-    hubo.ft[name].m_y = ft.m_y
-    hubo.ft[name].f_z = ft.f_z
-    hubo.ft[name].updateColor()
-    hubo.canvas.render()
-  )
+  # # Create the Firebase update
+  # jointRef.on('child_changed', (snapshot) ->
+  #   name = snapshot.name()
+  #   joint = snapshot.val()
+  #   hubo.motors[name].value = joint.pos
+  # )
+
+  # # Create the Firebase update
+  # ftRef.on('child_changed', (snapshot) ->
+  #   name = snapshot.name()
+  #   ft = snapshot.val()
+  #   console.log('name: '+ name)
+  #   console.log(ft)
+  #   # TODO: Make part of class. Add setters/getters
+  #   hubo.ft[name].m_x = ft.m_x
+  #   hubo.ft[name].m_y = ft.m_y
+  #   hubo.ft[name].f_z = ft.f_z
+  #   hubo.ft[name].updateColor()
+  #   hubo.canvas.render()
+  # )
 
   # Update the rendering to reflect any changes to Hubo.
   c.render()
