@@ -1,3 +1,4 @@
+var hz = 10;
 console.log('Started ' + __filename);
 
 // NOTE: The limitations of a free developer Firebase account: 5 GB Data Transfer, 50 Max Connections, 100 MB Data Storage
@@ -21,7 +22,7 @@ var main = function() {
         console.log("Error initializing hubo-ach-readonly module. Likely cause: hubo-daemon is not running.")
         return
     }
-    updateID = setInterval(update,1000);
+    updateID = setInterval(update,1000/hz);
 }
 
 var update = function() {
