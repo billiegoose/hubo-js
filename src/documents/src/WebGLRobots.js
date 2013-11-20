@@ -179,7 +179,6 @@ WebGLRobots.Robot = function() {
                     node.color = node.children[0].material.color;
                     // Set color
                     var arColor = str2floats(color);
-                    console.log(arColor);
                     node.color.setRGB(arColor[0],arColor[1],arColor[2]);
                 } else {
                     node.color = new THREE.Color();
@@ -194,7 +193,6 @@ WebGLRobots.Robot = function() {
                         (typeof node.children[0] !== 'undefined') && (node.children[0] !== null) &&
                         (typeof color !== 'undefined') && (color !== null)) {
                         var arColor = str2floats(color);
-                        console.log(arColor);
                         node.color.setRGB(arColor[0],arColor[1],arColor[2]);
                     }
                 };

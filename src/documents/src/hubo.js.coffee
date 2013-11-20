@@ -51,7 +51,6 @@ class Hubo extends WebGLRobots.Robot
       get: -> return _robot.joints[@name].value - _robot.motors[@name].offset
       set: (val) -> 
         val = clamp(val,this)
-        console.log('_robot.joints[@name].offset' + _robot.motors[@name].offset)
         val = val + _robot.motors[@name].offset
         _robot.joints[@name].value = val
         return val
