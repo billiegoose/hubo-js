@@ -27,8 +27,10 @@ Hubo = (function(_super) {
           _this.addRegularMotor(key);
         }
       }
-      _robot.motors.LSR.default_value = +20 / 180 * Math.PI;
-      _robot.motors.RSR.default_value = -20 / 180 * Math.PI;
+      _robot.motors.LSR.offset = +15 / 180 * Math.PI;
+      _robot.motors.RSR.offset = -15 / 180 * Math.PI;
+      _robot.motors.LEP.offset = -10 / 180 * Math.PI;
+      _robot.motors.REP.offset = -10 / 180 * Math.PI;
       _this.addFinger('LF1');
       _this.addFinger('LF2');
       _this.addFinger('LF3');
@@ -53,21 +55,24 @@ Hubo = (function(_super) {
     motor.name = name;
     motor.lower_limit = this.joints[name].lower_limit;
     motor.upper_limit = this.joints[name].upper_limit;
+    motor.default_value = 0;
+    motor.offset = 0;
+    motor.value = motor.default_value;
     Object.defineProperties(motor, {
       value: {
         get: function() {
-          return _robot.joints[this.name].value;
+          return _robot.joints[this.name].value - _robot.motors[this.name].offset;
         },
         set: function(val) {
           val = clamp(val, this);
+          console.log('_robot.joints[@name].offset' + _robot.motors[this.name].offset);
+          val = val + _robot.motors[this.name].offset;
           _robot.joints[this.name].value = val;
           return val;
         },
         enumerable: true
       }
     });
-    motor.default_value = 0;
-    motor.value = motor.default_value;
     return this.motors[name] = motor;
   };
 
