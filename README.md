@@ -67,7 +67,7 @@ I'm using a tool called [docpad][] to make my web-developing more efficient. It 
 2. Install [node][]
 3. Open the command line, go to the repository directory and run `npm install`
 4. Then run `npm start`
-5. Navigate to `http://localhost:9778`
+5. Navigate to <http://localhost:9778>
 
 And now you've got a live webserver that will transform the templates and stuff in `/src` into real web pages that you can see.
 
