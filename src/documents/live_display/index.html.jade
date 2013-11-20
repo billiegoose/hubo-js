@@ -27,10 +27,10 @@ block body
               tr
                 td m_x min:
                 td 
-                  input.m_x_min(type='number', value='-1')
+                  input.m_x_min(type='number', value='-0.05')
                 td m_x max:
                 td
-                  input.m_x_max(type='number', value='1')
+                  input.m_x_max(type='number', value='0.05')
               tr
                 td m_y min:
                 td
@@ -41,10 +41,10 @@ block body
               tr
                 td f_z min:
                 td
-                  input.f_z_min(type='number', value='-10')
+                  input.f_z_min(type='number', value='-30')
                 td f_z max:
                 td
-                  input.f_z_max(type='number', value='10')
+                  input.f_z_max(type='number', value='30')
           #HUBO_FT_L_HAND
             table
               tr
@@ -66,10 +66,10 @@ block body
               tr
                 td f_z min:
                 td
-                  input.f_z_min(type='number', value='-10')
+                  input.f_z_min(type='number', value='-30')
                 td f_z max:
                 td
-                  input.f_z_max(type='number', value='10')
+                  input.f_z_max(type='number', value='30')
           #HUBO_FT_R_FOOT
             table
               tr
@@ -91,10 +91,10 @@ block body
               tr
                 td f_z min:
                 td
-                  input.f_z_min(type='number', value='-10')
+                  input.f_z_min(type='number', value='-30')
                 td f_z max:
                 td
-                  input.f_z_max(type='number', value='10')
+                  input.f_z_max(type='number', value='30')
           #HUBO_FT_L_FOOT
             table
               tr
@@ -116,14 +116,15 @@ block body
               tr
                 td f_z min:
                 td
-                  input.f_z_min(type='number', value='-10')
+                  input.f_z_min(type='number', value='-30')
                 td f_z max:
                 td
-                  input.f_z_max(type='number', value='10')
+                  input.f_z_max(type='number', value='30')
             
 
 block append scripts
   include /jade/includes/hubo
   script(src='/lib/jquery-ui/jquery-ui.custom.min.js')
   script(src='https://cdn.firebase.com/v0/firebase.js')
+  script(src='/lib/stats/stats.min.js')
   script(src='index.js')
