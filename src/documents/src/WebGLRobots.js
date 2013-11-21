@@ -22,8 +22,8 @@ WebGLRobots.getDirName = function(filename) {
 }
 
 WebGLRobots.DefaultCanvas = function(container, display_width, display_height) {
-    if (display_width == null) {display_width = 480;};
-    if (display_height == null) {display_height = display_width;};
+    if (display_width == null) {display_width = $(container).width();};
+    if (display_height == null) {display_height = $(container).height();};
 
     // renderer
     var renderer = Detector.webgl? new THREE.WebGLRenderer({antialias: true}): new THREE.CanvasRenderer();
