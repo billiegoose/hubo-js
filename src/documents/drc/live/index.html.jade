@@ -1,0 +1,147 @@
+extends /jade/templates/regular-layout
+
+block prepend head
+  title Hubo Live Display | Hubo-js
+block append head
+  link(rel='stylesheet', type='text/css', href='/lib/jquery-ui/jquery-ui.custom.css')
+
+block body
+  #mouse_info_dialog(title='Mouse Navigation', style="display:none")
+    p Rotate = LEFT mouse button
+    p Zoom = MIDDLE mouse wheel
+    p Pan = RIGHT mouse button
+  p This page shows DRC-Hubo's position and force-torque data in near real-time.
+  table(border='1')
+    tr 
+      td(style='vertical-align:top')
+        #hubo_container(style="width: 480px; height: 580px; position: relative") 
+          #load(style='position:absolute')
+          // Source: http://openclipart.org/detail/88123/led-red-by-bnielsen
+          img#led(style='position:absolute; top:10px; left:10px;',src="led_red_black.png")
+            
+          #mouse_info_button(style="position: absolute; top: 464px; left:0px")
+            img(src="/img/info.png")
+      td
+        #controls
+          p Adjust the bounds of the red-green color gradient here.
+          #HUBO_FT_R_HAND 
+            table
+              tr 
+                th FT_R_HAND:
+              tr
+                td m_x min:
+                td 
+                  input.m_x_min(type='number', value='-0.05')
+                td m_x max:
+                td
+                  input.m_x_max(type='number', value='0.05')
+              tr
+                td m_y min:
+                td
+                  input.m_y_min(type='number', value='-1')
+                td m_y max:
+                td
+                  input.m_y_max(type='number', value='1')
+              tr
+                td f_z min:
+                td
+                  input.f_z_min(type='number', value='-30')
+                td f_z max:
+                td
+                  input.f_z_max(type='number', value='30')
+          #HUBO_FT_L_HAND
+            table
+              tr
+                th FT_L_HAND:
+              tr
+                td m_x min:
+                td 
+                  input.m_x_min(type='number', value='-1')
+                td m_x max:
+                td
+                  input.m_x_max(type='number', value='1')
+              tr
+                td m_y min:
+                td
+                  input.m_y_min(type='number', value='-1')
+                td m_y max:
+                td
+                  input.m_y_max(type='number', value='1')
+              tr
+                td f_z min:
+                td
+                  input.f_z_min(type='number', value='-30')
+                td f_z max:
+                td
+                  input.f_z_max(type='number', value='30')
+          #HUBO_FT_R_FOOT
+            table
+              tr
+                th FT_R_FOOT:
+              tr
+                td m_x min:
+                td 
+                  input.m_x_min(type='number', value='-1')
+                td m_x max:
+                td
+                  input.m_x_max(type='number', value='1')
+              tr
+                td m_y min:
+                td
+                  input.m_y_min(type='number', value='-1')
+                td m_y max:
+                td
+                  input.m_y_max(type='number', value='1')
+              tr
+                td f_z min:
+                td
+                  input.f_z_min(type='number', value='-30')
+                td f_z max:
+                td
+                  input.f_z_max(type='number', value='30')
+          #HUBO_FT_L_FOOT
+            table
+              tr
+                th FT_L_FOOT:
+              tr
+                td m_x min:
+                td 
+                  input.m_x_min(type='number', value='-1')
+                td m_x max:
+                td
+                  input.m_x_max(type='number', value='1')
+              tr
+                td m_y min:
+                td
+                  input.m_y_min(type='number', value='-1')
+                td m_y max:
+                td
+                  input.m_y_max(type='number', value='1')
+              tr
+                td f_z min:
+                td
+                  input.f_z_min(type='number', value='-30')
+                td f_z max:
+                td
+                  input.f_z_max(type='number', value='30')
+            
+
+block append scripts
+  // Used for rendering 3D Hubo 
+  script(src='/lib/three/three.min.js')
+  script(src='/lib/three/Detector.js')
+  // Note the swap
+  script(src='/lib/three/STLLoader.js') 
+  script(src='/lib/three/TrackballControls.js')
+  // Hubo-in-the-Browser base
+  script(src='/lib/dict/dict.js')
+  script(src='/src/WebGLRobots.js')
+  // for DRC Hubo
+  script(src='/drc/drchubo.js')
+  // for GUI stuff
+  script(src='/lib/jquery-ui/jquery-ui.custom.min.js')
+  // for reading the broadcast of the robot state
+  script(src='https://cdn.firebase.com/v0/firebase.js')
+  // for FPS display
+  script(src='/lib/stats/stats.min.js')
+  script(src='index.js')
