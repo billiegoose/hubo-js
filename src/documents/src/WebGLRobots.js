@@ -6,8 +6,11 @@
 var WebGLRobots = {version: 0.0};
 
 WebGLRobots.str2vec = function(coords) {
-    coords = coords.split(' ');
     var v = new THREE.Vector3();
+    // This error check is needed to handle objects 
+    // that don't have every property defined.
+    if (typeof coords === "undefined") return v;
+    coords = coords.split(' ');
     v.x = parseFloat(coords[0]);
     v.y = parseFloat(coords[1]);
     v.z = parseFloat(coords[2]);
@@ -271,18 +274,36 @@ WebGLRobots.Robot = function() {
                     createLink(name, new THREE.Object3D());
                 } else {
                     filename = path + filename;
-                    // Load mesh
-                    var loader = new THREE.ColladaLoader();
-                    loader.load(filename, 
-                        function(collada) {
-                            var node = collada.scene;
-                            createLink(name, node, filename, color);
-                        }, 
-                        onProgress);
+                    // Determine file type
+                    var ext = filename.match(/\.[^\.]+$/)[0];
+                    // TODO: Add useful messages if the loaders error
+                    if (ext === ".dae") {
+                        // Load mesh
+                        var loader = new THREE.ColladaLoader();
+                        loader.load(filename, 
+                            function(collada) {
+                                var node = collada.scene;
+                                createLink(name, node, filename, color);
+                            }, 
+                            onProgress);
+                    } else if (ext === ".stl") {
+                        // Load mesh
+                        var loader = new THREE.STLLoader();
+                        loader.addEventListener('load', function (event) {
+                            var geometry = event.content;
+                            var mat = new THREE.MeshLambertMaterial({color: 0xCCCCCC});
+                            var mesh = new THREE.Mesh(geometry,mat);
+                            var node = new THREE.Object3D();
+                            node.add(mesh);
+                            createLink(name,node,filename,color);
+                        });
+                        loader.addEventListener('progress', onProgress);
+                        loader.load(filename);
+                    }
                 }
             });
         })
-        .fail(function() { alert("error"); })
+        .fail(function() { alert("Error loading URDF."); })
     };
     
     // TODO: Figure out how to show progress more effectively.
