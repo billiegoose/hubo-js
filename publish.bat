@@ -1,1 +1,1 @@
-cmd /k node node_modules\\docpad\\bin\\docpad deploy-ghpages
+cmd /k node node_modules\\docpad\\bin\\docpad deploy-ghpages --env static
