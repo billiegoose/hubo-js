@@ -19,11 +19,12 @@ class Hubo extends WebGLRobots.Robot
         for own key, value of @joints
           if key.length == 3
             @addRegularMotor(key);
-        # Offsets for shoulder roll and elbow pitch (values taken from huboplus.kinbody.xml "<initial>" fields)
-        _robot.motors.LSR.offset = +15/180*Math.PI
-        _robot.motors.RSR.offset = -15/180*Math.PI
-        _robot.motors.LEP.offset = -10/180*Math.PI
-        _robot.motors.REP.offset = -10/180*Math.PI
+        # Note: offsets not needed for DRC-Hubo
+        # # Offsets for shoulder roll and elbow pitch (values taken from huboplus.kinbody.xml "<initial>" fields)
+        # _robot.motors.LSR.offset = +15/180*Math.PI
+        # _robot.motors.RSR.offset = -15/180*Math.PI
+        # _robot.motors.LEB.offset = -10/180*Math.PI
+        # _robot.motors.REB.offset = -10/180*Math.PI
         # @addFinger('LF1')
         # @addFinger('LF2')
         # @addFinger('LF3')
