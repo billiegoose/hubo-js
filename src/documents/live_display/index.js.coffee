@@ -3,6 +3,12 @@
 #
 window.stateRef = new Firebase('https://hubo-firebase.firebaseIO.com/state')
 
+flashLED = () ->
+  $('#led').show()
+  setTimeout(()->
+    $('#led').hide()
+  , 1000)
+
 # TODO: make this a function
 # # http://threejs.org/docs/#Reference/Extras.Geometries/CylinderGeometry
 # rayx = new THREE.Mesh(new THREE.CylinderGeometry(.01, .01, .1, 24, 1, false),
@@ -125,6 +131,9 @@ $( document ).ready () ->
       stats.end();
       stats.begin();
       state = snapshot.val()
+
+      # LED status indicator
+      flashLED()
 
       # TODO: In the future, make this a loop rather than hard-coded.
       hubo.ft["HUBO_FT_R_HAND"].m_x = state.ft[0].m_x

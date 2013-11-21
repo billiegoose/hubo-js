@@ -10,12 +10,15 @@ block body
     p Rotate = LEFT mouse button
     p Zoom = MIDDLE mouse wheel
     p Pan = RIGHT mouse button
-  p This page demonstrates [put some text here].
+  p This page demonstrates [put some text here]. 
   table(border='1')
     tr 
       td
         #hubo_container(style="width: 480px; height: 480px; position: relative") 
           #load(style='position:absolute')
+          // Source: http://openclipart.org/detail/88123/led-red-by-bnielsen
+          img#led(style='position:absolute; top:10px; left:10px;',src="led_red_black.png")
+            
           #mouse_info_button(style="position: absolute; top: 464px; left:0px")
             img(src="/img/info.png")
       td
