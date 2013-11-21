@@ -1,10 +1,17 @@
-var hz = 10;
+var hz = 30;
 console.log('Started ' + __filename);
+
+// Get Firebase URL
+var firebase_url = 'https://hubo-firebase.firebaseIO.com';
+if (process.argv[2] == "drc") {
+	var firebase_url = 'https://drc-hubo.firebaseIO.com';
+}
+console.log('Using Firebase: ' + firebase_url);
 
 // NOTE: The limitations of a free developer Firebase account: 5 GB Data Transfer, 50 Max Connections, 100 MB Data Storage
 var Firebase = require('firebase');
 // Open Firebase connection
-var huboRef = new Firebase('https://hubo-firebase.firebaseIO.com');
+var huboRef = new Firebase(firebase_url);
 
 // Communicate with ACH
 var hubo_ach = require('hubo-ach-readonly');
@@ -14,7 +21,9 @@ var hubo_ach = require('hubo-ach-readonly');
 // var util = require('util');
 //var coffeescript = require('connect-coffee-script');
 // var fs = require('fs');
-var state = {}
+var state = {};
+var serial_state = '';
+var old_state = serial_state + 'not_equal';
 var updateID = null;
 var main = function() {
     var r = hubo_ach.init();
@@ -25,10 +34,81 @@ var main = function() {
     updateID = setInterval(update,1000/hz);
 }
 
+var serialize = function() {
+	var datastring = '{';
+	datastring += '"ft":[';
+	datastring += state.ft[0].m_x.toFixed(3) + ',';
+	datastring += state.ft[0].m_y.toFixed(3) + ',';
+	datastring += state.ft[0].f_z.toFixed(3) + ',';
+	datastring += state.ft[1].m_x.toFixed(3) + ',';
+	datastring += state.ft[1].m_y.toFixed(3) + ',';
+	datastring += state.ft[1].f_z.toFixed(3) + ',';
+	datastring += state.ft[2].m_x.toFixed(3) + ',';
+	datastring += state.ft[2].m_y.toFixed(3) + ',';
+	datastring += state.ft[2].f_z.toFixed(3) + ',';
+	datastring += state.ft[3].m_x.toFixed(3) + ',';
+	datastring += state.ft[3].m_y.toFixed(3) + ',';
+	datastring += state.ft[3].f_z.toFixed(3) + ']';
+
+	datastring += ',';
+	datastring += '"joint":[';
+	datastring += state.joint[0].ref.toFixed(3) + ',';
+	datastring += state.joint[1].ref.toFixed(3) + ',';
+	datastring += state.joint[2].ref.toFixed(3) + ',';
+	datastring += state.joint[3].ref.toFixed(3) + ',';
+	datastring += state.joint[4].ref.toFixed(3) + ',';
+	datastring += state.joint[5].ref.toFixed(3) + ',';
+	datastring += state.joint[6].ref.toFixed(3) + ',';
+	datastring += state.joint[7].ref.toFixed(3) + ',';
+	datastring += state.joint[8].ref.toFixed(3) + ',';
+	datastring += state.joint[9].ref.toFixed(3) + ',';
+	datastring += state.joint[10].ref.toFixed(3) + ',';
+	datastring += state.joint[11].ref.toFixed(3) + ',';
+	datastring += state.joint[12].ref.toFixed(3) + ',';
+	datastring += state.joint[13].ref.toFixed(3) + ',';
+	datastring += state.joint[14].ref.toFixed(3) + ',';
+	datastring += state.joint[15].ref.toFixed(3) + ',';
+	datastring += state.joint[16].ref.toFixed(3) + ',';
+	datastring += state.joint[17].ref.toFixed(3) + ',';
+	datastring += state.joint[18].ref.toFixed(3) + ',';
+	datastring += state.joint[19].ref.toFixed(3) + ',';
+	datastring += state.joint[20].ref.toFixed(3) + ',';
+	datastring += state.joint[21].ref.toFixed(3) + ',';
+	datastring += state.joint[22].ref.toFixed(3) + ',';
+	datastring += state.joint[23].ref.toFixed(3) + ',';
+	datastring += state.joint[24].ref.toFixed(3) + ',';
+	datastring += state.joint[25].ref.toFixed(3) + ',';
+	datastring += state.joint[26].ref.toFixed(3) + ',';
+	datastring += state.joint[27].ref.toFixed(3) + ',';
+	datastring += state.joint[28].ref.toFixed(3) + ',';
+	datastring += state.joint[29].ref.toFixed(3) + ',';
+	datastring += state.joint[30].ref.toFixed(3) + ',';
+	datastring += state.joint[31].ref.toFixed(3) + ',';
+	datastring += state.joint[32].ref.toFixed(3) + ',';
+	datastring += state.joint[33].ref.toFixed(3) + ',';
+	datastring += state.joint[34].ref.toFixed(3) + ',';
+	datastring += state.joint[35].ref.toFixed(3) + ',';
+	datastring += state.joint[36].ref.toFixed(3) + ',';
+	datastring += state.joint[37].ref.toFixed(3) + ',';
+	datastring += state.joint[38].ref.toFixed(3) + ',';
+	datastring += state.joint[39].ref.toFixed(3) + ',';
+	datastring += state.joint[40].ref.toFixed(3) + ',';
+	datastring += state.joint[41].ref.toFixed(3) + ']';
+
+	datastring += '}';
+	return datastring;
+}
+
 var update = function() {
     state = hubo_ach.getState()
     console.log('RSP: ' + state.joint[11].ref);
-    huboRef.child('state').set(state);
+    // TODO: Serialize compare with previous state before sending.
+    serial_state = serialize();
+    console.log(serial_state);
+    if (serial_state !== old_state) {
+    	huboRef.child('serial_state').set(serial_state);
+    }
+    old_state = serial_state;
 }
 
 main();
