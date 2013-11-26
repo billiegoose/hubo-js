@@ -13,7 +13,7 @@ class Hubo extends WebGLRobots.Robot
     @motors = new Dict()
     # Load the robot using the URDF importer.
     @loadURDF(
-      "#{local_root}data/drchubo-urdf/drchubo-v3.urdf",
+      "#{local_root}drc/drchubo-urdf/drchubo-v3.urdf",
       load_callback = () =>
         # Once the URDF is completely loaded, this function is run.
         for own key, value of @joints
