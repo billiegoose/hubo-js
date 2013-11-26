@@ -1,0 +1,150 @@
+extends /jade/templates/regular-layout
+
+block prepend head
+  title Insert Title Here | Hubo-js
+block append head
+  link(rel='stylesheet', type='text/css', href='/lib/jquery-ui/jquery-ui.custom.css')
+  link(rel='stylesheet', type='text/css', href='index.css')
+
+block body
+  #mouse_info_dialog(title='Mouse Navigation', style="display:none")
+    p Rotate = LEFT mouse button
+    p Zoom = MIDDLE mouse wheel
+    p Pan = RIGHT mouse button
+  p This page demonstrates [put some text here].
+  #radar
+  table(border='1')
+    tr 
+      td(style="vertical-align:top")
+        #hubo_container(style="width: 480px; height: 480px; position: relative") 
+          #load(style='position:absolute')
+          #mouse_info_button(style="position: absolute; top: 464px; left:0px")
+            img(src="/img/info.png")
+      td
+        table#display
+          tr.Head
+            td.name Head:
+            td.x x
+            td.y y
+            td.z z
+          tr.LeftAnkle
+            td.name LeftAnkle: 
+            td.x x
+            td.y y
+            td.z z
+          tr.LeftCollar
+            td.name LeftCollar:
+            td.x x
+            td.y y
+            td.z z
+          tr.LeftElbow
+            td.name LeftElbow:
+            td.x x
+            td.y y
+            td.z z
+          tr.LeftFingertip
+            td.name LeftFingertip: 
+            td.x x
+            td.y y
+            td.z z
+          tr.LeftFoot
+            td.name LeftFoot: 
+            td.x x
+            td.y y
+            td.z z
+          tr.LeftHand
+            td.name LeftHand:
+            td.x x
+            td.y y
+            td.z z
+          tr.LeftHip
+            td.name LeftHip: 
+            td.x x
+            td.y y
+            td.z z
+          tr.LeftKnee
+            td.name LeftKnee: 
+            td.x x
+            td.y y
+            td.z z
+          tr.LeftShoulder
+            td.name LeftShoulder:
+            td.x x
+            td.y y
+            td.z z
+          tr.LeftWrist
+            td.name LeftWrist:
+            td.x x
+            td.y y
+            td.z z
+          tr.Neck
+            td.name Neck:
+            td.x x
+            td.y y
+            td.z z
+          tr.RightAnkle
+            td.name RightAnkle: 
+            td.x x
+            td.y y
+            td.z z
+          tr.RightCollar
+            td.name RightCollar: 
+            td.x x
+            td.y y
+            td.z z
+          tr.RightElbow
+            td.name RightElbow: 
+            td.x x
+            td.y y
+            td.z z
+          tr.RightFingertip
+            td.name RightFingertip: 
+            td.x x
+            td.y y
+            td.z z
+          tr.RightFoot
+            td.name RightFoot: 
+            td.x x
+            td.y y
+            td.z z
+          tr.RightHand
+            td.name RightHand: 
+            td.x x
+            td.y y
+            td.z z
+          tr.RightHip
+            td.name RightHip: 
+            td.x x
+            td.y y
+            td.z z
+          tr.RightKnee
+            td.name RightKnee: 
+            td.x x
+            td.y y
+            td.z z
+          tr.RightShoulder
+            td.name RightShoulder: 
+            td.x x
+            td.y y
+            td.z z
+          tr.RightWrist
+            td.name RightWrist: 
+            td.x x
+            td.y y
+            td.z z
+          tr.Torso
+            td.name Torso:
+            td.x x
+            td.y y
+            td.z z
+          tr.Waist
+            td.name Waist:
+            td.x x
+            td.y y
+            td.z z
+
+block append scripts
+  include /jade/includes/hubo
+  script(src='/lib/jquery-ui/jquery-ui.custom.min.js')
+  script(src='http://cdn.zigfu.com/zigjs/zig.min.js')
+  script(src='index.js')
