@@ -6,11 +6,11 @@ block prepend head
 block body
   table(border='1')
     tr
-      td
-        #hubo_container(style='position:relative')
+      td(style='vertical-align:top;')
+        #hubo_container(style='position:relative; width:480px; height: 480px;')
           #load(style='position:absolute')
         div(style='text-align: center;') LEFT button ROTATES. RIGHT button PANS. MIDDLE wheel ZOOMS.
-      td(style='vertical-align:top;')        
+      td(style='vertical-align:top;')
         p Instructions: 
         ol
           li Scroll through the tracks in the timeline using the right-hand side scrollbar.
