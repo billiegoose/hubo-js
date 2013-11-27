@@ -28,7 +28,9 @@ WebGLRobots.DefaultCanvas = function(container, display_width, display_height) {
     // renderer
     var renderer = Detector.webgl? new THREE.WebGLRenderer({antialias: true}): new THREE.CanvasRenderer();
     renderer.setSize(display_width, display_height);
-    $(container).append(renderer.domElement);
+    // NOTE: I use prepend instead of append
+    renderer.domElement.attr()
+    $(container).prepend(renderer.domElement);
 
     // scene
     var scene = new THREE.Scene();

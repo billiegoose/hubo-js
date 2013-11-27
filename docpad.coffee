@@ -18,7 +18,10 @@ docpadConfig = {
         bare: on
         header: on
     stylus:
-      compress: off
+      stylusLibraries:
+        nib: on
+      stylusOptions:
+        compress: off
 
   # =================================
   # DocPad Events

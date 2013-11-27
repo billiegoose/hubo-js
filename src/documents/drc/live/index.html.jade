@@ -4,126 +4,129 @@ block prepend head
   title Hubo Live Display | Hubo-js
 block append head
   link(rel='stylesheet', type='text/css', href='/lib/jquery-ui/jquery-ui.custom.css')
+  link(rel='stylesheet', type='text/css', href='index.css')
 
 block body
   #mouse_info_dialog(title='Mouse Navigation', style="display:none")
     p Rotate = LEFT mouse button
     p Zoom = MIDDLE mouse wheel
     p Pan = RIGHT mouse button
-  p This page shows DRC-Hubo's position and force-torque data in near real-time.
-  table(border='1')
-    tr 
-      td(style='vertical-align:top')
-        #hubo_container(style="width: 480px; height: 580px; position: relative") 
-          #load(style='position:absolute')
-          // Source: http://openclipart.org/detail/88123/led-red-by-bnielsen
-          img#led(style='position:absolute; top:10px; left:10px; display:none',src="led_red_black.png")
-            
-          #mouse_info_button(style="position: absolute; top: 464px; left:0px")
-            img(src="/img/info.png")
-      td
-        #controls
-          p Adjust the bounds of the red-green color gradient here.
-          #HUBO_FT_R_HAND 
-            table
-              tr 
-                th FT_R_HAND:
-              tr
-                td m_x min:
-                td 
-                  input.m_x_min(type='number', value='-0.05')
-                td m_x max:
-                td
-                  input.m_x_max(type='number', value='0.05')
-              tr
-                td m_y min:
-                td
-                  input.m_y_min(type='number', value='-1')
-                td m_y max:
-                td
-                  input.m_y_max(type='number', value='1')
-              tr
-                td f_z min:
-                td
-                  input.f_z_min(type='number', value='-30')
-                td f_z max:
-                td
-                  input.f_z_max(type='number', value='30')
-          #HUBO_FT_L_HAND
-            table
-              tr
-                th FT_L_HAND:
-              tr
-                td m_x min:
-                td 
-                  input.m_x_min(type='number', value='-1')
-                td m_x max:
-                td
-                  input.m_x_max(type='number', value='1')
-              tr
-                td m_y min:
-                td
-                  input.m_y_min(type='number', value='-1')
-                td m_y max:
-                td
-                  input.m_y_max(type='number', value='1')
-              tr
-                td f_z min:
-                td
-                  input.f_z_min(type='number', value='-30')
-                td f_z max:
-                td
-                  input.f_z_max(type='number', value='30')
-          #HUBO_FT_R_FOOT
-            table
-              tr
-                th FT_R_FOOT:
-              tr
-                td m_x min:
-                td 
-                  input.m_x_min(type='number', value='-1')
-                td m_x max:
-                td
-                  input.m_x_max(type='number', value='1')
-              tr
-                td m_y min:
-                td
-                  input.m_y_min(type='number', value='-1')
-                td m_y max:
-                td
-                  input.m_y_max(type='number', value='1')
-              tr
-                td f_z min:
-                td
-                  input.f_z_min(type='number', value='-30')
-                td f_z max:
-                td
-                  input.f_z_max(type='number', value='30')
-          #HUBO_FT_L_FOOT
-            table
-              tr
-                th FT_L_FOOT:
-              tr
-                td m_x min:
-                td 
-                  input.m_x_min(type='number', value='-1')
-                td m_x max:
-                td
-                  input.m_x_max(type='number', value='1')
-              tr
-                td m_y min:
-                td
-                  input.m_y_min(type='number', value='-1')
-                td m_y max:
-                td
-                  input.m_y_max(type='number', value='1')
-              tr
-                td f_z min:
-                td
-                  input.f_z_min(type='number', value='-30')
-                td f_z max:
-                td
-                  input.f_z_max(type='number', value='30')
+  //p This page shows DRC-Hubo's position and force-torque data in near real-time.
+
+  #content
+    #hubo_meta_container
+      #hubo_container
+        #load(style='position:relative')
+        // Source: http://openclipart.org/detail/88123/led-red-by-bnielsen
+        img#led
+          //(style='position:relative; top:10px; left:10px; display:none',src="led_red_black.png")
+        #mouse_info_button
+          //(style="position: relative; top: 464px; left:0px")
+          img(src="/img/info.png")
+
+    #controls
+
+      p Adjust the bounds of the red-green color gradient here.
+      #HUBO_FT_R_HAND 
+        table
+          tr 
+            th FT_R_HAND:
+          tr
+            td m_x min:
+            td 
+              input.m_x_min(type='number', value='-0.05')
+            td m_x max:
+            td
+              input.m_x_max(type='number', value='0.05')
+          tr
+            td m_y min:
+            td
+              input.m_y_min(type='number', value='-1')
+            td m_y max:
+            td
+              input.m_y_max(type='number', value='1')
+          tr
+            td f_z min:
+            td
+              input.f_z_min(type='number', value='-30')
+            td f_z max:
+            td
+              input.f_z_max(type='number', value='30')
+      #HUBO_FT_L_HAND
+        table
+          tr
+            th FT_L_HAND:
+          tr
+            td m_x min:
+            td 
+              input.m_x_min(type='number', value='-1')
+            td m_x max:
+            td
+              input.m_x_max(type='number', value='1')
+          tr
+            td m_y min:
+            td
+              input.m_y_min(type='number', value='-1')
+            td m_y max:
+            td
+              input.m_y_max(type='number', value='1')
+          tr
+            td f_z min:
+            td
+              input.f_z_min(type='number', value='-30')
+            td f_z max:
+            td
+              input.f_z_max(type='number', value='30')
+      #HUBO_FT_R_FOOT
+        table
+          tr
+            th FT_R_FOOT:
+          tr
+            td m_x min:
+            td 
+              input.m_x_min(type='number', value='-1')
+            td m_x max:
+            td
+              input.m_x_max(type='number', value='1')
+          tr
+            td m_y min:
+            td
+              input.m_y_min(type='number', value='-1')
+            td m_y max:
+            td
+              input.m_y_max(type='number', value='1')
+          tr
+            td f_z min:
+            td
+              input.f_z_min(type='number', value='-30')
+            td f_z max:
+            td
+              input.f_z_max(type='number', value='30')
+      #HUBO_FT_L_FOOT
+        table
+          tr
+            th FT_L_FOOT:
+          tr
+            td m_x min:
+            td 
+              input.m_x_min(type='number', value='-1')
+            td m_x max:
+            td
+              input.m_x_max(type='number', value='1')
+          tr
+            td m_y min:
+            td
+              input.m_y_min(type='number', value='-1')
+            td m_y max:
+            td
+              input.m_y_max(type='number', value='1')
+          tr
+            td f_z min:
+            td
+              input.f_z_min(type='number', value='-30')
+            td f_z max:
+            td
+              input.f_z_max(type='number', value='30')
             
 
 block append scripts
