@@ -174,7 +174,6 @@ WebGLRobots.Robot = function() {
                 // TODO: We really need links to be their own class.
                 node.name = name;
                 node.userData.filename = filename;
-                node.userData.color = color;
                 // TODO: Eliminate the need for such ugly checks.
                 if ((typeof node.children !== 'undefined') && (node.children !== null) && 
                     (typeof node.children[0] !== 'undefined') && (node.children[0] !== null) &&
@@ -186,17 +185,21 @@ WebGLRobots.Robot = function() {
                 } else {
                     node.color = new THREE.Color();
                 }
+                node.userData.original_color = new THREE.Color(node.color);
+                node.userData.prev_color = new THREE.Color(node.color);
                 // Extend link with custom functionality
+                node.setColor = function(color) {
+                    node.userData.prev_color = new THREE.Color(color);
+                    node.color.setHex(color.getHex());
+                }
                 node.highlight = function() {
+                    node.userData.prev_color = new THREE.Color(node.color);
                     node.color.setRGB(1,1,0);
                 };
                 node.unhighlight = function() {
-                    var color = node.userData.color;
                     if ((typeof node.children !== 'undefined') && (node.children !== null) && 
-                        (typeof node.children[0] !== 'undefined') && (node.children[0] !== null) &&
-                        (typeof color !== 'undefined') && (color !== null)) {
-                        var arColor = str2floats(color);
-                        node.color.setRGB(arColor[0],arColor[1],arColor[2]);
+                        (typeof node.children[0] !== 'undefined') && (node.children[0] !== null)) {
+                        node.color.setHex(node.userData.prev_color.getHex());
                     }
                 };
                 _robot.links[name] = node;

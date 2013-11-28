@@ -1,0 +1,46 @@
+extends /jade/templates/regular-layout
+
+block prepend head
+  title Insert Title Here | Hubo-js
+block append head
+  link(rel='stylesheet', type='text/css', href='/lib/jquery-ui/jquery-ui.custom.css')
+
+block body
+  #mouse_info_dialog(title='Mouse Navigation', style="display:none")
+    p Rotate = LEFT mouse button
+    p Zoom = MIDDLE mouse wheel
+    p Pan = RIGHT mouse button
+
+  table(style="border:none")
+    tr 
+      td
+        #hubo_container(style="width: 480px; height: 480px; position: relative; border: 1px solid black") 
+          #panel_load(style="position:absolute")
+            p Load Hubo
+          #mouse_info_button(style="position: absolute; top: 464px; left:0px")
+            img(src="/img/info.png")
+      td(style="float:left", padding="20px", margin="20px")
+        table(style="border:none")
+          tr
+            td#color_picker
+              p Color: 
+                input(class="color", value="ffffff", onchange="setColor(this.color.rgb);")
+                span Hubo link: 
+                select(id="link_list", onchange="highlightLink(this);")
+                  option(value="whole") Whole Robot
+          tr
+            td(colspan='1')
+              p This page demonstrates the color API for WebGLRobots. For now it consists of:
+              ul 
+                li 
+                  pre hubo.links[i].highlight()
+                li 
+                  pre hubo.links[i].unhighlight()
+                li 
+                  pre hubo.links[i].setColor(THREE.Color)
+
+block append scripts
+  include /jade/includes/hubo
+  script(src='/lib/jquery-ui/jquery-ui.custom.min.js')
+  script(src='jscolor.js')
+  script(src='main.js')
