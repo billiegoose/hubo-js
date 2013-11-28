@@ -3,7 +3,8 @@
 , "version": "0.0.1"
 , "private": true
 , "dependencies": 
-  { "firebase": "0.6.7"
-  , "hubo-ach-readonly": "0.1.0"
+  { "firebase"          : "0.6.7"
+  , "socket.io"         : "0.9.16"
+  , "hubo-ach-readonly" : "0.1.0"
   }
 }

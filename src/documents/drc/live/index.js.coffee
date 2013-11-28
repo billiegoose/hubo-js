@@ -84,13 +84,24 @@ $( document ).ready () ->
   window.stats = new Stats();
   stats.setMode(0); # 0: fps, 1: ms
   $('#hubo_container').append(stats.domElement)
-  stats.domElement.style.position = 'absolute'
-  stats.domElement.style.left = '400px'
-  stats.domElement.style.top = '0px'
+  stats.domElement.style.position = 'relative'
+  stats.domElement.style.float = 'right'
+
+  $(window).on('orientationchange', () ->
+    size = Math.min($(window).width(), $(window).height())
+    $('#hubo_container').width(size)
+    $('#hubo_container').height(size)
+    # $(hubo.canvas.renderer.domElement).attr({ width: size, height: size})
+    hubo.canvas.resize(size, size)
+  );
 
   #
   # Setup Hubo-in-the-Browser
   #
+  # I appologize that this cannot be done with CSS.
+  size = Math.min($(window).width(), $(window).height())
+  $('#hubo_container').width(size)
+  $('#hubo_container').height(size)
   c = new Hubo.DefaultCanvas("#hubo_container")
   window.hubo = new Hubo("hubo2", callback = ->    
     # Once the URDF is completely loaded, this function is run.
@@ -137,6 +148,8 @@ $( document ).ready () ->
       # LED status indicator
       flashLED()
 
+      jointType = 'ref' # or 'pos'
+
       # TODO: In the future, make this a loop rather than hard-coded.
       hubo.ft["HUBO_FT_R_HAND"].m_x = state.ft[0]
       hubo.ft["HUBO_FT_R_HAND"].m_y = state.ft[1]
@@ -155,48 +168,48 @@ $( document ).ready () ->
       hubo.ft["HUBO_FT_L_FOOT"].f_z = state.ft[11]
       hubo.ft["HUBO_FT_L_FOOT"].updateColor()
 
-      hubo.motors["WST"].value = state.joint[0]
-      hubo.motors["NKY"].value = state.joint[1]
-      hubo.motors["NK1"].value = state.joint[2]
-      hubo.motors["NK2"].value = state.joint[3]
-      hubo.motors["LSP"].value = state.joint[4]
-      hubo.motors["LSR"].value = state.joint[5]
-      hubo.motors["LSY"].value = state.joint[6]
-      hubo.motors["LEB"].value = state.joint[7]
-      hubo.motors["LWY"].value = state.joint[8]
-      hubo.motors["LWR"].value = state.joint[9]
-      hubo.motors["LWP"].value = state.joint[10]
-      hubo.motors["RSP"].value = state.joint[11]
-      hubo.motors["RSR"].value = state.joint[12]
-      hubo.motors["RSY"].value = state.joint[13]
-      hubo.motors["REB"].value = state.joint[14]
-      hubo.motors["RWY"].value = state.joint[15]
-      hubo.motors["RWR"].value = state.joint[16]
-      hubo.motors["RWP"].value = state.joint[17]
+      hubo.motors["WST"].value = state[jointType][0]
+      hubo.motors["NKY"].value = state[jointType][1]
+      hubo.motors["NK1"].value = state[jointType][2]
+      hubo.motors["NK2"].value = state[jointType][3]
+      hubo.motors["LSP"].value = state[jointType][4]
+      hubo.motors["LSR"].value = state[jointType][5]
+      hubo.motors["LSY"].value = state[jointType][6]
+      hubo.motors["LEB"].value = state[jointType][7]
+      hubo.motors["LWY"].value = state[jointType][8]
+      hubo.motors["LWR"].value = state[jointType][9]
+      hubo.motors["LWP"].value = state[jointType][10]
+      hubo.motors["RSP"].value = state[jointType][11]
+      hubo.motors["RSR"].value = state[jointType][12]
+      hubo.motors["RSY"].value = state[jointType][13]
+      hubo.motors["REB"].value = state[jointType][14]
+      hubo.motors["RWY"].value = state[jointType][15]
+      hubo.motors["RWR"].value = state[jointType][16]
+      hubo.motors["RWP"].value = state[jointType][17]
       # mind the gap
-      hubo.motors["LHY"].value = state.joint[19]
-      hubo.motors["LHR"].value = state.joint[20]
-      hubo.motors["LHP"].value = state.joint[21]
-      hubo.motors["LKN"].value = state.joint[22]
-      hubo.motors["LAP"].value = state.joint[23]
-      hubo.motors["LAR"].value = state.joint[24]
+      hubo.motors["LHY"].value = state[jointType][19]
+      hubo.motors["LHR"].value = state[jointType][20]
+      hubo.motors["LHP"].value = state[jointType][21]
+      hubo.motors["LKN"].value = state[jointType][22]
+      hubo.motors["LAP"].value = state[jointType][23]
+      hubo.motors["LAR"].value = state[jointType][24]
       # mind the gap
-      hubo.motors["RHY"].value = state.joint[26]
-      hubo.motors["RHR"].value = state.joint[27]
-      hubo.motors["RHP"].value = state.joint[28]
-      hubo.motors["RKN"].value = state.joint[29]
-      hubo.motors["RAP"].value = state.joint[30]
-      hubo.motors["RAR"].value = state.joint[31]
-      hubo.motors["RF1"].value = state.joint[32]
-      # hubo.motors["RF2"].value = state.joint[33]
-      # hubo.motors["RF3"].value = state.joint[34]    
-      # hubo.motors["RF4"].value = state.joint[35]
-      # hubo.motors["RF5"].value = state.joint[36]
-      hubo.motors["LF1"].value = state.joint[37]
-      # hubo.motors["LF2"].value = state.joint[38]
-      # hubo.motors["LF3"].value = state.joint[39]
-      # hubo.motors["LF4"].value = state.joint[40]
-      # hubo.motors["LF5"].value = state.joint[41]
+      hubo.motors["RHY"].value = state[jointType][26]
+      hubo.motors["RHR"].value = state[jointType][27]
+      hubo.motors["RHP"].value = state[jointType][28]
+      hubo.motors["RKN"].value = state[jointType][29]
+      hubo.motors["RAP"].value = state[jointType][30]
+      hubo.motors["RAR"].value = state[jointType][31]
+      hubo.motors["RF1"].value = state[jointType][32]
+      # hubo.motors["RF2"].value = state[jointType][33]
+      # hubo.motors["RF3"].value = state[jointType][34]    
+      # hubo.motors["RF4"].value = state[jointType][35]
+      # hubo.motors["RF5"].value = state[jointType][36]
+      hubo.motors["LF1"].value = state[jointType][37]
+      # hubo.motors["LF2"].value = state[jointType][38]
+      # hubo.motors["LF3"].value = state[jointType][39]
+      # hubo.motors["LF4"].value = state[jointType][40]
+      # hubo.motors["LF5"].value = state[jointType][41]
       hubo.canvas.render()
     )
 

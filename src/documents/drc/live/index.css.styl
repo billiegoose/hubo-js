@@ -6,36 +6,52 @@
 
 #hubo_container
   position relative
+  border 1px solid black
 
+// #hubo_container{
+//   position: absolute;
+//   top: 0;
+//   left: 0;
+//   bottom: 0;
+//   right: 0;
+// }
 
-#hubo_meta_container{
-  position: relative;
-  width: 25%;   /* desired width */
-}
-#hubo_meta_container:before{
-  content: "";
-  display: block;
-  padding-top: 100%;  /* initial ratio of 1:1*/
-}
+@media screen and (orientation:landscape)
+  #content
+    box-orient horizontal
+  // .aspect-controller
+  //   height 100%
 
-#hubo_container{
-  position: absolute;
-  top: 0;
-  left: 0;
-  bottom: 0;
-  right: 0;
-}
+//   #hubo_meta_container{
+//     position: relative;
+//     top: 0px;
+//     bottom: 0px;   /* desired height */
+//     max-width:100%;
+//     max-height:100%;  
+//   }
+//   #hubo_meta_container:before{
+//     content: "";
+//     display: block;
+//     padding-left: 100%;  /* initial ratio of 1:1*/
+//   }
+// //   #hubo_container
+// //     height 100%
+// //     width 100%
 
-// @media screen and (orientation:landscape)
-//   #content
-//     box-orient horizontal
-//   #hubo_container
-//     height 100%
-//     width 100%
-
-// @media screen and (orientation:portrait)
-//   #content
-//     box-orient vertical
-//   #hubo_container
-//     width 100%
-//     height 100%
+@media screen and (orientation:portrait)
+  #content
+    box-orient vertical
+  // .aspect-controller
+  //   width 100%
+  // #hubo_meta_container{
+  //   position: relative;
+  //   width: 100%;   /* desired width */
+  // }
+  // #hubo_meta_container:before{
+  //   content: "";
+  //   display: block;
+  //   padding-top: 100%;  /* initial ratio of 1:1*/
+  // }
+  // #hubo_container
+  //   width 100%
+  //   height 100%
