@@ -1,26 +1,27 @@
+var use_socket = true; // TODO: Clean this up.
 var hz = 30;
 console.log('Started ' + __filename);
 
-// Get Firebase URL
-var firebase_url = 'https://hubo-firebase.firebaseIO.com';
-if (process.argv[2] == "drc") {
-	var firebase_url = 'https://drc-hubo.firebaseIO.com';
-}
-console.log('Using Firebase: ' + firebase_url);
+if (use_socket) {
+	var app = require('http').createServer()
+	    , io = require('socket.io').listen(app)
+} else {
+	// Get Firebase URL
+	var firebase_url = 'https://hubo-firebase.firebaseIO.com';
+	if (process.argv[2] == "drc") {
+		var firebase_url = 'https://drc-hubo.firebaseIO.com';
+	}
+	console.log('Using Firebase: ' + firebase_url);
 
-// NOTE: The limitations of a free developer Firebase account: 5 GB Data Transfer, 50 Max Connections, 100 MB Data Storage
-var Firebase = require('firebase');
-// Open Firebase connection
-var huboRef = new Firebase(firebase_url);
+	// NOTE: The limitations of a free developer Firebase account: 5 GB Data Transfer, 50 Max Connections, 100 MB Data Storage
+	var Firebase = require('firebase');
+	// Open Firebase connection
+	var huboRef = new Firebase(firebase_url);
+}
 
 // Communicate with ACH
 var hubo_ach = require('hubo-ach-readonly');
 
-// var path = require('path');
-
-// var util = require('util');
-//var coffeescript = require('connect-coffee-script');
-// var fs = require('fs');
 var state = {};
 var serial_state = '';
 var old_state = serial_state + 'not_equal';
@@ -31,6 +32,13 @@ var main = function() {
         console.log("Error initializing hubo-ach-readonly module. Likely cause: hubo-daemon is not running.")
         return
     }
+    if (use_socket) {
+		app.listen(6060);
+		// Send initial position
+		io.sockets.on('connection', function (socket) {
+		  socket.emit('serial_state', serial_state);
+		});
+	}
     updateID = setInterval(update,1000/hz);
 }
 
@@ -146,12 +154,15 @@ var serialize = function() {
 
 var update = function() {
     state = hubo_ach.getState()
-    console.log('RSP: ' + state.joint[11].ref);
     // TODO: Serialize compare with previous state before sending.
     serial_state = serialize();
-    console.log(serial_state);
     if (serial_state !== old_state) {
-    	huboRef.child('serial_state').set(serial_state);
+    	console.log(serial_state);
+    	if (use_socket) {
+			io.sockets.emit('serial_state', serial_state);
+    	} else {
+    		huboRef.child('serial_state').set(serial_state);
+    	}
     }
     old_state = serial_state;
 }

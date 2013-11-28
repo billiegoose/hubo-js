@@ -1,7 +1,12 @@
-#
-# Init Firebase
-#
-window.serial_stateRef = new Firebase('http://drc-hubo.firebaseIO.com/serial_state')
+use_socket = true;
+
+if (use_socket)
+  socket = io.connect(':6060');
+else
+  #
+  # Init Firebase
+  #
+  window.serial_stateRef = new Firebase('http://drc-hubo.firebaseIO.com/serial_state')
 
 window.ledTimeoutId = null;
 flashLED = () ->
@@ -132,23 +137,11 @@ $( document ).ready () ->
     hubo.ft.HUBO_FT_R_FOOT.axis.position = new THREE.Vector3(-0.05,0,-0.15)
     hubo.ft.HUBO_FT_L_FOOT.axis.position = new THREE.Vector3(-0.05,0,-0.15)
 
-    # Create the Firebase update
-    serial_stateRef.on('value', (snapshot) ->
-      # NOTE: With the stats library, we are timing the interval
-      # between runs of this function, not the time needed to render
-      # it. Therefore, we end recording at the beginning and begin recording
-      # right away.
-      stats.end();
-      stats.begin();
-      serial_state = snapshot.val()
-      console.log(serial_state);
+    updateModel = (serial_state) ->
       state = JSON.parse(serial_state);
       console.log(state);
 
-      # LED status indicator
-      flashLED()
-
-      jointType = 'ref' # or 'pos'
+      jointType = $('#joint-toggle').val() #'ref' # or 'pos'
 
       # TODO: In the future, make this a loop rather than hard-coded.
       hubo.ft["HUBO_FT_R_HAND"].m_x = state.ft[0]
@@ -211,7 +204,34 @@ $( document ).ready () ->
       # hubo.motors["LF4"].value = state[jointType][40]
       # hubo.motors["LF5"].value = state[jointType][41]
       hubo.canvas.render()
-    )
+
+    if (use_socket)
+      socket.on('serial_state', (serial_state) ->
+        console.log(serial_state)
+        window.serial_state = serial_state
+        # LED status indicator
+        flashLED()
+        updateModel(serial_state)
+      )
+    else
+      # Create the Firebase update
+      serial_stateRef.on('value', (snapshot) ->
+        # NOTE: With the stats library, we are timing the interval
+        # between runs of this function, not the time needed to render
+        # it. Therefore, we end recording at the beginning and begin recording
+        # right away.
+        stats.end();
+        stats.begin();
+        serial_state = snapshot.val()
+        window.serial_state = serial_state
+        console.log(serial_state)
+        # LED status indicator
+        flashLED()
+        updateModel(serial_state)
+      )
+
+    $('#joint-toggle').on 'slidestop', () ->
+      updateModel(window.serial_state)
 
     # Update the rendering to reflect any changes to Hubo.
     c.render()
