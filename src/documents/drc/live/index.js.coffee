@@ -28,26 +28,18 @@ class FT_Sensor
     # TODO: Use cylinder to make it thicker?
     @m_x_obj = new THREE.ArrowHelper(new THREE.Vector3(1,0,0), new THREE.Vector3(0,0,0),0.15,0xFF0000)
     @m_y_obj = new THREE.ArrowHelper(new THREE.Vector3(0,1,0), new THREE.Vector3(0,0,0),0.15,0x00FF00)
-    @f_z_obj = new THREE.ArrowHelper(new THREE.Vector3(0,0,-1), new THREE.Vector3(0,0,0),0.15,0x00FF00)
+    @f_z_obj = new THREE.ArrowHelper(new THREE.Vector3(0,0,-1), new THREE.Vector3(0,0,0),0.15,0x0000FF)
     @axis = new THREE.Object3D()
     @axis.add(@m_x_obj)
     @axis.add(@m_y_obj)
     @axis.add(@f_z_obj)
-  updateColor: () ->
+  updateColor: (o) ->
     # Get mx_min, mx_max, etc
-    mx_min = $("##{ @name } .m_x_min").val()
-    mx_max = $("##{ @name } .m_x_max").val()
-    # console.log("mx_min: #{mx_min}")
-    # console.log("mx_max: #{mx_max}")
-    my_min = $("##{ @name } .m_y_min").val()
-    my_max = $("##{ @name } .m_y_max").val()
-    fz_min = $("##{ @name } .f_z_min").val()
-    fz_max = $("##{ @name } .f_z_max").val()
     # Scale 
-    mx_gradient = interpColor(mx_min, mx_max, 0, @m_x)
+    mx_gradient = interpColor(o.mx_min, o.mx_max, 0, @m_x)
     # console.log("mx_gradient: #{mx_gradient}")
-    my_gradient = interpColor(my_min, my_max, 0, @m_y)
-    fz_gradient = interpColor(fz_min, fz_max, 0, @f_z)
+    my_gradient = interpColor(o.my_min, o.my_max, 0, @m_y)
+    fz_gradient = interpColor(o.fz_min, o.fz_max, 0, @f_z)
     # Set colors
     temp = new THREE.Color()
     temp.setRGB(mx_gradient,(1-mx_gradient),0)
@@ -68,6 +60,18 @@ interpColor = (min,max,zero,t) ->
     return Math.min((zero-t)/(zero-min),1)
   else
     return Math.min((t-zero)/(max-zero),1)
+
+extractLimits = (el) ->
+  o = {}
+  o.mx_min = $(el).find(".m_x_min").val()
+  o.mx_max = $(el).find(".m_x_max").val()
+  # console.log("mx_min: #{mx_min}")
+  # console.log("mx_max: #{mx_max}")
+  o.my_min = $(el).find(".m_y_min").val()
+  o.my_max = $(el).find(".m_y_max").val()
+  o.fz_min = $(el).find(".f_z_min").val()
+  o.fz_max = $(el).find(".f_z_max").val()
+  return o
 
 #
 # MAIN
@@ -120,10 +124,10 @@ $( document ).ready () ->
     # Create FT display axes
     if not hubo.ft?
       hubo.ft = {}
-    hubo.ft.HUBO_FT_R_HAND = new FT_Sensor("HUBO_FT_R_HAND")
-    hubo.ft.HUBO_FT_L_HAND = new FT_Sensor("HUBO_FT_L_HAND")
-    hubo.ft.HUBO_FT_R_FOOT = new FT_Sensor("HUBO_FT_R_FOOT")
-    hubo.ft.HUBO_FT_L_FOOT = new FT_Sensor("HUBO_FT_L_FOOT")
+    hubo.ft.HUBO_FT_R_HAND = new FT_Sensor()
+    hubo.ft.HUBO_FT_L_HAND = new FT_Sensor()
+    hubo.ft.HUBO_FT_R_FOOT = new FT_Sensor()
+    hubo.ft.HUBO_FT_L_FOOT = new FT_Sensor()
 
     # Add the hand FT sensors to the wrist pitch links
     hubo.links.Body_RWR.add(hubo.ft.HUBO_FT_R_HAND.axis)
@@ -136,30 +140,35 @@ $( document ).ready () ->
     hubo.ft.HUBO_FT_L_HAND.axis.position = new THREE.Vector3(0.1,0,0)
     hubo.ft.HUBO_FT_R_FOOT.axis.position = new THREE.Vector3(-0.05,0,-0.15)
     hubo.ft.HUBO_FT_L_FOOT.axis.position = new THREE.Vector3(-0.05,0,-0.15)
+    # Looks like the wrists need some rotation too.
+    hubo.ft.HUBO_FT_R_HAND.axis.rotation.y = -Math.PI/2
+    hubo.ft.HUBO_FT_L_HAND.axis.rotation.y = -Math.PI/2
 
     updateModel = (serial_state) ->
       state = JSON.parse(serial_state);
-      console.log(state);
+      # console.log(state);
 
       jointType = $('#joint-toggle').val() #'ref' # or 'pos'
 
-      # TODO: In the future, make this a loop rather than hard-coded.
+      hand_limits = extractLimits($('#ft_hand_limits'))
+      foot_limits = extractLimits($('#ft_foot_limits'))
       hubo.ft["HUBO_FT_R_HAND"].m_x = state.ft[0]
+      # $('#huge_display').html(state.ft[0]);
       hubo.ft["HUBO_FT_R_HAND"].m_y = state.ft[1]
       hubo.ft["HUBO_FT_R_HAND"].f_z = state.ft[2]
-      hubo.ft["HUBO_FT_R_HAND"].updateColor()
+      hubo.ft["HUBO_FT_R_HAND"].updateColor(hand_limits)
       hubo.ft["HUBO_FT_L_HAND"].m_x = state.ft[3]
       hubo.ft["HUBO_FT_L_HAND"].m_y = state.ft[4]
       hubo.ft["HUBO_FT_L_HAND"].f_z = state.ft[5]
-      hubo.ft["HUBO_FT_L_HAND"].updateColor()
+      hubo.ft["HUBO_FT_L_HAND"].updateColor(hand_limits)
       hubo.ft["HUBO_FT_R_FOOT"].m_x = state.ft[6]
       hubo.ft["HUBO_FT_R_FOOT"].m_y = state.ft[7]
       hubo.ft["HUBO_FT_R_FOOT"].f_z = state.ft[8]
-      hubo.ft["HUBO_FT_R_FOOT"].updateColor()
+      hubo.ft["HUBO_FT_R_FOOT"].updateColor(foot_limits)
       hubo.ft["HUBO_FT_L_FOOT"].m_x = state.ft[9]
       hubo.ft["HUBO_FT_L_FOOT"].m_y = state.ft[10]
       hubo.ft["HUBO_FT_L_FOOT"].f_z = state.ft[11]
-      hubo.ft["HUBO_FT_L_FOOT"].updateColor()
+      hubo.ft["HUBO_FT_L_FOOT"].updateColor(foot_limits)
 
       hubo.motors["WST"].value = state[jointType][0]
       hubo.motors["NKY"].value = state[jointType][1]
@@ -207,7 +216,7 @@ $( document ).ready () ->
 
     if (use_socket)
       socket.on('serial_state', (serial_state) ->
-        console.log(serial_state)
+        # console.log(serial_state)
         window.serial_state = serial_state
         # LED status indicator
         flashLED()
@@ -224,7 +233,7 @@ $( document ).ready () ->
         stats.begin();
         serial_state = snapshot.val()
         window.serial_state = serial_state
-        console.log(serial_state)
+        # console.log(serial_state)
         # LED status indicator
         flashLED()
         updateModel(serial_state)
