@@ -1,3 +1,13 @@
+*TO INSTALL*
+You will need an Internet connection to complete the install process.
+Prerequisites: an installation of hubo-ach and NodeJS.
+* `git clone --recursive https://bitbucket.org/wmhilton/drchubo.js.git`
+* `cd drchubo.js`
+* `npm install`
+* `cd hubo-ach_server`
+* `./install`
+More instructions to follow
+
 Hubo-in-the-Browser
 ===================
 
