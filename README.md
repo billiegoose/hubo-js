@@ -1,11 +1,14 @@
 *TO INSTALL*
+
 You will need an Internet connection to complete the install process.
-Prerequisites: an installation of hubo-ach and NodeJS.
+
+Prerequisites: an installation of hubo-ach and [node][].
+
 * `git clone --recursive https://bitbucket.org/wmhilton/drchubo.js.git`
+  * You may be prompted to enter your credentials twice, because of the private drchubo-urdf submodule.
 * `cd drchubo.js`
-* `npm install`
-* `cd hubo-ach_server`
-* `./install`
+* `./install_all`
+
 More instructions to follow
 
 Hubo-in-the-Browser
