@@ -7,7 +7,7 @@ Prerequisites: an installation of hubo-ach and [node][].
 * `git clone --recursive https://bitbucket.org/wmhilton/drchubo.js.git`
   * You may be prompted to enter your credentials twice, because of the private drchubo-urdf submodule.
 * `cd drchubo.js`
-* `./install_all`
+* `./install_all.sh`
 
 More instructions to follow
 
