@@ -36,22 +36,43 @@ class FT_Sensor
   updateColor: (o) ->
     # Get mx_min, mx_max, etc
     # Scale 
-    mx_gradient = interpColor(o.mx_min, o.mx_max, 0, @m_x)
+    mx_gradient = lerp(o.mx_min, o.mx_max, 0, @m_x)
     # console.log("mx_gradient: #{mx_gradient}")
-    my_gradient = interpColor(o.my_min, o.my_max, 0, @m_y)
-    fz_gradient = interpColor(o.fz_min, o.fz_max, 0, @f_z)
+    my_gradient = lerp(o.my_min, o.my_max, 0, @m_y)
+    fz_gradient = lerp(o.fz_min, o.fz_max, 0, @f_z)
     # Set colors
-    temp = new THREE.Color()
-    temp.setRGB(mx_gradient,(1-mx_gradient),0)
-    @axis.children[0].setColor(temp.getHex())
+    @axis.children[0].setColor(computeColor(mx_gradient).getHex())
+    @axis.children[1].setColor(computeColor(my_gradient).getHex())
+    @axis.children[2].setColor(computeColor(fz_gradient).getHex())
+    # temp = new THREE.Color()
 
-    temp.setRGB(my_gradient,(1-my_gradient),0)
-    @axis.children[1].setColor(temp.getHex())
+    # temp.setRGB(mx_gradient,(1-mx_gradient),0)
+    # @axis.children[0].setColor(temp.getHex())
 
-    temp.setRGB(fz_gradient,(1-fz_gradient),0)
-    @axis.children[2].setColor(temp.getHex())
+    # temp.setRGB(my_gradient,(1-my_gradient),0)
+    # @axis.children[1].setColor(temp.getHex())
 
-interpColor = (min,max,zero,t) ->
+    # temp.setRGB(fz_gradient,(1-fz_gradient),0)
+    # @axis.children[2].setColor(temp.getHex())
+
+computeColor = (t) ->
+  temp = new THREE.Color()
+  y = $('#color_limits .y_threshold').val()
+  console.log("t:" + t);
+  if t > y
+    console.log("t>y")
+    temp.setRGB(
+      1,
+      1-lerp(y,1,0,t),
+      0)
+    console.log(temp)
+  else
+    temp.setRGB(
+      lerp(0,y,0,t),
+      1,
+      0)
+  return temp
+lerp = (min,max,zero,t) ->
   if t > max
     t = max
   if t < min
