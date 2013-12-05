@@ -18,6 +18,8 @@ Examples
 
 If you are at this page, I assume you are looking for the demos. All the demos are simple static HTML/JavaScript pages, so you can see all the source code by using the "View Source" option in your web browser. All the source code is also found in the Github repository.
 
+> [mouseclick]({local_root}examples/mouseclick/index.html): Identify which link of Hubo is clicked by the mouse.
+>
 > [color-picker.html]({local_root}examples/color-picker/color-picker.html): Demo of the highlighting and color changing API.
 >
 > [trajectory_playback.html]({local_root}examples/trajectory_playback/trajectory_playback.html): Play the Rainbox, Inc mocap demos.
