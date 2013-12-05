@@ -70,6 +70,8 @@ WebGLRobots.DefaultCanvas = function(container, display_width, display_height) {
     // If the rendering canvas is desired at a size other than the default,
     // this function will resize the canvas and update the trackball control.
     function resize(display_height, display_width) {
+        this.display_width = display_width
+        this.display_height = display_height
         $(renderer.domElement).attr({ 
             width: display_width,
             height: display_height
@@ -198,16 +200,19 @@ WebGLRobots.Robot = function() {
                 node.setColor = function(color) {
                     node.userData.prev_color = new THREE.Color(color);
                     node.color.setHex(color.getHex());
+                    if (_robot.autorender) _robot.canvas.render();
                 }
                 node.highlight = function() {
                     node.userData.prev_color = new THREE.Color(node.color);
                     node.color.setRGB(1,1,0);
+                    if (_robot.autorender) _robot.canvas.render();
                 };
                 node.unhighlight = function() {
                     if ((typeof node.children !== 'undefined') && (node.children !== null) && 
                         (typeof node.children[0] !== 'undefined') && (node.children[0] !== null)) {
                         node.color.setHex(node.userData.prev_color.getHex());
                     }
+                    if (_robot.autorender) _robot.canvas.render();
                 };
                 _robot.links[name] = node;
                 // Report progress
@@ -316,6 +321,16 @@ WebGLRobots.Robot = function() {
         .fail(function() { alert("Error loading URDF."); })
     };
     
+    this.unhighlightAll = function() {
+        var save = _robot.autorender;
+        _robot.autorender = false;
+        _robot.links.asArray().forEach(function(link) {
+            link.unhighlight();
+        })
+        _robot.autorender = save;
+        if (_robot.autorender) _robot.canvas.render();
+    }
+
     // TODO: Figure out how to show progress more effectively.
     function onProgress(data) {
         // data.total might be null if the server does not set the Content-Length header
