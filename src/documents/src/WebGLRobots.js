@@ -28,7 +28,9 @@ WebGLRobots.DefaultCanvas = function(container, display_width, display_height) {
     // renderer
     var renderer = Detector.webgl? new THREE.WebGLRenderer({antialias: true}): new THREE.CanvasRenderer();
     renderer.setSize(display_width, display_height);
-    $(container).append(renderer.domElement);
+    // NOTE: I use prepend instead of append
+    $(renderer.domElement).css("position","absolute");
+    $(container).prepend(renderer.domElement);
 
     // scene
     var scene = new THREE.Scene();
@@ -67,7 +69,11 @@ WebGLRobots.DefaultCanvas = function(container, display_width, display_height) {
 
     // If the rendering canvas is desired at a size other than the default,
     // this function will resize the canvas and update the trackball control.
-    function defaultResize(display_height, display_width) {
+    function resize(display_height, display_width) {
+        $(renderer.domElement).attr({ 
+            width: display_width,
+            height: display_height
+        });
         renderer.setSize( display_width, display_height );
         controls.handleResize();
         render();
@@ -108,6 +114,7 @@ WebGLRobots.DefaultCanvas = function(container, display_width, display_height) {
     this.scene = scene;
     this.camera = camera;
     this.controls = controls;
+    this.resize = resize;
     this.render = render;
     this.add = add;
     return this;
