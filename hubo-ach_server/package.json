@@ -6,5 +6,6 @@
   { "firebase"          : "0.6.7"
   , "socket.io"         : "0.9.16"
   , "hubo-ach-readonly" : "0.1.0"
+  , "argp"              : "1.0.0"
   }
 }

@@ -1,14 +1,29 @@
-var use_socket = true; // TODO: Clean this up.
-var hz = 30;
-console.log('Started ' + __filename);
+console.log('Started ' + __filename + '\n');
 
-if (use_socket) {
+var argv = require ("argp").createParser ({ once: true })
+    .description ("live_display_server")
+    .email ("wmhilton@gmail.com")
+    .body ()
+        //The object and argument definitions and the text of the --help message
+        //are configured at the same time
+        .text (" Arguments:")
+        .argument ("drc", { description: "Use for drc-hubo" })
+        .text ("\n Options:")
+        .option ({ short: "s", long: "socketio", description: "Use socket.io instead of Firebase" })
+        .option ({ short: "f", long: "hz", 
+        	metavar: "FREQUENCY", type: Number, default: 10,
+        	description: "State publishing frequency" })
+        .help ()
+        .version ("0.0.2")
+    .argv ();
+
+if (argv.socketio) {
 	var app = require('http').createServer()
 	    , io = require('socket.io').listen(app)
 } else {
 	// Get Firebase URL
 	var firebase_url = 'https://hubo-firebase.firebaseIO.com';
-	if (process.argv[2] == "drc") {
+	if (argv.drc) {
 		var firebase_url = 'https://drc-hubo.firebaseIO.com';
 	}
 	console.log('Using Firebase: ' + firebase_url);
@@ -32,14 +47,14 @@ var main = function() {
         console.log("Error initializing hubo-ach-readonly module. Likely cause: hubo-daemon is not running.")
         return
     }
-    if (use_socket) {
+    if (argv.socketio) {
 		app.listen(6060);
 		// Send initial position
 		io.sockets.on('connection', function (socket) {
 		  socket.emit('serial_state', serial_state);
 		});
 	}
-    updateID = setInterval(update,1000/hz);
+    updateID = setInterval(update,1000/argv.hz);
 }
 
 var serialize = function() {
@@ -158,7 +173,7 @@ var update = function() {
     serial_state = serialize();
     if (serial_state !== old_state) {
     	console.log(serial_state);
-    	if (use_socket) {
+    	if (argv.socketio) {
 			io.sockets.emit('serial_state', serial_state);
     	} else {
     		huboRef.child('serial_state').set(serial_state);
