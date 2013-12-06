@@ -191,8 +191,8 @@ $( document ).ready () ->
       hubo.ft["HUBO_FT_L_FOOT"].updateColor(foot_limits)
 
       # IMU
-      hubo.links.Body_Torso.rotation.x = state.imu[0].a_x;
-      hubo.links.Body_Torso.rotation.y = state.imu[0].a_y;
+      hubo.links.Body_Torso.rotation.x = state.imu[2].a_x;
+      hubo.links.Body_Torso.rotation.y = state.imu[2].a_y;
 
       # Joints
       hubo.motors["WST"].value = state[jointType][0]
