@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Trajectory Playback | Hubo-js</title>
+    <meta charset="utf-8">
+    <link rel="icon" href="../../img/favicon.png">
+    <!-- Jquery makes life so much easier. Load it before everything else!-->
+    <script src="../../lib/jquery/jquery.min.js"></script><meta http-equiv="X-Powered-By" content="DocPad v6.49.1"/>
+    <link rel="stylesheet" type="text/css" href="../../lib/jquery-ui/jquery-ui.custom.css">
+  </head>
+  <body>
+    <div id="paste_traj_dialog" title="Paste file" style="display:none">
+      <p>Paste the trajectory file here.</p>
+      <textarea id="traj_input" rows="4" style="width:100%; -moz-box-sizing:border-box; box-sizing:border-box"></textarea>
+    </div>
+    <div id="mouse_info_dialog" title="Mouse Navigation" style="display:none">
+      <p>Rotate = LEFT mouse button</p>
+      <p>Zoom = MIDDLE mouse wheel</p>
+      <p>Pan = RIGHT mouse button</p>
+    </div>
+    <p>This page demonstrates loading trajectory files containing angles recorded at 200Hz and playing them back at speed.</p>
+    <table border="1">
+      <tr> 
+        <td>
+          <div id="hubo_container" style="width: 480px; height: 480px; position: relative"> 
+            <div id="panel_load" style="position:absolute">
+              <button id="load">Load Hubo</button>
+            </div>
+            <div id="panel_loading" style="position:absolute; display:none">
+              <progress id="loading_bar"></progress>
+            </div>
+            <div id="panel_traj" style="position:absolute; display:none">
+              <select id="traj_selection">
+                <option value="">-- Select --</option>
+                <option value="clipboard">Paste from Clipboard</option>
+                <option value="testure.traj">Maestro Testure</option>
+                <option value="home2walkready.traj">Home 2 Walk Ready</option>
+                <option value="walkready2home.traj">Walk Ready 2 Home</option>
+                <option value="taichi.traj">Taichi</option>
+                <option value="bow.traj">Bow</option>
+                <option value="welcome.traj">Welcome</option>
+                <option value="goodbye.traj">Goodbye</option>
+                <option value="hand_wave.traj">Hand wave</option>
+                <option value="left_hand_head.traj">Left hand head</option>
+                <option value="right_hand_head.traj">Right hand head</option>
+                <option value="dance1.traj">Dance 1</option>
+                <option value="dance2.traj">Dance 2</option>
+                <option value="dance3.traj">Dance 3</option>
+                <option value="dance4.traj">Dance 4</option>
+                <option value="sign_language.traj">Sign language</option>
+                <option value="speech1.traj">Speech 1</option>
+                <option value="speech2.traj">Speech 2</option>
+              </select><br>
+              <button id="toggle_play" disabled="disabled">Play</button>
+            </div>
+            <div id="mouse_info_button" style="position: absolute; top: 464px; left:0px"><img src="../../img/info.png"></div>
+          </div>
+        </td>
+      </tr>
+    </table>
+    <p><i>NEW!</i> Drag and drop a trajectory file to load it.</p>
+    <p><i>Almost as new!</i> Select "Paste from Clipboard" in the Dropdown menu.</p>
+    <script>window.local_root = '../../'</script>
+    <!-- Used for rendering 3D Hubo -->
+    <script src="../../lib/three/three.min.js"></script>
+    <script src="../../lib/three/Detector.js"></script>
+    <script src="../../lib/three/ColladaLoader.js"></script>
+    <script src="../../lib/three/TrackballControls.js"></script>
+    <!-- Our code -->
+    <script src="../../lib/dict/dict.js"></script>
+    <script src="../../src/WebGLRobots.js"></script>
+    <script src="../../src/hubo.js"></script>
+    <script src="../../lib/watch/watch.min.js"></script>
+    <script src="../../lib/stats/stats.min.js"></script>
+    <script src="../../lib/jquery-ui/jquery-ui.custom.min.js"></script>
+    <script src="trajectory_playback.js"></script>
+    <script src="trajectory_playback_gui.js"></script>
+  </body>
+</html>

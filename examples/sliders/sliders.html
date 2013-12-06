@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Sliders | Hubo-js</title>
+    <meta charset="utf-8">
+    <link rel="icon" href="../../img/favicon.png">
+    <!-- Jquery makes life so much easier. Load it before everything else!-->
+    <script src="../../lib/jquery/jquery.min.js"></script><meta http-equiv="X-Powered-By" content="DocPad v6.49.1"/>
+    <link rel="stylesheet" type="text/css" href="light.css">
+  </head>
+  <body>
+    <table>
+      <tr>
+        <td>
+          <div id="hubo_container" style="position:relative; width:480px; height: 480px;">
+            <div id="load" style="position:absolute"></div>
+          </div>
+          <div style="text-align: center;">LEFT button ROTATES. RIGHT button PANS. MIDDLE wheel ZOOMS.</div>
+        </td>
+        <td>
+          <div id="controls">
+            <ul>
+              <li> <a href="#upper_body">Upper Body</a></li>
+              <li><a href="#lower_body">Lower Body</a></li>
+              <li><a href="#neck_waist">Neck / Waist</a></li>
+              <li> <a href="#fingers">Fingers</a></li>
+              <p>Beta: Keep left foot anchored.
+                <input id="footanchor" type="checkbox">
+              </p>
+            </ul>
+            <div id="upper_body">
+              <table>
+                <tr>
+                  <td>
+                    <div data-name="RSP" class="joint">
+                      <div>Right Shoulder Pitch: </div>
+                      <div class="joint_slider"></div><span class="joint_txt"></span>
+                    </div>
+                  </td>
+                  <td>
+                    <div data-name="LSP" class="joint">
+                      <div>Left Shoulder Pitch: </div>
+                      <div class="joint_slider"></div><span class="joint_txt"></span>
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <div data-name="RSR" class="joint">
+                      <div>Right Shoulder Roll: </div>
+                      <div class="joint_slider"></div><span class="joint_txt"></span>
+                    </div>
+                  </td>
+                  <td>
+                    <div data-name="LSR" class="joint">
+                      <div>Left Shoulder Roll: </div>
+                      <div class="joint_slider"></div><span class="joint_txt"></span>
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <div data-name="RSY" class="joint">
+                      <div>Right Shoulder Yaw: </div>
+                      <div class="joint_slider"></div><span class="joint_txt"></span>
+                    </div>
+                  </td>
+                  <td>
+                    <div data-name="LSY" class="joint">
+                      <div>Left Shoulder Yaw: </div>
+                      <div class="joint_slider"></div><span class="joint_txt"></span>
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <div data-name="REP" class="joint">
+                      <div>Right Elbow Pitch: </div>
+                      <div class="joint_slider"></div><span class="joint_txt"></span>
+                    </div>
+                  </td>
+                  <td>
+                    <div data-name="LEP" class="joint">
+                      <div>Left Elbow Pitch: </div>
+                      <div class="joint_slider"></div><span class="joint_txt"></span>
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <div data-name="RWY" class="joint">
+                      <div>Right Wrist Yaw: </div>
+                      <div class="joint_slider"></div><span class="joint_txt"></span>
+                    </div>
+                  </td>
+                  <td>
+                    <div data-name="LWY" class="joint">
+                      <div>Left Wrist Yaw: </div>
+                      <div class="joint_slider"></div><span class="joint_txt"></span>
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <div data-name="RWP" class="joint">
+                      <div>Right Wrist Pitch: </div>
+                      <div class="joint_slider"></div><span class="joint_txt"></span>
+                    </div>
+                  </td>
+                  <td>
+                    <div data-name="LWP" class="joint">
+                      <div>Left Wrist Pitch: </div>
+                      <div class="joint_slider"></div><span class="joint_txt"></span>
+                    </div>
+                  </td>
+                </tr>
+              </table>
+            </div>
+            <div id="lower_body">
+              <table>
+                <tr>
+                  <td>
+                    <div data-name="RHY" class="joint">
+                      <div>Right Hip Yaw: </div>
+                      <div class="joint_slider"></div><span class="joint_txt"></span>
+                    </div>
+                  </td>
+                  <td>
+                    <div data-name="LHY" class="joint">
+                      <div>Left Hip Yaw: </div>
+                      <div class="joint_slider"></div><span class="joint_txt"></span>
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <div data-name="RHR" class="joint">
+                      <div>Right Hip Roll: </div>
+                      <div class="joint_slider"></div><span class="joint_txt"></span>
+                    </div>
+                  </td>
+                  <td>
+                    <div data-name="LHR" class="joint">
+                      <div>Left Hip Roll: </div>
+                      <div class="joint_slider"></div><span class="joint_txt"></span>
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <div data-name="RHP" class="joint">
+                      <div>Right Hip Pitch: </div>
+                      <div class="joint_slider"></div><span class="joint_txt"></span>
+                    </div>
+                  </td>
+                  <td>
+                    <div data-name="LHP" class="joint">
+                      <div>Left Hip Pitch: </div>
+                      <div class="joint_slider"></div><span class="joint_txt"></span>
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <div data-name="RKP" class="joint">
+                      <div>Right Knee Pitch: </div>
+                      <div class="joint_slider"></div><span class="joint_txt"></span>
+                    </div>
+                  </td>
+                  <td>
+                    <div data-name="LKP" class="joint">
+                      <div>Left Knee Pitch: </div>
+                      <div class="joint_slider"></div><span class="joint_txt"></span>
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <div data-name="RAP" class="joint">
+                      <div>Right Ankle Pitch: </div>
+                      <div class="joint_slider"></div><span class="joint_txt"></span>
+                    </div>
+                  </td>
+                  <td>
+                    <div data-name="LAP" class="joint">
+                      <div>Left Ankle Pitch: </div>
+                      <div class="joint_slider"></div><span class="joint_txt"></span>
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <div data-name="RAR" class="joint">
+                      <div>Right Ankle Roll: </div>
+                      <div class="joint_slider"></div><span class="joint_txt"></span>
+                    </div>
+                  </td>
+                  <td>
+                    <div data-name="LAR" class="joint">
+                      <div>Left Ankle Roll: </div>
+                      <div class="joint_slider"></div><span class="joint_txt"></span>
+                    </div>
+                  </td>
+                </tr>
+              </table>
+            </div>
+            <div id="neck_waist">
+              <table>
+                <tr>
+                  <td>
+                    <div data-name="NKY" class="joint">
+                      <div>Neck Yaw: </div>
+                      <div class="joint_slider"></div><span class="joint_txt"></span>
+                    </div>
+                  </td>
+                  <td>
+                    <div data-name="WST" class="joint">
+                      <div>Waist: </div>
+                      <div class="joint_slider"></div><span class="joint_txt"></span>
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <div data-name="NK1" class="joint">
+                      <div>Neck 1: </div>
+                      <div class="joint_slider"></div><span class="joint_txt">                   </span>
+                    </div>
+                  </td>
+                  <td>
+                    <div data-name="NK2" class="joint">
+                      <div>Neck 2: </div>
+                      <div class="joint_slider"></div><span class="joint_txt"></span>
+                    </div>
+                  </td>
+                </tr>
+              </table>
+            </div>
+            <div id="fingers">
+              <table>
+                <tr>
+                  <td>
+                    <div data-name="RF1" class="joint">
+                      <div>Right Finger 1: </div>
+                      <div class="joint_slider"></div><span class="joint_txt">                   </span>
+                    </div>
+                  </td>
+                  <td>
+                    <div data-name="LF1" class="joint">
+                      <div>Left Finger 1: </div>
+                      <div class="joint_slider"></div><span class="joint_txt">                   </span>
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <div data-name="RF2" class="joint">
+                      <div>Right Finger 2: </div>
+                      <div class="joint_slider"></div><span class="joint_txt">                   </span>
+                    </div>
+                  </td>
+                  <td>
+                    <div data-name="LF2" class="joint">
+                      <div>Left Finger 2: </div>
+                      <div class="joint_slider"></div><span class="joint_txt"></span>
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <div data-name="RF3" class="joint">
+                      <div>Right Finger 3: </div>
+                      <div class="joint_slider"></div><span class="joint_txt">                   </span>
+                    </div>
+                  </td>
+                  <td>
+                    <div data-name="LF3" class="joint">
+                      <div>Left Finger 3: </div>
+                      <div class="joint_slider"></div><span class="joint_txt"></span>
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <div data-name="RF4" class="joint">
+                      <div>Right Finger 4: </div>
+                      <div class="joint_slider"></div><span class="joint_txt">                   </span>
+                    </div>
+                  </td>
+                  <td>
+                    <div data-name="LF4" class="joint">
+                      <div>Left Finger 4: </div>
+                      <div class="joint_slider"></div><span class="joint_txt"></span>
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <div data-name="RF5" class="joint">
+                      <div>Right Finger 5: </div>
+                      <div class="joint_slider"></div><span class="joint_txt">                   </span>
+                    </div>
+                  </td>
+                  <td>
+                    <div data-name="LF5" class="joint">
+                      <div>Left Finger 5: </div>
+                      <div class="joint_slider"></div><span class="joint_txt"></span>
+                    </div>
+                  </td>
+                </tr>
+              </table>
+            </div>
+          </div>
+        </td>
+      </tr>
+    </table>
+    <script>window.local_root = '../../'</script>
+    <!-- Used for rendering 3D Hubo -->
+    <script src="../../lib/three/three.min.js"></script>
+    <script src="../../lib/three/Detector.js"></script>
+    <script src="../../lib/three/ColladaLoader.js"></script>
+    <script src="../../lib/three/TrackballControls.js"></script>
+    <!-- Our code -->
+    <script src="../../lib/dict/dict.js"></script>
+    <script src="../../src/WebGLRobots.js"></script>
+    <script src="../../src/hubo.js"></script>
+    <!-- Used for UI elements -->
+    <script src="../../lib/jquery-ui/jquery-ui.custom.min.js"></script>
+    <script src="sliders.js"></script>
+  </body>
+</html>

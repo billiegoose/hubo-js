@@ -1,0 +1,35 @@
+@import '../../lib/jquery-ui/jquery-ui.custom.css';
+body {
+  font-family: Monospace;
+  background-color: #000;
+  color: #fff;
+  margin: 0px;
+  overflow: hidden;
+}
+#hubo_container canvas {
+  border: 1px solid #fff;
+}
+#controls {
+  margin-left: 5px;
+  border: 1px solid #fff;
+}
+td {
+  vertical-align: top;
+}
+.joint {
+  padding: 10px;
+}
+.joint table {
+  border-collapse: collapse;
+}
+.joint > div:first-child {
+  margin-bottom: 0.5em;
+  width: 21em;
+}
+.joint_slider {
+  width: 15em;
+  float: left;
+}
+.joint_txt {
+  padding-left: 1em;
+}

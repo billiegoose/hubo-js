@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Insert Title Here | Hubo-js</title>
+    <meta charset="utf-8">
+    <link rel="icon" href="../../img/favicon.png">
+    <!-- Jquery makes life so much easier. Load it before everything else!-->
+    <script src="../../lib/jquery/jquery.min.js"></script><meta http-equiv="X-Powered-By" content="DocPad v6.49.1"/>
+    <link rel="stylesheet" type="text/css" href="../../lib/jquery-ui/jquery-ui.custom.css">
+  </head>
+  <body>
+    <div id="mouse_info_dialog" title="Mouse Navigation" style="display:none">
+      <p>Rotate = LEFT mouse button</p>
+      <p>Zoom = MIDDLE mouse wheel</p>
+      <p>Pan = RIGHT mouse button</p>
+    </div>
+    <table style="border:none">
+      <tr> 
+        <td>
+          <div id="hubo_container" style="width: 480px; height: 480px; position: relative; border: 1px solid black"> 
+            <div id="panel_load" style="position:absolute">
+              <p>Load Hubo</p>
+            </div>
+            <div id="mouse_info_button" style="position: absolute; top: 464px; left:0px"><img src="../../img/info.png"></div>
+          </div>
+        </td>
+        <td style="float:left" padding="20px" margin="20px">
+          <table style="border:none">
+            <tr>
+              <td id="color_picker">
+                <p>Color: 
+                  <input value="ffffff" onchange="setColor(this.color.rgb);" class="color"><span>Hubo link: </span>
+                  <select id="link_list" onchange="highlightLink(this);">
+                    <option value="whole">Whole Robot</option>
+                  </select>
+                </p>
+              </td>
+            </tr>
+            <tr>
+              <td colspan="1">
+                <p>This page demonstrates the color API for WebGLRobots. For now it consists of:</p>
+                <ul> 
+                  <li> 
+                    <pre>hubo.links[i].highlight()</pre>
+                  </li>
+                  <li> 
+                    <pre>hubo.links[i].unhighlight()</pre>
+                  </li>
+                  <li> 
+                    <pre>hubo.links[i].setColor(THREE.Color)</pre>
+                  </li>
+                </ul>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <script>window.local_root = '../../'</script>
+    <!-- Used for rendering 3D Hubo -->
+    <script src="../../lib/three/three.min.js"></script>
+    <script src="../../lib/three/Detector.js"></script>
+    <script src="../../lib/three/ColladaLoader.js"></script>
+    <script src="../../lib/three/TrackballControls.js"></script>
+    <!-- Our code -->
+    <script src="../../lib/dict/dict.js"></script>
+    <script src="../../src/WebGLRobots.js"></script>
+    <script src="../../src/hubo.js"></script>
+    <script src="../../lib/jquery-ui/jquery-ui.custom.min.js"></script>
+    <script src="jscolor.js"></script>
+    <script src="main.js"></script>
+  </body>
+</html>

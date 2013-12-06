@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Hubo Live Display | Hubo-js</title>
+    <meta charset="utf-8">
+    <link rel="icon" href="../img/favicon.png">
+    <!-- Jquery makes life so much easier. Load it before everything else!-->
+    <script src="../lib/jquery/jquery.min.js"></script><meta http-equiv="X-Powered-By" content="DocPad v6.49.1"/>
+    <link rel="stylesheet" type="text/css" href="../lib/jquery-ui/jquery-ui.custom.css">
+  </head>
+  <body>
+    <div id="mouse_info_dialog" title="Mouse Navigation" style="display:none">
+      <p>Rotate = LEFT mouse button</p>
+      <p>Zoom = MIDDLE mouse wheel</p>
+      <p>Pan = RIGHT mouse button</p>
+    </div>
+    <p>This page demonstrates [put some text here]. </p>
+    <table border="1">
+      <tr> 
+        <td style="vertical-align:top">
+          <div id="hubo_container" style="width: 480px; height: 480px; position: relative"> 
+            <div id="load" style="position:absolute"></div>
+            <!-- Source: http://openclipart.org/detail/88123/led-red-by-bnielsen--><img id="led" style="position:absolute; top:10px; left:10px; display:none" src="led_red_black.png">
+            <div id="mouse_info_button" style="position: absolute; top: 464px; left:0px"><img src="../img/info.png"></div>
+          </div>
+        </td>
+        <td>
+          <div id="controls">
+            <div id="HUBO_FT_R_HAND"> 
+              <table>
+                <tr> 
+                  <th>FT_R_HAND:</th>
+                </tr>
+                <tr>
+                  <td>m_x min:</td>
+                  <td> 
+                    <input type="number" value="-0.05" class="m_x_min">
+                  </td>
+                  <td>m_x max:</td>
+                  <td>
+                    <input type="number" value="0.05" class="m_x_max">
+                  </td>
+                </tr>
+                <tr>
+                  <td>m_y min:</td>
+                  <td>
+                    <input type="number" value="-1" class="m_y_min">
+                  </td>
+                  <td>m_y max:</td>
+                  <td>
+                    <input type="number" value="1" class="m_y_max">
+                  </td>
+                </tr>
+                <tr>
+                  <td>f_z min:</td>
+                  <td>
+                    <input type="number" value="-30" class="f_z_min">
+                  </td>
+                  <td>f_z max:</td>
+                  <td>
+                    <input type="number" value="30" class="f_z_max">
+                  </td>
+                </tr>
+              </table>
+            </div>
+            <div id="HUBO_FT_L_HAND">
+              <table>
+                <tr>
+                  <th>FT_L_HAND:</th>
+                </tr>
+                <tr>
+                  <td>m_x min:</td>
+                  <td> 
+                    <input type="number" value="-1" class="m_x_min">
+                  </td>
+                  <td>m_x max:</td>
+                  <td>
+                    <input type="number" value="1" class="m_x_max">
+                  </td>
+                </tr>
+                <tr>
+                  <td>m_y min:</td>
+                  <td>
+                    <input type="number" value="-1" class="m_y_min">
+                  </td>
+                  <td>m_y max:</td>
+                  <td>
+                    <input type="number" value="1" class="m_y_max">
+                  </td>
+                </tr>
+                <tr>
+                  <td>f_z min:</td>
+                  <td>
+                    <input type="number" value="-30" class="f_z_min">
+                  </td>
+                  <td>f_z max:</td>
+                  <td>
+                    <input type="number" value="30" class="f_z_max">
+                  </td>
+                </tr>
+              </table>
+            </div>
+            <div id="HUBO_FT_R_FOOT">
+              <table>
+                <tr>
+                  <th>FT_R_FOOT:</th>
+                </tr>
+                <tr>
+                  <td>m_x min:</td>
+                  <td> 
+                    <input type="number" value="-1" class="m_x_min">
+                  </td>
+                  <td>m_x max:</td>
+                  <td>
+                    <input type="number" value="1" class="m_x_max">
+                  </td>
+                </tr>
+                <tr>
+                  <td>m_y min:</td>
+                  <td>
+                    <input type="number" value="-1" class="m_y_min">
+                  </td>
+                  <td>m_y max:</td>
+                  <td>
+                    <input type="number" value="1" class="m_y_max">
+                  </td>
+                </tr>
+                <tr>
+                  <td>f_z min:</td>
+                  <td>
+                    <input type="number" value="-30" class="f_z_min">
+                  </td>
+                  <td>f_z max:</td>
+                  <td>
+                    <input type="number" value="30" class="f_z_max">
+                  </td>
+                </tr>
+              </table>
+            </div>
+            <div id="HUBO_FT_L_FOOT">
+              <table>
+                <tr>
+                  <th>FT_L_FOOT:</th>
+                </tr>
+                <tr>
+                  <td>m_x min:</td>
+                  <td> 
+                    <input type="number" value="-1" class="m_x_min">
+                  </td>
+                  <td>m_x max:</td>
+                  <td>
+                    <input type="number" value="1" class="m_x_max">
+                  </td>
+                </tr>
+                <tr>
+                  <td>m_y min:</td>
+                  <td>
+                    <input type="number" value="-1" class="m_y_min">
+                  </td>
+                  <td>m_y max:</td>
+                  <td>
+                    <input type="number" value="1" class="m_y_max">
+                  </td>
+                </tr>
+                <tr>
+                  <td>f_z min:</td>
+                  <td>
+                    <input type="number" value="-30" class="f_z_min">
+                  </td>
+                  <td>f_z max:</td>
+                  <td>
+                    <input type="number" value="30" class="f_z_max">
+                  </td>
+                </tr>
+              </table>
+            </div>
+          </div>
+        </td>
+      </tr>
+    </table>
+    <script>window.local_root = '../'</script>
+    <!-- Used for rendering 3D Hubo -->
+    <script src="../lib/three/three.min.js"></script>
+    <script src="../lib/three/Detector.js"></script>
+    <script src="../lib/three/ColladaLoader.js"></script>
+    <script src="../lib/three/TrackballControls.js"></script>
+    <!-- Our code -->
+    <script src="../lib/dict/dict.js"></script>
+    <script src="../src/WebGLRobots.js"></script>
+    <script src="../src/hubo.js"></script>
+    <script src="../lib/jquery-ui/jquery-ui.custom.min.js"></script>
+    <script src="https://cdn.firebase.com/v0/firebase.js"></script>
+    <script src="../lib/stats/stats.min.js"></script>
+    <script src="index.js"></script>
+  </body>
+</html>
