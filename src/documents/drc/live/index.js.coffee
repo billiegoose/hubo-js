@@ -58,7 +58,6 @@ class FT_Sensor
 computeColor = (t) ->
   temp = new THREE.Color()
   y = $('#color_limits .y_threshold').val()
-  console.log("t:" + t);
   if t > y
     console.log("t>y")
     temp.setRGB(
@@ -94,6 +93,17 @@ extractLimits = (el) ->
   o.fz_max = $(el).find(".f_z_max").val()
   return o
 
+adaptCanvasSize = () ->
+  if (document.webkitIsFullScreen)
+    width = $(window).width()
+    height = $(window).height()
+  else
+    width = Math.min($(window).width(), $(window).height())
+    height = width
+  $('#hubo_container').width(width)
+  $('#hubo_container').height(height)
+  hubo.canvas.resize(width, height)
+
 #
 # MAIN
 #
@@ -101,16 +111,6 @@ $( document ).ready () ->
   #
   # Setup GUI
   #
-  $("#mouse_info_dialog").dialog
-    autoOpen: false
-    closeOnEscape: true
-    buttons:
-      OK: ->
-        $(this).dialog "close"
-
-  $("#mouse_info_button").on "click", ->
-    $("#mouse_info_dialog").dialog "open"
-
   window.stats = new Stats();
   stats.setMode(0); # 0: fps, 1: ms
   $('#hubo_container').append(stats.domElement)
@@ -118,11 +118,9 @@ $( document ).ready () ->
   stats.domElement.style.float = 'right'
 
   $(window).on('orientationchange', () ->
-    size = Math.min($(window).width(), $(window).height())
-    $('#hubo_container').width(size)
-    $('#hubo_container').height(size)
-    # $(hubo.canvas.renderer.domElement).attr({ width: size, height: size})
-    hubo.canvas.resize(size, size)
+    # I added a delay to this effect because I found that the size recalculation
+    # is more reliable if we wait a moment after the orientation change.
+    setTimeout(adaptCanvasSize, 500)
   );
 
   #
@@ -270,6 +268,22 @@ $( document ).ready () ->
 
     $('#joint-toggle').on 'slidestop', () ->
       updateModel(window.serial_state)
+
+    $('#fullscreen-toggle').on 'slidestop', () ->
+      if $('#fullscreen-toggle').val() == "on"
+        if (document.webkitFullscreenEnabled)
+          document.getElementById('hubo_container').webkitRequestFullscreen()
+      else
+        if (document.webkitFullscreenEnabled)
+          document.webkitExitFullscreen()
+
+    $(document).on 'webkitfullscreenchange', () ->
+      if (document.webkitIsFullScreen)
+        setTimeout(adaptCanvasSize, 500)
+        $('#fullscreen-toggle').val("on").slider("refresh")
+      else
+        setTimeout(adaptCanvasSize, 500)
+        $('#fullscreen-toggle').val("off").slider("refresh")
 
     # Update the rendering to reflect any changes to Hubo.
     c.render()

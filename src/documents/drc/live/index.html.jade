@@ -8,31 +8,34 @@ block append head
   meta(name='viewport', content='initial-scale=1.0, maximum-scale=1.0, user-scalable=0')
 
 block body
-  #mouse_info_dialog(title='Mouse Navigation', style="display:none")
-    p Rotate = LEFT mouse button
-    p Zoom = MIDDLE mouse wheel
-    p Pan = RIGHT mouse button
-  //p This page shows DRC-Hubo's position and force-torque data in near real-time.
-
   #content
     #hubo_container
       #load(style='position:absolute')
       // Source: http://openclipart.org/detail/88123/led-red-by-bnielsen
       img#led(style='position:absolute; top:10px; left:10px; display:none',src="led_green_black.png")
-      #mouse_info_button(style="position: absolute; top: 464px; left:0px")
-        img(src="/img/info.png")
 
     #controls
-      label(for="joint-toggle",style="display:none") Flip switch:
-      select(name="joint-toggle",id="joint-toggle",data-role="slider")
-        option(value="pos") pos
-        option(value="ref") ref
+      table
+        tr
+          th
+            label(for="joint-toggle") Joint source:
+          td
+            select(name="joint-toggle",id="joint-toggle",data-role="slider")
+              option(value="pos") pos
+              option(value="ref") ref
+        tr
+          th
+            label(for="fullscreen-toggle") Fullscreen Mode:
+          td
+            select(name="fullscreen-toggle",id="fullscreen-toggle",data-role="slider")
+              option(value="off") off
+              option(value="on") on
 
       p Adjust the bounds of the red-green color gradient here.
       #ft_hand_limits
         table
           tr 
-            th FT_HAND LIMITS:
+            th(colspan='4') FT_HAND LIMITS:
           tr
             td m_x min:
             td 
@@ -54,35 +57,10 @@ block body
             td f_z max:
             td
               input.f_z_max(type='number', value='30')
-      //- #HUBO_FT_L_HAND
-      //-   table
-      //-     tr
-      //-       th FT_L_HAND:
-      //-     tr
-      //-       td m_x min:
-      //-       td 
-      //-         input.m_x_min(type='number', value='-1')
-      //-       td m_x max:
-      //-       td
-      //-         input.m_x_max(type='number', value='1')
-      //-     tr
-      //-       td m_y min:
-      //-       td
-      //-         input.m_y_min(type='number', value='-1')
-      //-       td m_y max:
-      //-       td
-      //-         input.m_y_max(type='number', value='1')
-      //-     tr
-      //-       td f_z min:
-      //-       td
-      //-         input.f_z_min(type='number', value='-30')
-      //-       td f_z max:
-      //-       td
-      //-         input.f_z_max(type='number', value='30')
       #ft_foot_limits
         table
           tr
-            th FT_FOOT LIMITS:
+            th(colspan='4') FT_FOOT LIMITS:
           tr
             td m_x min:
             td 
@@ -107,36 +85,11 @@ block body
       #color_limits
         table
           tr
-            th COLOR THRESHOLDS:
+            th(colspan='2') COLOR THRESHOLDS:
           tr
             td Yellow point:
             td
               input.y_threshold(type='number', value='0.5')
-      //- #HUBO_FT_L_FOOT
-      //-   table
-      //-     tr
-      //-       th FT_L_FOOT:
-      //-     tr
-      //-       td m_x min:
-      //-       td 
-      //-         input.m_x_min(type='number', value='-1')
-      //-       td m_x max:
-      //-       td
-      //-         input.m_x_max(type='number', value='1')
-      //-     tr
-      //-       td m_y min:
-      //-       td
-      //-         input.m_y_min(type='number', value='-1')
-      //-       td m_y max:
-      //-       td
-      //-         input.m_y_max(type='number', value='1')
-      //-     tr
-      //-       td f_z min:
-      //-       td
-      //-         input.f_z_min(type='number', value='-30')
-      //-       td f_z max:
-      //-       td
-      //-         input.f_z_max(type='number', value='30')
   #huge_display(style='position:absolute; top:0px; font-size:600px; display:none') -2.0
             
 
