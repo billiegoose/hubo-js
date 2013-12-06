@@ -235,6 +235,10 @@ $( document ).ready () ->
       # hubo.motors["LF5"].value = state[jointType][41]
       hubo.canvas.render()
 
+    # Update FPS counter
+    stats.end();
+    stats.begin();
+
     if (use_socket)
       socket.on('serial_state', (serial_state) ->
         # console.log(serial_state)
@@ -250,8 +254,6 @@ $( document ).ready () ->
         # between runs of this function, not the time needed to render
         # it. Therefore, we end recording at the beginning and begin recording
         # right away.
-        stats.end();
-        stats.begin();
         serial_state = snapshot.val()
         window.serial_state = serial_state
         # console.log(serial_state)

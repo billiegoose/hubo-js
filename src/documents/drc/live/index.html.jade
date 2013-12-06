@@ -5,6 +5,7 @@ block prepend head
 block append head
   link(rel='stylesheet', href='/lib/jquery-mobile/jquery.mobile-1.2.1.min.css')
   link(rel='stylesheet', type='text/css', href='index.css')
+  meta(name='viewport', content='initial-scale=1.0, maximum-scale=1.0, user-scalable=0')
 
 block body
   #mouse_info_dialog(title='Mouse Navigation', style="display:none")
@@ -17,7 +18,7 @@ block body
     #hubo_container
       #load(style='position:absolute')
       // Source: http://openclipart.org/detail/88123/led-red-by-bnielsen
-      img#led(style='position:absolute; top:10px; left:10px; display:none',src="led_red_black.png")
+      img#led(style='position:absolute; top:10px; left:10px; display:none',src="led_green_black.png")
       #mouse_info_button(style="position: absolute; top: 464px; left:0px")
         img(src="/img/info.png")
 
@@ -85,24 +86,24 @@ block body
           tr
             td m_x min:
             td 
-              input.m_x_min(type='number', value='-1')
+              input.m_x_min(type='number', value='-10')
             td m_x max:
             td
-              input.m_x_max(type='number', value='1')
+              input.m_x_max(type='number', value='10')
           tr
             td m_y min:
             td
-              input.m_y_min(type='number', value='-1')
+              input.m_y_min(type='number', value='-10')
             td m_y max:
             td
-              input.m_y_max(type='number', value='1')
+              input.m_y_max(type='number', value='10')
           tr
             td f_z min:
             td
               input.f_z_min(type='number', value='-30')
             td f_z max:
             td
-              input.f_z_max(type='number', value='30')
+              input.f_z_max(type='number', value='500')
       #color_limits
         table
           tr
@@ -110,7 +111,7 @@ block body
           tr
             td Yellow point:
             td
-              input.y_threshold(type='number', value='0.8')
+              input.y_threshold(type='number', value='0.5')
       //- #HUBO_FT_L_FOOT
       //-   table
       //-     tr
