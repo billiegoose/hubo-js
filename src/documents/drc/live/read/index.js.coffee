@@ -1,0 +1,127 @@
+use_socket = true;
+
+updateTable = (serial_state) ->
+      state = JSON.parse(serial_state);
+      # console.log(state);
+
+      $('#RH .m_x').html( state.ft[0] )
+      $('#RH .m_y').html( state.ft[1] )
+      $('#RH .f_z').html( state.ft[2] )
+      $('#LH .m_x').html( state.ft[3] )
+      $('#LH .m_y').html( state.ft[4] )
+      $('#LH .f_z').html( state.ft[5] )
+      $('#RF .m_x').html( state.ft[6] )
+      $('#RF .m_y').html( state.ft[7] )
+      $('#RF .f_z').html( state.ft[8] )
+      $('#LF .m_x').html( state.ft[9] )
+      $('#LF .m_y').html( state.ft[10] )
+      $('#LF .f_z').html( state.ft[11] )
+
+      $('#WST .ref').html( state.ref[0] )
+      $('#NKY .ref').html( state.ref[1] )
+      $('#NK1 .ref').html( state.ref[2] )
+      $('#NK2 .ref').html( state.ref[3] )
+      $('#LSP .ref').html( state.ref[4] )
+      $('#LSR .ref').html( state.ref[5] )
+      $('#LSY .ref').html( state.ref[6] )
+      $('#LEB .ref').html( state.ref[7] )
+      $('#LWY .ref').html( state.ref[8] )
+      $('#LWR .ref').html( state.ref[9] )
+      $('#LWP .ref').html( state.ref[10] )
+      $('#RSP .ref').html( state.ref[11] )
+      $('#RSR .ref').html( state.ref[12] )
+      $('#RSY .ref').html( state.ref[13] )
+      $('#REB .ref').html( state.ref[14] )
+      $('#RWY .ref').html( state.ref[15] )
+      $('#RWR .ref').html( state.ref[16] )
+      $('#RWP .ref').html( state.ref[17] )
+      # mind the gap
+      $('#LHY .ref').html( state.ref[19] )
+      $('#LHR .ref').html( state.ref[20] )
+      $('#LHP .ref').html( state.ref[21] )
+      $('#LKN .ref').html( state.ref[22] )
+      $('#LAP .ref').html( state.ref[23] )
+      $('#LAR .ref').html( state.ref[24] )
+      # mind the gap
+      $('#RHY .ref').html( state.ref[26] )
+      $('#RHR .ref').html( state.ref[27] )
+      $('#RHP .ref').html( state.ref[28] )
+      $('#RKN .ref').html( state.ref[29] )
+      $('#RAP .ref').html( state.ref[30] )
+      $('#RAR .ref').html( state.ref[31] )
+      $('#RF1 .ref').html( state.ref[32] )
+      $('#RF2 .ref').html( state.ref[33] )
+      $('#RF3 .ref').html( state.ref[34] )
+      $('#RF4 .ref').html( state.ref[35] )
+      $('#RF5 .ref').html( state.ref[36] )
+      $('#LF1 .ref').html( state.ref[37] )
+      $('#LF2 .ref').html( state.ref[38] )
+      $('#LF3 .ref').html( state.ref[39] )
+      $('#LF4 .ref').html( state.ref[40] )
+      $('#LF5 .ref').html( state.ref[41] )
+
+      $('#WST .pos').html( state.pos[0] )
+      $('#NKY .pos').html( state.pos[1] )
+      $('#NK1 .pos').html( state.pos[2] )
+      $('#NK2 .pos').html( state.pos[3] )
+      $('#LSP .pos').html( state.pos[4] )
+      $('#LSR .pos').html( state.pos[5] )
+      $('#LSY .pos').html( state.pos[6] )
+      $('#LEB .pos').html( state.pos[7] )
+      $('#LWY .pos').html( state.pos[8] )
+      $('#LWR .pos').html( state.pos[9] )
+      $('#LWP .pos').html( state.pos[10] )
+      $('#RSP .pos').html( state.pos[11] )
+      $('#RSR .pos').html( state.pos[12] )
+      $('#RSY .pos').html( state.pos[13] )
+      $('#REB .pos').html( state.pos[14] )
+      $('#RWY .pos').html( state.pos[15] )
+      $('#RWR .pos').html( state.pos[16] )
+      $('#RWP .pos').html( state.pos[17] )
+      # mind the gap
+      $('#LHY .pos').html( state.pos[19] )
+      $('#LHR .pos').html( state.pos[20] )
+      $('#LHP .pos').html( state.pos[21] )
+      $('#LKN .pos').html( state.pos[22] )
+      $('#LAP .pos').html( state.pos[23] )
+      $('#LAR .pos').html( state.pos[24] )
+      # mind the gap
+      $('#RHY .pos').html( state.pos[26] )
+      $('#RHR .pos').html( state.pos[27] )
+      $('#RHP .pos').html( state.pos[28] )
+      $('#RKN .pos').html( state.pos[29] )
+      $('#RAP .pos').html( state.pos[30] )
+      $('#RAR .pos').html( state.pos[31] )
+      $('#RF1 .pos').html( state.pos[32] )
+      $('#RF2 .pos').html( state.pos[33] )
+      $('#RF3 .pos').html( state.pos[34] )
+      $('#RF4 .pos').html( state.pos[35] )
+      $('#RF5 .pos').html( state.pos[36] )
+      $('#LF1 .pos').html( state.pos[37] )
+      $('#LF2 .pos').html( state.pos[38] )
+      $('#LF3 .pos').html( state.pos[39] )
+      $('#LF4 .pos').html( state.pos[40] )
+      $('#LF5 .pos').html( state.pos[41] )
+
+      $('#IMU0 .a_x').html( state.imu[0].a_x)
+      $('#IMU0 .a_y').html( state.imu[0].a_y)
+      $('#IMU0 .a_z').html( state.imu[0].a_z)
+      $('#IMU1 .a_x').html( state.imu[1].a_x)
+      $('#IMU1 .a_y').html( state.imu[1].a_y)
+      $('#IMU1 .a_z').html( state.imu[1].a_z)
+
+#
+# MAIN
+#
+$( document ).ready () ->
+  if (use_socket)
+    socket = io.connect(':6060');
+    socket.on 'serial_state', (serial_state) ->
+      window.serial_state = serial_state
+      updateTable(serial_state)
+  else
+    window.serial_stateRef = new Firebase('http://drc-hubo.firebaseIO.com/serial_state')
+    serial_stateRef.on 'value', (snapshot) ->
+      serial_state = snapshot.val()
+      window.serial_state = serial_state
+      updateTable(serial_state)

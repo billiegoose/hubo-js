@@ -1,0 +1,314 @@
+extends /jade/templates/regular-layout
+
+block prepend head
+  title hubo-ach read | Hubo-js
+block append head
+  link(rel='stylesheet', type='text/css', href='index.css')
+  //meta(name='viewport', content='initial-scale=1.0, maximum-scale=1.0, user-scalable=0')
+  meta(name='viewport', content='initial-scale=1.0')
+
+block body
+  table
+    tr 
+      td t = 
+      td#t 7443.8597
+    tr
+      th 
+      th Ref
+      th Enc
+      th Cur
+      th Tmp
+    tr#WST
+      td WST
+      td.ref 0.000000
+      td.pos 0.000000
+      td.cur 0.000000
+      td.tmp 0.000000
+    tr#NKY
+      td NKY
+      td.ref
+      td.pos
+      td.cur
+      td.tmp
+    tr#NK1
+      td NK1
+      td.ref
+      td.pos
+      td.cur
+      td.tmp
+    tr#NK2
+      td NK2
+      td.ref
+      td.pos
+      td.cur
+      td.tmp
+    tr#LSP
+      td LSP
+      td.ref
+      td.pos
+      td.cur
+      td.tmp
+    tr#LSR
+      td LSR
+      td.ref
+      td.pos
+      td.cur
+      td.tmp
+    tr#LSY
+      td LSY
+      td.ref
+      td.pos
+      td.cur
+      td.tmp
+    tr#LEB
+      td LEB
+      td.ref
+      td.pos
+      td.cur
+      td.tmp
+    tr#LWY
+      td LWY
+      td.ref
+      td.pos
+      td.cur
+      td.tmp
+    tr#LWR
+      td LWR
+      td.ref
+      td.pos
+      td.cur
+      td.tmp
+    tr#LWP
+      td LWP
+      td.ref
+      td.pos
+      td.cur
+      td.tmp
+    tr#RSP
+      td RSP
+      td.ref
+      td.pos
+      td.cur
+      td.tmp
+    tr#RSR
+      td RSR
+      td.ref
+      td.pos
+      td.cur
+      td.tmp
+    tr#RSY
+      td RSY
+      td.ref
+      td.pos
+      td.cur
+      td.tmp
+    tr#REB
+      td REB
+      td.ref
+      td.pos
+      td.cur
+      td.tmp
+    tr#RWY
+      td RWY
+      td.ref
+      td.pos
+      td.cur
+      td.tmp
+    tr#RWR
+      td RWR
+      td.ref
+      td.pos
+      td.cur
+      td.tmp
+    tr#RWP
+      td RWP
+      td.ref
+      td.pos
+      td.cur
+      td.tmp
+    tr#LHY
+      td LHY
+      td.ref
+      td.pos
+      td.cur
+      td.tmp
+    tr#LHR
+      td LHR
+      td.ref
+      td.pos
+      td.cur
+      td.tmp
+    tr#LHP
+      td LHP
+      td.ref
+      td.pos
+      td.cur
+      td.tmp
+    tr#LKN
+      td LKN
+      td.ref
+      td.pos
+      td.cur
+      td.tmp
+    tr#LAP
+      td LAP
+      td.ref
+      td.pos
+      td.cur
+      td.tmp
+    tr#LAR
+      td LAR
+      td.ref
+      td.pos
+      td.cur
+      td.tmp
+    tr#RHY
+      td RHY
+      td.ref
+      td.pos
+      td.cur
+      td.tmp
+    tr#RHR
+      td RHR
+      td.ref
+      td.pos
+      td.cur
+      td.tmp
+    tr#RHP
+      td RHP
+      td.ref
+      td.pos
+      td.cur
+      td.tmp
+    tr#RKN
+      td RKN
+      td.ref
+      td.pos
+      td.cur
+      td.tmp
+    tr#RAP
+      td RAP
+      td.ref
+      td.pos
+      td.cur
+      td.tmp
+    tr#RAR
+      td RAR
+      td.ref
+      td.pos
+      td.cur
+      td.tmp
+    tr#RF1
+      td RF1
+      td.ref
+      td.pos
+      td.cur
+      td.tmp
+    tr#RF2
+      td RF2
+      td.ref
+      td.pos
+      td.cur
+      td.tmp
+    tr#RF3
+      td RF3
+      td.ref
+      td.pos
+      td.cur
+      td.tmp
+    tr#RF4
+      td RF4
+      td.ref
+      td.pos
+      td.cur
+      td.tmp
+    tr#RF5
+      td RF5
+      td.ref
+      td.pos
+      td.cur
+      td.tmp
+    tr#LF1
+      td LF1
+      td.ref
+      td.pos
+      td.cur
+      td.tmp
+    tr#LF2
+      td LF2
+      td.ref
+      td.pos
+      td.cur
+      td.tmp
+    tr#LF3
+      td LF3
+      td.ref
+      td.pos
+      td.cur
+      td.tmp
+    tr#LF4
+      td LF4
+      td.ref
+      td.pos
+      td.cur
+      td.tmp
+    tr#LF5
+      td LF5
+      td.ref
+      td.pos
+      td.cur
+      td.tmp
+    tr
+      th 
+      th Mx
+      th My
+      th Fz
+    tr#RF
+      td RF
+      td.m_x
+      td.m_y
+      td.f_z
+    tr#LF
+      td LF
+      td.m_x
+      td.m_y
+      td.f_z
+    tr#RH
+      td RH
+      td.m_x
+      td.m_y
+      td.f_z
+    tr#LH
+      td LH
+      td.m_x
+      td.m_y
+      td.f_z  
+    tr
+      th 
+      th Ax
+      th Ay
+      th Az
+    tr#IMU0
+      td IMU0
+      td.a_x
+      td.a_y
+      td.a_z        
+    tr#IMU1
+      td IMU1
+      td.a_x
+      td.a_y
+      td.a_z       
+    tr
+      th 
+      th V
+      th I
+      th P
+    tr#PWR
+      td PWR
+      td.v
+      td.i
+      td.p
+
+block append scripts
+  script(src='/lib/socket.io/socket.io.js')
+  script(src='index.js')
