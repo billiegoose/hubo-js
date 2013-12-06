@@ -171,6 +171,7 @@ $( document ).ready () ->
 
       jointType = $('#joint-toggle').val() #'ref' # or 'pos'
 
+      # FT
       hand_limits = extractLimits($('#ft_hand_limits'))
       foot_limits = extractLimits($('#ft_foot_limits'))
       hubo.ft["HUBO_FT_R_HAND"].m_x = state.ft[0]
@@ -191,6 +192,11 @@ $( document ).ready () ->
       hubo.ft["HUBO_FT_L_FOOT"].f_z = state.ft[11]
       hubo.ft["HUBO_FT_L_FOOT"].updateColor(foot_limits)
 
+      # IMU
+      hubo.links.Body_Torso.rotation.x = state.imu[0].a_x;
+      hubo.links.Body_Torso.rotation.y = state.imu[0].a_y;
+
+      # Joints
       hubo.motors["WST"].value = state[jointType][0]
       hubo.motors["NKY"].value = state[jointType][1]
       hubo.motors["NK1"].value = state[jointType][2]
