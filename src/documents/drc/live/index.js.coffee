@@ -117,7 +117,7 @@ $( document ).ready () ->
   stats.domElement.style.position = 'relative'
   stats.domElement.style.float = 'right'
 
-  $(window).on('orientationchange', () ->
+  $(window).on('orientationchange resize', () ->
     # I added a delay to this effect because I found that the size recalculation
     # is more reliable if we wait a moment after the orientation change.
     setTimeout(adaptCanvasSize, 500)
