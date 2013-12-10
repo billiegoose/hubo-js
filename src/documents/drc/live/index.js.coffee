@@ -131,7 +131,14 @@ $( document ).ready () ->
   $('#hubo_container').width(size)
   $('#hubo_container').height(size)
   c = new Hubo.DefaultCanvas("#hubo_container")
-  window.hubo = new Hubo("hubo2", callback = ->    
+
+  window.texture = THREE.ImageUtils.loadTexture('checkerboard.png', THREE.Linear)
+  texture.wrapS = THREE.RepeatWrapping;
+  texture.wrapT = THREE.RepeatWrapping;
+  texture.repeat.x = 20;
+  texture.repeat.y = 20;
+
+  window.hubo = new Hubo("dirk", callback = ->    
     # Once the URDF is completely loaded, this function is run.
     # Add your robot to the canvas.
     c.add hubo
@@ -139,6 +146,15 @@ $( document ).ready () ->
     # hubo.canvas.controls.target=new THREE.Vector3(0,0,-0.4);
     hubo.autorender = false
     $("#load").hide()
+
+    # Create a floor
+    floorG = new THREE.PlaneGeometry(20, 20)
+    floorM = new THREE.MeshBasicMaterial({map: texture})
+    window.floor = new THREE.Mesh(floorG, floorM)
+    # window.floor = new THREE.Mesh(new THREE.PlaneGeometry(300, 300), new THREE.MeshBasicMaterial({color: 0x0000ff}));
+    floor.position.z = -1.17;
+    floor.overdraw = true;
+    c.scene.add(floor);
 
     # Create FT display axes
     if not hubo.ft?
