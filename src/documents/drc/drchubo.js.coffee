@@ -11,6 +11,8 @@ class Hubo extends WebGLRobots.Robot
     _robot = this
     # Motors
     @motors = new Dict()
+    # Helpful Properties
+    @JointList = ['WST','NKY','NK1','NK2','LSP','LSR','LSY','LEB','LWY','LWR','LWP','RSP','RSR','RSY','REB','RWY','RWR','RWP','LHY','LHR','LHP','LKN','LAP','LAR','RHY','RHR','RHP','RKN','RAP','RAR','RF1','RF2','RF3','RF4','RF5','LF1','LF2','LF3','LF4','LF5']
     # Load the robot using the URDF importer.
     @loadURDF(
       "#{local_root}drc/drchubo-urdf/drchubo-v3.urdf",
