@@ -1,0 +1,25 @@
+extends /jade/templates/regular-layout
+
+block prepend head
+  title Insert Title Here | Hubo-js
+block append head
+  link(rel='stylesheet', type='text/css', href='/lib/jquery-ui/jquery-ui.custom.css')
+
+block body
+  #mouse_info_dialog(title='Mouse Navigation', style="display:none")
+    p Rotate = LEFT mouse button
+    p Zoom = MIDDLE mouse wheel
+    p Pan = RIGHT mouse button
+  p This page is part of a process to simplify the STL files for Hubo+ by reducing them to hollow shells.
+  table(border='1')
+    tr 
+      td
+        #hubo_container(style="width: 480px; height: 480px; position: relative") 
+          #load(style='position:absolute')
+          #mouse_info_button(style="position: absolute; top: 464px; left:0px")
+            img(src="/img/info.png")
+
+block append scripts
+  include /jade/includes/hubo
+  script(src='/lib/jquery-ui/jquery-ui.custom.min.js')
+  script(src='index.js')
