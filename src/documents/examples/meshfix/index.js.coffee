@@ -30,40 +30,69 @@ partLoaded = (filename, node) ->
   window.geo = head.children[0].geometry
   c.scene.add(node)
   makeSphere()
+
+  head.children[0].material.vertexColors = THREE.FaceColors;
   for face in geo.faces
-    drawFaceNormal(geo,face)
+    #drawFaceNormal(geo,face)
+    # Do collision test
+    base = getFaceCentroid(face)
+    raycaster = new THREE.Raycaster( base, face.normal )
+    intersects = raycaster.intersectObjects( Array(head, shell), true)
+    if ( intersects.length > 0 )
+      # console.log(intersects[0].object.name)
+      tip = intersects[0].point
+      line = drawLine(base, new THREE.Vector3().copy( tip ))
+      # c.scene.add(line)
+      # console.log(intersects[0].point.x + ',' + intersects[0].point.y + ',' + intersects[0].point.z)
+      face.color = new THREE.Color(0x00FF00)
+
   c.camera.near = 0
   c.render()
 
-drawLine = (base, normal, length) ->
-  lineGeometry = new THREE.Geometry()
-  bob = new THREE.Vector3().copy( base )
-  lineGeometry.vertices.push( bob )
+# Const base, normal, length
+drawNormal = (base, normal, length) ->
+  base_copy = new THREE.Vector3().copy( base )
   tip = new THREE.Vector3().copy( normal )
   tip.multiplyScalar(length)
-  tip.add(base)
-  lineGeometry.vertices.push( tip )
+  tip.add(base_copy)
+  return drawLine(base_copy, tip)
 
-  line = new THREE.Line( lineGeometry, new THREE.LineBasicMaterial( { color: 0xFF0000 } ) )
+# Passed by ref: base, tip
+# Returns: THREE.Line
+drawLine = (base, tip) ->
+  lineGeometry = new THREE.Geometry()
+  lineGeometry.vertices.push( base )
+  lineGeometry.vertices.push( tip )
+  line = new THREE.Line( lineGeometry, new THREE.LineBasicMaterial( { color: 0x0000FF } ) )
   line.matrixAutoUpdate = false
   return line
 
 makeSphere = () ->
+  mat = new THREE.MeshLambertMaterial(
+    color: 0xFF0000
+    transparent: true
+    opacity: 0.1
+    side: THREE.DoubleSide
+    )
   g = new THREE.SphereGeometry(0.2,24,24) #, widthSegments, heightSegments, phiStart, phiLength, thetaStart, thetaLength)
-  foo = new THREE.Mesh(g, new THREE.MeshLambertMaterial( {color: 0xFF0000, transparent: true, opacity: 0.5 } ))
-  c.scene.add(foo)
+  window.shell = new THREE.Mesh(g, mat)
+  shell.name = "sphere"
+  c.scene.add(shell)
 
-drawFaceNormal = (geo, face) ->
+getFaceCentroid = (face) ->
   va = geo.vertices[face.a]
   vb = geo.vertices[face.b]
   vc = geo.vertices[face.c]
-  base = new THREE.Vector3(
+  return new THREE.Vector3(
     (va.x + vb.x + vc.x)/3,
     (va.y + vb.y + vc.y)/3,
     (va.z + vb.z + vc.z)/3
     )
+
+drawFaceNormal = (geo, face) ->
+  base = getFaceCentroid(face)
   #arrow = new THREE.ArrowHelper(face.normal, base, 0.01, 0xFF0000)
-  line = drawLine(base,face.normal,0.01)
+  line = drawNormal(base,face.normal,0.01)
   c.scene.add(line)
 
 $(document).ready () ->
