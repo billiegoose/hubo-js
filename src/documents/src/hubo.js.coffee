@@ -1,6 +1,10 @@
 # A custom extension of WebGLRobots.Robot just for Hubo.
 class Hubo extends WebGLRobots.Robot
-  _robot = this
+  _robot = this  
+  @DefaultCanvas: (args) ->
+    c = WebGLRobots.DefaultCanvas.apply(this, arguments)
+    c.controls.target = new THREE.Vector3(0,0,-0.3);
+    return c
   constructor: (@name, ready_callback, progress_callback) ->
     # Set this = new WebGLRobots.Robot()
     super()
@@ -18,8 +22,8 @@ class Hubo extends WebGLRobots.Robot
         # Offsets for shoulder roll and elbow pitch (values taken from huboplus.kinbody.xml "<initial>" fields)
         _robot.motors.LSR.offset = +15/180*Math.PI
         _robot.motors.RSR.offset = -15/180*Math.PI
-        _robot.motors.LEP.offset = -10/180*Math.PI
-        _robot.motors.REP.offset = -10/180*Math.PI
+        _robot.motors.LEB.offset = -10/180*Math.PI
+        _robot.motors.REB.offset = -10/180*Math.PI
         @addFinger('LF1')
         @addFinger('LF2')
         @addFinger('LF3')
@@ -119,7 +123,7 @@ class Hubo extends WebGLRobots.Robot
     @motors.asArray().forEach (e) ->
       e.value = e.default_value
   outputPoseHeader: () ->
-    return 'RHY         RHR         RHP         RKP         RAP         RAR         LHY         LHR         LHP         LKP         LAP         LAR         RSP         RSR         RSY         REP         RWY         RWR         RWP         LSP         LSR         LSY         LEP         LWY         LWR         LWP         NKY         NK1         NK2         WST         RF1         RF2         RF3         RF4         RF5         LF1         LF2         LF3         LF4         LF5         '
+    return 'RHY         RHR         RHP         RKP         RAP         RAR         LHY         LHR         LHP         LKP         LAP         LAR         RSP         RSR         RSY         REB         RWY         RWR         RWP         LSP         LSR         LSY         LEB         LWY         LWR         LWP         NKY         NK1         NK2         WST         RF1         RF2         RF3         RF4         RF5         LF1         LF2         LF3         LF4         LF5         '
   outputPose: () ->
     str = ''
     names = @outputPoseHeader().trim().split( /\W+/ )

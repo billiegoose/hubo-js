@@ -2,9 +2,10 @@
 body
   overflow-x scroll !important
 
-#content
-  display box
-  display -webkit-box
+// #content
+//  display box
+//  display -webkit-box
+//  display -moz-box
 
 #hubo_container
   position relative
@@ -28,8 +29,10 @@ label.ui-slider
 // }
 
 @media screen and (orientation:landscape)
-  #content
-    box-orient horizontal
+  #hubo_container
+    float left
+  // #content
+  //   box-orient horizontal
   // .aspect-controller
   //   height 100%
 
@@ -51,7 +54,7 @@ label.ui-slider
 
 @media screen and (orientation:portrait)
   #content
-    box-orient vertical
+    // box-orient vertical
   // .aspect-controller
   //   width 100%
   // #hubo_meta_container{

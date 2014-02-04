@@ -255,9 +255,9 @@ $( document ).ready () ->
       # hubo.motors["LF5"].value = state[jointType][41]
       hubo.canvas.render()
 
-    # Update FPS counter
-    stats.end();
-    stats.begin();
+      # Update FPS counter
+      stats.end();
+      stats.begin();
 
     if (use_socket)
       socket.on('serial_state', (serial_state) ->
