@@ -1,0 +1,73 @@
+extends /jade/templates/regular-layout
+
+block prepend head
+  title hubo-ach read | Hubo-js
+block append head
+  link(rel='stylesheet', type='text/css', href='index.css')
+  //meta(name='viewport', content='initial-scale=1.0, maximum-scale=1.0, user-scalable=0')
+  meta(name='viewport', content='initial-scale=1.0')
+
+block body
+  table
+    tr 
+      td Time = 
+      td#time 0000.000
+    tr
+      th 
+      th Ref
+      th Enc
+      th Cur
+      //- th Tmp
+      th Home
+    - var JointList = ['WST','NKY','NK1','NK2','LSP','LSR','LSY','LEB','LWY','LWR','LWP','RSP','RSR','RSY','REB','RWY','RWR','RWP','LHY','LHR','LHP','LKN','LAP','LAR','RHY','RHR','RHP','RKN','RAP','RAR','RF1','RF2','RF3','RF4','RF5','LF1','LF2','LF3','LF4','LF5']
+    - for (var i = 0; i < JointList.length; i++) {
+      tr(id=JointList[i])
+        td= JointList[i]
+        td.ref 0.000
+        td.pos 0.000
+        td.cur 0.000
+        //- td.tmp 0.000
+        td.home 0
+    - }
+    tr
+      th 
+      th Mx
+      th My
+      th Fz
+    - var FtList = ['RF','LF','RH','LH'];
+    - for (var i = 0; i < FtList.length; i++) {
+      tr(id=FtList[i])
+        td= FtList[i]
+        td.m_x
+        td.m_y
+        td.f_z
+    - }
+    tr
+      th 
+      th Ax
+      th Ay
+      th Az
+    tr#IMU0
+      td IMU0
+      td.a_x
+      td.a_y
+      td.a_z        
+    tr#IMU1
+      td IMU1
+      td.a_x
+      td.a_y
+      td.a_z       
+    tr
+      th 
+      th V
+      th I
+      th P
+    tr#PWR
+      td PWR
+      td.v
+      td.i
+      td.p
+
+block append scripts
+  script(src='/lib/socket.io/socket.io.js')
+  script(src='index.js')

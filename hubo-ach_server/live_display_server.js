@@ -1,5 +1,7 @@
 console.log('Started ' + __filename + '\n');
 
+var exec = require('child_process').exec;
+
 var argv = require ("argp").createParser ({ once: true })
     .description ("live_display_server")
     .email ("wmhilton@gmail.com")
@@ -52,6 +54,10 @@ var main = function() {
 		// Send initial position
 		io.sockets.on('connection', function (socket) {
 		  socket.emit('serial_state', serial_state);
+		  // Register listener
+		  socket.on('reset-ach', function (data) {
+		    resetHuboAch();
+		  });
 		});
 	}
     updateID = setInterval(update,1000/argv.hz);
@@ -355,7 +361,6 @@ var serialize = function() {
 
 var update = function() {
     state = hubo_ach.getState()
-    // TODO: Serialize compare with previous state before sending.
     serial_state = serialize();
     if (serial_state !== old_state) {
     	console.log(serial_state);
@@ -366,6 +371,25 @@ var update = function() {
     	}
     }
     old_state = serial_state;
+}
+
+var resetHuboAch = function() {
+  console.log('Resetting Hubo-ach...');
+  var reset_ach = exec('./restart_ach.sh', function (error, stdout, stderr) {
+    if (stderr !== null) {
+      console.log('stderr: ' + stderr);
+    }
+    if (error !== null) {
+      console.log('exec error: ' + error);
+    }
+    console.log('...resetting...');
+    var r = hubo_ach.init();
+    if (!r) {
+      console.log("Error initializing hubo-ach-readonly module. Likely cause: hubo-daemon is not running.")
+      return
+    }
+    console.log('success.');
+  });
 }
 
 main();

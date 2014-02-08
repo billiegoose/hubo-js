@@ -1,0 +1,123 @@
+extends /jade/templates/regular-layout
+
+block prepend head
+  title Hubo Live Display | Hubo-js
+block append head
+  link(rel='stylesheet', href='/lib/jquery-mobile/jquery.mobile-1.3.2.min.css')
+  link(rel='stylesheet', type='text/css', href='index.css')
+  meta(name='viewport', content='initial-scale=1.0, maximum-scale=1.0, user-scalable=0')
+
+block body
+  #content
+    #hubo_container
+      #load(style='position:absolute')
+      // Source: http://openclipart.org/detail/88123/led-red-by-bnielsen
+      img#led(style='position:absolute; top:10px; left:10px; display:none',src="led_green_black.png")
+
+    #controls
+      table
+        tr
+          td
+            dif(data-role='fieldcontain')
+              fieldset(data-role="controlgroup", data-type="horizontal")
+                legend Joint angle source:
+                input#pos(type="radio",name="angle-source",value="pos",checked="checked")
+                label(for="pos") Encoder
+                input#ref(type="radio",name="angle-source",value="ref")
+                label(for="ref") Reference
+        tr
+          td
+            button#fullscreen-button Fullscreen
+          //th
+          //  label(for="fullscreen-toggle") Fullscreen Mode:
+          //td
+          //  select(name="fullscreen-toggle",id="fullscreen-toggle",data-role="slider")
+          //    option(value="off") off
+          //    option(value="on") on
+        tr
+          td
+            button#fix-button(title="Restart hubo-ach remote connection") Fix
+
+      p Adjust the bounds of the red-green color gradient here.
+      #ft_hand_limits
+        table
+          tr 
+            th(colspan='4') FT_HAND LIMITS:
+          tr
+            td m_x min:
+            td 
+              input.m_x_min(type='number', value='-0.05')
+            td m_x max:
+            td
+              input.m_x_max(type='number', value='0.05')
+          tr
+            td m_y min:
+            td
+              input.m_y_min(type='number', value='-1')
+            td m_y max:
+            td
+              input.m_y_max(type='number', value='1')
+          tr
+            td f_z min:
+            td
+              input.f_z_min(type='number', value='-30')
+            td f_z max:
+            td
+              input.f_z_max(type='number', value='30')
+      #ft_foot_limits
+        table
+          tr
+            th(colspan='4') FT_FOOT LIMITS:
+          tr
+            td m_x min:
+            td 
+              input.m_x_min(type='number', value='-10')
+            td m_x max:
+            td
+              input.m_x_max(type='number', value='10')
+          tr
+            td m_y min:
+            td
+              input.m_y_min(type='number', value='-10')
+            td m_y max:
+            td
+              input.m_y_max(type='number', value='10')
+          tr
+            td f_z min:
+            td
+              input.f_z_min(type='number', value='-30')
+            td f_z max:
+            td
+              input.f_z_max(type='number', value='500')
+      #color_limits
+        table
+          tr
+            th(colspan='2') COLOR THRESHOLDS:
+          tr
+            td Yellow point:
+            td
+              input.y_threshold(type='number', value='0.5')
+  #huge_display(style='position:absolute; top:0px; font-size:600px; display:none') -2.0
+            
+
+block append scripts
+  // Used for rendering 3D Hubo 
+  script(src='/lib/three/three.min.js')
+  script(src='/lib/three/Detector.js')
+  script(src='/lib/three/TrackballControls.js')
+  // Load both, just in case
+  script(src='/lib/three/STLLoader.js') 
+  script(src='/lib/three/ColladaLoader.js') 
+  // Hubo-in-the-Browser base
+  script(src='/lib/dict/dict.js')
+  script(src='/src/WebGLRobots.js')
+  // TODO: Make drchubo.js an object NOT called Hubo.
+  script(src='/src/hubo.js') 
+  // for GUI stuff
+  script(src='/lib/jquery-mobile/jquery.mobile-1.3.2.min.js')
+  // for reading the broadcast of the robot state
+  script(src='https://cdn.firebase.com/v0/firebase.js')
+  script(src='/lib/socket.io/socket.io.js')
+  // for FPS display
+  script(src='/lib/stats/stats.min.js')
+  script(src='index.js')
