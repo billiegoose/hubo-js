@@ -1,13 +1,15 @@
 use_socket = true;
 
-if (use_socket)
-  socket = io.connect(':6060');
-else
-  #
-  # Init Firebase
-  #
-  window.serial_stateRef = new Firebase('http://hubo-firebase.firebaseIO.com/serial_state')
+connectToServer = () ->
+  if (use_socket)
+    window.socket = io.connect(':6060');
+  else
+    #
+    # Init Firebase
+    #
+    window.serial_stateRef = new Firebase('http://hubo-firebase.firebaseIO.com/serial_state')
 
+connectToServer()
 window.ledTimeoutId = null;
 flashLED = () ->
   # Cancel the previous timeout.
@@ -292,9 +294,12 @@ $( document ).ready () ->
       if (document.webkitFullscreenEnabled)
         document.getElementById('hubo_container').webkitRequestFullscreen()
 
-    $('#fix-button').on 'click', () ->
-      console.log('Resetting hubo-ach...')
-      socket.emit('reset-ach',{jawn: true})
+    # Deprecated for now by server-side timeouts watching state.time.
+    # Might still be needed to reestablish client connections at some point?
+    # $('#fix-button').on 'click', () ->
+    #   connectToServer()
+    #   console.log('Resetting hubo-ach...')
+    #   socket.emit('reset-ach',{jawn: true})
 
     $(document).on 'webkitfullscreenchange', () ->
       setTimeout(adaptCanvasSize, 500)

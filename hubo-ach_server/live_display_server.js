@@ -21,7 +21,7 @@ var argv = require ("argp").createParser ({ once: true })
 
 if (argv.socketio) {
 	var app = require('http').createServer()
-	    , io = require('socket.io').listen(app)
+	    , io = require('socket.io').listen(app, { log: false })
 } else {
 	// Get Firebase URL
 	var firebase_url = 'https://hubo-firebase.firebaseIO.com';
@@ -60,6 +60,7 @@ var main = function() {
 		  });
 		});
 	}
+	resetTimer();
     updateID = setInterval(update,1000/argv.hz);
 }
 
@@ -359,11 +360,35 @@ var serialize = function() {
 	return datastring;
 }
 
+var resetTimer = function() {
+	timer_jawn = {}
+	timer_jawn.last_time = -1;
+	timer_jawn.seconds_frozen = 0;
+}
+
+var checkForDeadTimer = function() {
+	// If the time hasn't updated
+	//console.log(state.time + ' == ' + timer_jawn.last_time)
+	if (state.time == timer_jawn.last_time) {		
+		timer_jawn.seconds_frozen += 1/argv.hz;
+		console.log('Timer frozen: ' + timer_jawn.seconds_frozen + 's');
+	} else {
+		timer_jawn.last_time = state.time;
+		timer_jawn.seconds_frozen = 0;
+	}
+	// If dead, reset
+	if (timer_jawn.seconds_frozen > 5) {
+		resetHuboAch();
+		resetTimer();
+	}
+}
+
 var update = function() {
     state = hubo_ach.getState()
-    serial_state = serialize();
+    checkForDeadTimer();
+    serial_state = serialize()
     if (serial_state !== old_state) {
-    	console.log(serial_state);
+    	//console.log(serial_state);
     	if (argv.socketio) {
 			io.sockets.emit('serial_state', serial_state);
     	} else {
@@ -376,19 +401,24 @@ var update = function() {
 var resetHuboAch = function() {
   console.log('Resetting Hubo-ach...');
   var reset_ach = exec('./restart_ach.sh', function (error, stdout, stderr) {
-    if (stderr !== null) {
-      console.log('stderr: ' + stderr);
-    }
-    if (error !== null) {
-      console.log('exec error: ' + error);
-    }
-    console.log('...resetting...');
-    var r = hubo_ach.init();
-    if (!r) {
-      console.log("Error initializing hubo-ach-readonly module. Likely cause: hubo-daemon is not running.")
-      return
-    }
-    console.log('success.');
+  	console.log('Starting Timeout...');
+  	setTimeout( function() {
+  		console.log('Running init.');
+	    if (stderr !== null) {
+	      console.log('stderr: ' + stderr);
+	    }
+	    if (error !== null) {
+	      console.log('exec error: ' + error);
+	    }
+	    console.log('...resetting...');
+	    var r = hubo_ach.init();
+	    if (!r) {
+	      console.log("Error initializing hubo-ach-readonly module. Likely cause: hubo-daemon is not running.")
+	      return
+	    }
+	    resetTimer()
+	    console.log('success.');
+	},2000);
   });
 }
 
