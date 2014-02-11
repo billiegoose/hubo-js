@@ -18,7 +18,7 @@ flashLED = () ->
   # If we don't get more data soon, hide the LED.
   window.ledTimeoutId = setTimeout(()->
     $('#led').hide()
-  , 100)
+  , 200) # TODO: Make this a function of the update frequency. TODO: Have the server tell the client the update frequency.
 
 # TODO: make this a function
 # # http://threejs.org/docs/#Reference/Extras.Geometries/CylinderGeometry

@@ -15,88 +15,97 @@ block body
       img#led(style='position:absolute; top:10px; left:10px; display:none',src="led_green_black.png")
 
     #controls
-      table
+      p.
+        This is a live display of what Hubo the Humanoid Robot is doing in
+        the back workshop.
+      p.
+        If the robot is active, a green indicator (<img src="led_green_black.png"/>) will appear 
+        in the top-left corner of the 3D display area.
+      p.
+        The arrows next to his hands and feet show how much force is 
+        being applied to them. Red is more force than green.
+      div(style="display: inline-block")
+        button#fullscreen-button Fullscreen
+      br
+      table(style="width:400px")
         tr
           td
-            dif(data-role='fieldcontain')
+            div(data-role='fieldcontain', style="width:100%")
               fieldset(data-role="controlgroup", data-type="horizontal")
-                legend Joint angle source:
+                legend Show Angles:
                 input#pos(type="radio",name="angle-source",value="pos",checked="checked")
                 label(for="pos") Encoder
                 input#ref(type="radio",name="angle-source",value="ref")
                 label(for="ref") Reference
-        tr
-          td
-            button#fullscreen-button Fullscreen
-          //th
-          //  label(for="fullscreen-toggle") Fullscreen Mode:
-          //td
-          //  select(name="fullscreen-toggle",id="fullscreen-toggle",data-role="slider")
-          //    option(value="off") off
-          //    option(value="on") on
+        //-th
+        //-  label(for="fullscreen-toggle") Fullscreen Mode:
+        //-td
+        //-  select(name="fullscreen-toggle",id="fullscreen-toggle",data-role="slider")
+        //-    option(value="off") off
+        //-    option(value="on") on
         //- tr
         //-   td
         //-     button#fix-button(title="Restart hubo-ach remote connection") Fix
-
-      p Adjust the bounds of the red-green color gradient here.
-      #ft_hand_limits
-        table
-          tr 
-            th(colspan='4') FT_HAND LIMITS:
-          tr
-            td m_x min:
-            td 
-              input.m_x_min(type='number', value='-0.05')
-            td m_x max:
-            td
-              input.m_x_max(type='number', value='0.05')
-          tr
-            td m_y min:
-            td
-              input.m_y_min(type='number', value='-1')
-            td m_y max:
-            td
-              input.m_y_max(type='number', value='1')
-          tr
-            td f_z min:
-            td
-              input.f_z_min(type='number', value='-30')
-            td f_z max:
-            td
-              input.f_z_max(type='number', value='30')
-      #ft_foot_limits
-        table
-          tr
-            th(colspan='4') FT_FOOT LIMITS:
-          tr
-            td m_x min:
-            td 
-              input.m_x_min(type='number', value='-10')
-            td m_x max:
-            td
-              input.m_x_max(type='number', value='10')
-          tr
-            td m_y min:
-            td
-              input.m_y_min(type='number', value='-10')
-            td m_y max:
-            td
-              input.m_y_max(type='number', value='10')
-          tr
-            td f_z min:
-            td
-              input.f_z_min(type='number', value='-30')
-            td f_z max:
-            td
-              input.f_z_max(type='number', value='500')
-      #color_limits
-        table
-          tr
-            th(colspan='2') COLOR THRESHOLDS:
-          tr
-            td Yellow point:
-            td
-              input.y_threshold(type='number', value='0.5')
+      div(style="display:none")
+        p Adjust the bounds of the red-green color gradient here.
+        #ft_hand_limits
+          table
+            tr 
+              th(colspan='4') FT_HAND LIMITS:
+            tr
+              td m_x min:
+              td 
+                input.m_x_min(type='number', value='-0.05')
+              td m_x max:
+              td
+                input.m_x_max(type='number', value='0.05')
+            tr
+              td m_y min:
+              td
+                input.m_y_min(type='number', value='-1')
+              td m_y max:
+              td
+                input.m_y_max(type='number', value='1')
+            tr
+              td f_z min:
+              td
+                input.f_z_min(type='number', value='-30')
+              td f_z max:
+              td
+                input.f_z_max(type='number', value='30')
+        #ft_foot_limits
+          table
+            tr
+              th(colspan='4') FT_FOOT LIMITS:
+            tr
+              td m_x min:
+              td 
+                input.m_x_min(type='number', value='-10')
+              td m_x max:
+              td
+                input.m_x_max(type='number', value='10')
+            tr
+              td m_y min:
+              td
+                input.m_y_min(type='number', value='-10')
+              td m_y max:
+              td
+                input.m_y_max(type='number', value='10')
+            tr
+              td f_z min:
+              td
+                input.f_z_min(type='number', value='-30')
+              td f_z max:
+              td
+                input.f_z_max(type='number', value='500')
+        #color_limits
+          table
+            tr
+              th(colspan='2') COLOR THRESHOLDS:
+            tr
+              td Yellow point:
+              td
+                input.y_threshold(type='number', value='0.5')
   #huge_display(style='position:absolute; top:0px; font-size:600px; display:none') -2.0
             
 

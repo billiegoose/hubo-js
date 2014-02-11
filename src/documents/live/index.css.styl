@@ -1,16 +1,36 @@
 @import 'nib'
 body
   overflow-x scroll !important
+  font-size x-large
 
-#content
-  display box
-  display -webkit-box
-  display -moz-box
+legend
+  // Style legends to look like button labels
+  font-size 18px
+  font-weight 700
+  font-family Helvetica,Arial,sans-serif 
+  // Vertical Align the damn thing
+  line-height 48px
+  vertical-align center
 
+// Give more space to the legend vs the ul.
+// Note that making them add up to 100% causes wrapping which looks UGLY.
+.ui-field-contain .ui-controlgroup-label
+  width 35%
+.ui-field-contain .ui-controlgroup-controls
+  width 60%
+
+// #content
+//  display box
+//  display -webkit-box
+//  display -moz-box
 
 #hubo_container
   position relative
   border 1px solid black
+
+#controls  
+  p 
+    padding-right 1em
 
 table
   tr
@@ -30,8 +50,11 @@ label.ui-slider
 // }
 
 @media screen and (orientation:landscape)
-  #content
-    box-orient horizontal
+  #hubo_container
+    float left
+    margin-right 1em
+  // #content
+  //   box-orient horizontal
   // .aspect-controller
   //   height 100%
 
@@ -53,7 +76,7 @@ label.ui-slider
 
 @media screen and (orientation:portrait)
   #content
-    box-orient vertical
+    // box-orient vertical
   // .aspect-controller
   //   width 100%
   // #hubo_meta_container{
