@@ -38,17 +38,14 @@ if (argv.socketio) {
 
 // Communicate with ACH
 var hubo_ach = require('hubo-ach-readonly');
-
+// TODO: Build this global into the module
+var hubo_ach_ready = false;
 var state = {};
 var serial_state = '';
 var old_state = serial_state + 'not_equal';
 var updateID = null;
 var main = function() {
-    var r = hubo_ach.init();
-    if (!r) {
-        console.log("Error initializing hubo-ach-readonly module. Likely cause: hubo-daemon is not running.")
-        return
-    }
+	resetHuboAch();
     if (argv.socketio) {
 		app.listen(6060);
 		// Send initial position
@@ -384,40 +381,43 @@ var checkForDeadTimer = function() {
 }
 
 var update = function() {
-    state = hubo_ach.getState()
-    checkForDeadTimer();
-    serial_state = serialize()
-    if (serial_state !== old_state) {
-    	//console.log(serial_state);
-    	if (argv.socketio) {
-			io.sockets.emit('serial_state', serial_state);
-    	} else {
-    		huboRef.child('serial_state').set(serial_state);
-    	}
-    }
-    old_state = serial_state;
+	checkForDeadTimer();
+	if (hubo_ach_ready) {
+	    state = hubo_ach.getState()
+	    serial_state = serialize()
+	    if (serial_state !== old_state) {
+	    	//console.log(serial_state);
+	    	if (argv.socketio) {
+				io.sockets.emit('serial_state', serial_state);
+	    	} else {
+	    		huboRef.child('serial_state').set(serial_state);
+	    	}
+	    }
+	    old_state = serial_state;
+	}
 }
 
 var resetHuboAch = function() {
-  console.log('Resetting Hubo-ach...');
+  console.log('1...Resetting Hubo-ach...');
+  hubo_ach_ready = false;
   var reset_ach = exec('./restart_ach.sh', function (error, stdout, stderr) {
-  	console.log('Starting Timeout...');
+  	console.log('2...waiting a bit...');
   	setTimeout( function() {
-  		console.log('Running init.');
 	    if (stderr !== null) {
 	      console.log('stderr: ' + stderr);
 	    }
 	    if (error !== null) {
 	      console.log('exec error: ' + error);
 	    }
-	    console.log('...resetting...');
+  		console.log('3...reinitializing module...');
 	    var r = hubo_ach.init();
 	    if (!r) {
 	      console.log("Error initializing hubo-ach-readonly module. Likely cause: hubo-daemon is not running.")
 	      return
 	    }
 	    resetTimer()
-	    console.log('success.');
+	    hubo_ach_ready = true;
+	    console.log('4...Success!');
 	},2000);
   });
 }
