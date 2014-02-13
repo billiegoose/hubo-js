@@ -1,0 +1,36 @@
+!!! 5
+html(lang='en',manifest="cache-manifest.appcache")
+  head
+    title Hubo Offline | Hubo-js
+    meta(charset='utf-8')
+    link(rel='icon', href='hubojs/img/favicon.png') 
+    // Jquery makes life so much easier. Load it before everything else!
+    script(src='hubojs/lib/jquery/jquery.min.js') 
+    != getBlock("meta").toHTML()
+    != getBlock("styles").toHTML()
+    link(rel='stylesheet', type='text/css', href='hubojs/lib/jquery-ui/jquery-ui.custom.css')
+  body
+    #mouse_info_dialog(title='Mouse Navigation', style="display:none")
+      p Rotate = LEFT mouse button
+      p Zoom = MIDDLE mouse wheel
+      p Pan = RIGHT mouse button
+    p This page demonstrates Hubo-in-the-Browser alpha support for HTML5 "offline" capabilities using the Application Cache manifest.
+    table(border='1')
+      tr 
+        td
+          #hubo_container(style="width: 480px; height: 480px; position: relative") 
+            #load(style='position:absolute')
+            #mouse_info_button(style="position: absolute; top: 464px; left:0px")
+              img(src="hubojs/img/info.png")
+    != getBlock('scripts').toHTML()
+    // Used for rendering 3D Hubo 
+    script(src='hubojs/lib/three/three.min.js')
+    script(src='hubojs/lib/three/Detector.js')
+    script(src='hubojs/lib/three/ColladaLoader.js')
+    script(src='hubojs/lib/three/TrackballControls.js')
+    // Our code 
+    script(src='hubojs/lib/dict/dict.js')
+    script(src='hubojs/WebGLRobots.js')
+    script(src='hubojs/hubo.js')
+    script(src='hubojs/lib/jquery-ui/jquery-ui.custom.min.js')
+    script(src='main.js')

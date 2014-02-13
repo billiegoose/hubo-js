@@ -1,0 +1,94 @@
+CACHE MANIFEST
+# v1.0.4
+index.html
+main.js
+
+# docpad reload
+/primus/primus.js
+
+# hubojs/*
+hubojs/hubo.js
+hubojs/WebGLRobots.js
+
+# hubojs/img/*
+hubojs/img/favicon.png
+hubojs/img/info.png
+
+# hubojs/lib/*
+hubojs/lib/jquery/jquery.min.js
+hubojs/lib/three/three.min.js
+hubojs/lib/three/Detector.js
+hubojs/lib/three/ColladaLoader.js
+hubojs/lib/three/TrackballControls.js
+hubojs/lib/dict/dict.js
+hubojs/lib/jquery-ui/jquery-ui.custom.min.js
+hubojs/lib/jquery-ui/jquery-ui.custom.css
+
+# hubojs/hubo-urdf/*
+hubojs/hubo-urdf/model.urdf
+hubojs/hubo-urdf/meshes/Body_Torso_col.dae
+hubojs/hubo-urdf/meshes/Body_Hip_col.dae
+hubojs/hubo-urdf/meshes/Body_Head_col.dae
+hubojs/hubo-urdf/meshes/Body_RHP_col.dae
+hubojs/hubo-urdf/meshes/Body_LHP_col.dae
+hubojs/hubo-urdf/meshes/Body_RKP_col.dae
+hubojs/hubo-urdf/meshes/Body_LKP_col.dae
+hubojs/hubo-urdf/meshes/Body_LAR_col.dae
+hubojs/hubo-urdf/meshes/Body_RAR_col.dae
+hubojs/hubo-urdf/meshes/Body_RSP_col.dae
+hubojs/hubo-urdf/meshes/Body_LSP_col.dae
+hubojs/hubo-urdf/meshes/Body_RHR_col.dae
+hubojs/hubo-urdf/meshes/Body_LHR_col.dae
+hubojs/hubo-urdf/meshes/Body_LWY_col.dae
+hubojs/hubo-urdf/meshes/Body_RWY_col.dae
+hubojs/hubo-urdf/meshes/Body_RHY_col.dae
+hubojs/hubo-urdf/meshes/Body_LHY_col.dae
+hubojs/hubo-urdf/meshes/Body_LAP_col.dae
+hubojs/hubo-urdf/meshes/Body_RAP_col.dae
+hubojs/hubo-urdf/meshes/Body_LSR_col.dae
+hubojs/hubo-urdf/meshes/Body_RSR_col.dae
+hubojs/hubo-urdf/meshes/Body_RSY_col.dae
+hubojs/hubo-urdf/meshes/Body_LSY_col.dae
+hubojs/hubo-urdf/meshes/Body_RWP_col.dae
+hubojs/hubo-urdf/meshes/Body_LWP_col.dae
+hubojs/hubo-urdf/meshes/Body_REP_col.dae
+hubojs/hubo-urdf/meshes/Body_LEP_col.dae
+hubojs/hubo-urdf/meshes/Body_Neck_col.dae
+hubojs/hubo-urdf/meshes/leftThumbProximal_vis.dae
+hubojs/hubo-urdf/meshes/leftThumbMedial_vis.dae
+hubojs/hubo-urdf/meshes/leftThumbDistal_vis.dae
+hubojs/hubo-urdf/meshes/leftIndexDistal_vis.dae
+hubojs/hubo-urdf/meshes/leftIndexMedial_vis.dae
+hubojs/hubo-urdf/meshes/leftIndexProximal_vis.dae
+hubojs/hubo-urdf/meshes/leftMiddleDistal_vis.dae
+hubojs/hubo-urdf/meshes/leftMiddleMedial_vis.dae
+hubojs/hubo-urdf/meshes/leftMiddleProximal_vis.dae
+hubojs/hubo-urdf/meshes/leftRingProximal_vis.dae
+hubojs/hubo-urdf/meshes/leftRingMedial_vis.dae
+hubojs/hubo-urdf/meshes/leftRingDistal_vis.dae
+hubojs/hubo-urdf/meshes/leftPinkyDistal_vis.dae
+hubojs/hubo-urdf/meshes/leftPinkyMedial_vis.dae
+hubojs/hubo-urdf/meshes/leftPinkyProximal_vis.dae
+hubojs/hubo-urdf/meshes/rightThumbProximal_vis.dae
+hubojs/hubo-urdf/meshes/rightThumbMedial_vis.dae
+hubojs/hubo-urdf/meshes/rightThumbDistal_vis.dae
+hubojs/hubo-urdf/meshes/rightIndexDistal_vis.dae
+hubojs/hubo-urdf/meshes/rightIndexMedial_vis.dae
+hubojs/hubo-urdf/meshes/rightIndexProximal_vis.dae
+hubojs/hubo-urdf/meshes/rightMiddleDistal_vis.dae
+hubojs/hubo-urdf/meshes/rightMiddleMedial_vis.dae
+hubojs/hubo-urdf/meshes/rightMiddleProximal_vis.dae
+hubojs/hubo-urdf/meshes/rightRingProximal_vis.dae
+hubojs/hubo-urdf/meshes/rightRingMedial_vis.dae
+hubojs/hubo-urdf/meshes/rightRingDistal_vis.dae
+hubojs/hubo-urdf/meshes/rightPinkyDistal_vis.dae
+hubojs/hubo-urdf/meshes/rightPinkyMedial_vis.dae
+hubojs/hubo-urdf/meshes/rightPinkyProximal_vis.dae
+# etc
+
+# For docpad reload functionality etc.
+NETWORK:
+*
+
+# FALLBACK:
+# /html/ /offline.html
