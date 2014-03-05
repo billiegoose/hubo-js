@@ -64,23 +64,24 @@ class Hubo extends WebGLRobots.Robot
     _robot = this
     # Create the neck motors.
     motor = {}
-    motor.name = name # Either NK1 or NK2
-    motor.lower_limit = 0 # mm, Note: linear actuator pitch is 1mm/rev, 128 encoder counts per rev.
-    motor.upper_limit = 20 # mm
+    motor.name = name # either 'NK1' or 'NK2'
+    motor.lower_limit = -10 # mm, Note: linear actuator pitch is 1mm/rev, 128 encoder counts per rev.
+    motor.upper_limit = 10 # mm
     Object.defineProperties motor,
       value:
-        get: -> return @_value
+        get: -> 
+          switch name
+            when 'NK1'
+              return @_value = _robot.getNK1() # I think this will keep everything in sync. :-/
+            when 'NK2' 
+              return @_value = _robot.getNK2()
         set: (val) ->
           val = clamp(val,this)
           @_value = val
-          # We need both neck motors to calculate the head pose
-          if _robot.motors.NK1? and _robot.motors.NK2?
-            # We add 85mm to the extension of the linear actuator to get the total link length
-            [pitch, roll] = _robot.neckKin(_robot.motors.NK1.value+85, _robot.motors.NK2.value+85)
-            _robot.joints.HNP.value = pitch*Math.PI/180
-            _robot.joints.HNR.value = roll*Math.PI/180
-    motor.default_value = 10 #mm
-    motor.value = motor.default_value
+          _robot.motors.HNP.value = _robot.getHNP()
+          _robot.motors.HNR.value = _robot.getHNR()
+    motor.default_value = 0 #mm
+    motor._value = motor.default_value
     @motors[name] = motor
   addFinger: (name) ->
     _robot = this
@@ -108,22 +109,33 @@ class Hubo extends WebGLRobots.Robot
     motor.value = motor.default_value
     # Add to motor collection
     @motors[name] = motor
-  # ATTENTION: This returns values in degrees.
-  neckKin: (val1, val2) ->
-    # The code used to derive these equations can be found in the 'neck_kin' branch. 
-    # Short Explanation: The neck forward kinematics has no straightforward analytical solution. Instead, it was solved numerically by
-    # fixing the head pitch and roll, and then finding the lengths of the linear actuators. (Essentially, the inverse kinematics are 
-    # easier to solve.) Using this, a big lookup table was calculated. When plotted, the pitch and roll functions can be seen to be 
-    # non-linear but they are nearly planar 2D functions. The equations used below are the linear best fit of the numerical lookup tables.
-    # It shouldn't be off by more than a couple degrees at worst.    
-    HNP = -294.4 + 1.55*val1 + 1.55*val2
-    HNR =    0.0 - 1.3197*val1 + 1.3197*val2
-    return [HNP, HNR]
+  # The code used to derive these equations can be found in 'misc/Neck_science'.
+  # Short Explanation: The neck forward kinematics has no straightforward analytical solution. Instead, it was solved numerically by
+  # fixing the head pitch and roll, and then finding the lengths of the linear actuators. (Essentially, the inverse kinematics are 
+  # easier to solve.) Using this, a big lookup table was calculated. When plotted, the pitch and roll functions can be seen to be 
+  # non-linear but they are nearly planar 2D functions. The equations used below are the linear best fit of the numerical lookup tables.
+  # It shouldn't be off by more than a couple degrees at worst.  
+  getNK1: () ->
+    HNP = _robot.motors.HNP.value
+    HNR = _robot.motors.HNR.value
+    return 180/Math.PI*(0.322581*HNP - 0.378874*HNR);
+  getNK2: () ->
+    HNP = _robot.motors.HNP.value
+    HNR = _robot.motors.HNR.value
+    return 180/Math.PI*(0.322581*HNP + 0.378874*HNR);
+  getHNP: () ->
+    NK1 = _robot.motors.NK1._value
+    NK2 = _robot.motors.NK2._value
+    return Math.PI/180*(1.55*NK1 + 1.55*NK2)
+  getHNR: () ->
+    NK1 = _robot.motors.NK1._value
+    NK2 = _robot.motors.NK2._value
+    return Math.PI/180*(-1.3197*NK1 + 1.3197*NK2)
   reset: () ->
     @motors.asArray().forEach (e) ->
       e.value = e.default_value
   outputPoseHeader: () ->
-    return 'RHY         RHR         RHP         RKP         RAP         RAR         LHY         LHR         LHP         LKP         LAP         LAR         RSP         RSR         RSY         REB         RWY         RWR         RWP         LSP         LSR         LSY         LEB         LWY         LWR         LWP         NKY         NK1         NK2         WST         RF1         RF2         RF3         RF4         RF5         LF1         LF2         LF3         LF4         LF5         '
+    return 'RHY         RHR         RHP         RKN         RAP         RAR         LHY         LHR         LHP         LKN         LAP         LAR         RSP         RSR         RSY         REB         RWY         RWR         RWP         LSP         LSR         LSY         LEB         LWY         LWR         LWP         NKY         NK1         NK2         WST         RF1         RF2         RF3         RF4         RF5         LF1         LF2         LF3         LF4         LF5         '
   outputPose: () ->
     str = ''
     names = @outputPoseHeader().trim().split( /\W+/ )
