@@ -414,12 +414,13 @@ var resetHuboAch = function() {
           console.log('3...reinitializing module...');
           var r = hubo_ach.init();
           if (!r) {
-            console.log("Error initializing hubo-ach-readonly module. Likely cause: hubo-daemon is not running.")
-            return
+            console.log("4...Error initializing hubo-ach-readonly module. We'll try again in a moment.");
+            setTimeout( resetHuboAch, 5000 );
+          } else {
+            resetTimer();
+            hubo_ach_ready = true;
+            console.log('4...Success!');
           }
-          resetTimer();
-          hubo_ach_ready = true;
-          console.log('4...Success!');
       },2000);
     });
   } catch (e) {
