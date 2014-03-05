@@ -366,7 +366,7 @@ var resetTimer = function() {
 var checkForDeadTimer = function() {
 	// If the time hasn't updated
 	//console.log(state.time + ' == ' + timer_jawn.last_time)
-	if (state.time == timer_jawn.last_time) {		
+	if (state.time == timer_jawn.last_time && hubo_ach_ready) {		
 		timer_jawn.seconds_frozen += 1/argv.hz;
 		console.log('Timer frozen: ' + timer_jawn.seconds_frozen + 's');
 	} else {
@@ -376,7 +376,6 @@ var checkForDeadTimer = function() {
 	// If dead, reset
 	if (timer_jawn.seconds_frozen > 5) {
 		resetHuboAch();
-		resetTimer();
 	}
 }
 
@@ -387,6 +386,7 @@ var update = function() {
 	    serial_state = serialize()
 	    if (serial_state !== old_state) {
 	    	//console.log(serial_state);
+	    	console.log('Publish update. t=' + state.time);
 	    	if (argv.socketio) {
 				io.sockets.emit('serial_state', serial_state);
 	    	} else {
@@ -400,26 +400,35 @@ var update = function() {
 var resetHuboAch = function() {
   console.log('1...Resetting Hubo-ach...');
   hubo_ach_ready = false;
-  var reset_ach = exec('./restart_ach.sh', function (error, stdout, stderr) {
-  	console.log('2...waiting a bit...');
-  	setTimeout( function() {
-	    if (stderr !== null) {
-	      console.log('stderr: ' + stderr);
-	    }
-	    if (error !== null) {
-	      console.log('exec error: ' + error);
-	    }
-  		console.log('3...reinitializing module...');
-	    var r = hubo_ach.init();
-	    if (!r) {
-	      console.log("Error initializing hubo-ach-readonly module. Likely cause: hubo-daemon is not running.")
-	      return
-	    }
-	    resetTimer()
-	    hubo_ach_ready = true;
-	    console.log('4...Success!');
-	},2000);
-  });
+  try {
+    var reset_ach = exec('./restart_ach.sh', {timeout:15000}, function (error, stdout, stderr) {
+      // Print any errors. Not really useful since we directed errors to /dev/null anyway.
+      if (stderr !== null) {
+        console.log('stderr: ' + stderr);
+      }
+      if (error !== null) {
+        console.log('exec error: ' + error);
+      }
+      console.log('2...waiting a bit...');
+      setTimeout( function() {
+          console.log('3...reinitializing module...');
+          var r = hubo_ach.init();
+          if (!r) {
+            console.log("Error initializing hubo-ach-readonly module. Likely cause: hubo-daemon is not running.")
+            return
+          }
+          resetTimer();
+          hubo_ach_ready = true;
+          console.log('4...Success!');
+      },2000);
+    });
+  } catch (e) {
+    console.log(e.stack);
+    hubo_ach_ready = false; 
+    // Note that hubo_ach_ready = false; forever now, so nothing will get done ever again.
+    // But the process is kept alive for debugging purposes: so we can find zombies, 
+    // file descriptor leaks, etc.
+  }
 }
 
 main();

@@ -1,13 +1,57 @@
 use_socket = true;
+connection_established = false;
+hubo_loaded = false;
+
+setUpdateHook = () ->
+  if (connection_established and hubo_loaded)
+    if (use_socket)
+      socket.on 'serial_state', (serial_state) ->
+        # console.log(serial_state)
+        window.serial_state = serial_state
+        # LED status indicator
+        flashLED()
+        updateModel(serial_state)
 
 connectToServer = () ->
+  if connection_established
+    return
   if (use_socket)
-    window.socket = io.connect(':6060');
+    console.log('Trying to connect to server...')
+    window.socket = io.connect(':6060', {'force new connection':true, timeout: 3000})
+    socket.on 'connect', () -> 
+      console.log('connect')
+      connection_established = true
+      setUpdateHook()
+    # Debugging
+    socket.on 'connecting', () -> console.log('connecting')
+    socket.on 'disconnect', () -> console.log('disconnect')
+    socket.on 'connect_failed', () -> console.log('connect_failed')
+    socket.on 'reconnect', () -> console.log('reconnect')
+    socket.on 'reconnecting', () -> console.log('reconnecting')
+    socket.on 'reconnect_failed', () -> console.log('reconnect_failed')
+    # Due to a design flaw in socket.io? the events won't work if the initial
+    # connection fails due to the server not running.
+    # Therefore we manually will keep trying to reconnect until we establish an
+    # initial connection.
+    setTimeout( connectToServer, 5000 )
   else
     #
     # Init Firebase
     #
     window.serial_stateRef = new Firebase('http://hubo-firebase.firebaseIO.com/serial_state')
+    connection_established = true
+    # Create the Firebase update
+    serial_stateRef.on 'value', (snapshot) ->
+      # NOTE: With the stats library, we are timing the interval
+      # between runs of this function, not the time needed to render
+      # it. Therefore, we end recording at the beginning and begin recording
+      # right away.
+      serial_state = snapshot.val()
+      window.serial_state = serial_state
+      # console.log(serial_state)
+      # LED status indicator
+      flashLED()
+      updateModel(serial_state)
 
 connectToServer()
 window.ledTimeoutId = null;
@@ -139,6 +183,7 @@ $( document ).ready () ->
   texture.repeat.y = 20;
 
   window.hubo = new Hubo("hubo2", callback = ->    
+    hubo_loaded = true;
     # Once the URDF is completely loaded, this function is run.
     # Add your robot to the canvas.
     c.add hubo
@@ -182,6 +227,9 @@ $( document ).ready () ->
     # hubo.ft.HUBO_FT_L_HAND.axis.rotation.y = -Math.PI/2
 
     updateModel = (serial_state) ->
+      if (not serial_state?)
+        return
+
       state = JSON.parse(serial_state);
       # console.log(state);
 
@@ -211,6 +259,7 @@ $( document ).ready () ->
       # IMU
       hubo.links.Body_Torso.rotation.x = state.imu[2].a_x;
       hubo.links.Body_Torso.rotation.y = state.imu[2].a_y;
+      hubo.links.Body_Torso.rotation.z = state.imu[2].a_z;
 
       # Joints
       hubo.motors["WST"].value = state[jointType][0]
@@ -261,35 +310,14 @@ $( document ).ready () ->
       stats.end();
       stats.begin();
 
-    if (use_socket)
-      socket.on('serial_state', (serial_state) ->
-        # console.log(serial_state)
-        window.serial_state = serial_state
-        # LED status indicator
-        flashLED()
-        updateModel(serial_state)
-      )
-    else
-      # Create the Firebase update
-      serial_stateRef.on('value', (snapshot) ->
-        # NOTE: With the stats library, we are timing the interval
-        # between runs of this function, not the time needed to render
-        # it. Therefore, we end recording at the beginning and begin recording
-        # right away.
-        serial_state = snapshot.val()
-        window.serial_state = serial_state
-        # console.log(serial_state)
-        # LED status indicator
-        flashLED()
-        updateModel(serial_state)
-      )
+    # GAH! What a horrible hack
+    window.updateModel = updateModel
+    setUpdateHook()
 
-    # $('#joint-toggle').on 'slidestop', () ->
     $('input[name="angle-source"]:radio').on 'change', () ->
       console.log('Radio Changed')
       updateModel(window.serial_state)
 
-    # $('#fullscreen-toggle').on 'slidestop', () ->
     $('#fullscreen-button').on 'click', () ->
       if (document.webkitFullscreenEnabled)
         document.getElementById('hubo_container').webkitRequestFullscreen()
