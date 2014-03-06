@@ -61,11 +61,6 @@ applyTrajectory = (headers, data) ->
     console.log(data.length)
     playback.data = data
     playback.framerate = 200 # Hz
-    # Quick hack fix for knees and elbows
-    headers[headers.indexOf('LKN')] = 'LKP'
-    headers[headers.indexOf('RKN')] = 'RKP'
-    headers[headers.indexOf('LEB')] = 'LEP'
-    headers[headers.indexOf('REB')] = 'REP'
     # Find the joints we can actually use
     playback.working_headers = {}
     for id in headers
