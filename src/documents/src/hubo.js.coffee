@@ -88,8 +88,8 @@ class Hubo extends WebGLRobots.Robot
     # Add finger motor
     motor = {}
     motor.name = name
-    motor.lower_limit = 0
-    motor.upper_limit = 1.4
+    motor.lower_limit = -1
+    motor.upper_limit = 1
     # Note: we are VERY MUCH expecting a TLA for 'name'
     hand = if (name[0]=='L') then 'left' else 'right'
     fingers = ['Thumb', 'Index', 'Middle', 'Ring', 'Pinky']
@@ -100,7 +100,8 @@ class Hubo extends WebGLRobots.Robot
         get: -> return @_value
         set: (val) -> 
           val = clamp(val,this)
-          @_value = val              
+          @_value = val  
+          val = (-val + 1)/2*1.4
           _robot.joints[@full_name + 'Knuckle1'].value = val
           _robot.joints[@full_name + 'Knuckle2'].value = val
           _robot.joints[@full_name + 'Knuckle3'].value = val
