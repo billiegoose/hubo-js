@@ -56,5 +56,18 @@ makeSlider = (id) ->
       b.multiplyMatrices(a,footMatrix)
       hubo.links.Body_Torso.applyMatrix(b)
 
+  # Since the neck sliders are coupled, when one slider is update
+  # we should update the other sliders with the new model positions.
+  neck_joints = ['NK1', 'NK2', 'HNP', 'HNR']
+  if (id in neck_joints)
+    s.on "slide", (event, ui) ->
+      for other_joint in neck_joints
+        # (Don't update itself)
+        if (id!=other_joint)
+          # Update slider position
+          $("[data-name=" + other_joint + "] .joint_slider").slider('value',hubo.motors[other_joint].value);
+          # Update text display
+          $("[data-name=" + other_joint + "] .joint_txt").html hubo.motors[other_joint].value.toFixed(2)
+
 sign = (x) ->
   (if x then (if x < 0 then -1 else 1) else 0)

@@ -3,6 +3,8 @@
 
 # Define the DocPad Configuration
 docpadConfig = {
+  maxAge: 86400000
+
   # Ignore GIMP files
   ignoreCustomPatterns: /\.ignore/
 
@@ -18,7 +20,10 @@ docpadConfig = {
         bare: on
         header: on
     stylus:
-      compress: off
+      stylusLibraries:
+        nib: on
+      stylusOptions:
+        compress: off
 
   # =================================
   # DocPad Events
@@ -52,7 +57,7 @@ docpadConfig = {
         switch extension
           when 'html'
             opts.content = relativizeHTML(content,relativeRoot)
-          when 'css'
+          when 'css', '.styl'
             opts.content = relativizeCSS(content,relativeRoot)
 
       return next()

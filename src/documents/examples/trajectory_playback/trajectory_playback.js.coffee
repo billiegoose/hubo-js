@@ -111,7 +111,7 @@ animate = (timestamp) ->
             # tmp /= Math.PI # 1mm pitch per rev
             tmp *= window.param2
             #hubo.motors[prop].value += tmp
-            hubo.motors[prop].value = 10 # Disable because the trajectory files are missing NK2. Oops!
+            hubo.motors[prop].value = 0 # Disable because the trajectory files are missing NK2. Oops!
         else
             hubo.motors[prop].value = playback.data[playback.frame][i]
     # Rotate the whole shebang so that the foot is the "grounded" object.

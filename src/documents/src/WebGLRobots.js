@@ -69,7 +69,7 @@ WebGLRobots.DefaultCanvas = function(container, display_width, display_height) {
 
     // If the rendering canvas is desired at a size other than the default,
     // this function will resize the canvas and update the trackball control.
-    function resize(display_height, display_width) {
+    function resize(display_width, display_height) {
         this.display_width = display_width
         this.display_height = display_height
         $(renderer.domElement).attr({ 
@@ -77,6 +77,8 @@ WebGLRobots.DefaultCanvas = function(container, display_width, display_height) {
             height: display_height
         });
         renderer.setSize( display_width, display_height );
+        camera.aspect = display_width / display_height;
+        camera.updateProjectionMatrix();
         controls.handleResize();
         render();
     }

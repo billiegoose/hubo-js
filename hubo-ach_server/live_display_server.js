@@ -1,41 +1,95 @@
-var hz = 30;
-console.log('Started ' + __filename);
+console.log('Started ' + __filename + '\n');
 
-// Get Firebase URL
-var firebase_url = 'https://hubo-firebase.firebaseIO.com';
-if (process.argv[2] == "drc") {
-	var firebase_url = 'https://drc-hubo.firebaseIO.com';
+var exec = require('child_process').exec;
+
+var argv = require ("argp").createParser ({ once: true })
+    .description ("live_display_server")
+    .email ("wmhilton@gmail.com")
+    .body ()
+        //The object and argument definitions and the text of the --help message
+        //are configured at the same time
+        .text (" Arguments:")
+        .argument ("drc", { description: "Use for drc-hubo" })
+        .text ("\n Options:")
+        .option ({ short: "s", long: "socketio", description: "Use socket.io instead of Firebase" })
+        .option ({ short: "f", long: "hz", 
+        	metavar: "FREQUENCY", type: Number, default: 10,
+        	description: "State publishing frequency" })
+        .help ()
+        .version ("0.0.2")
+    .argv ();
+
+if (argv.socketio) {
+	var app = require('http').createServer()
+	    , io = require('socket.io').listen(app, { log: false })
+} else {
+	// Get Firebase URL
+	var firebase_url = 'https://hubo-firebase.firebaseIO.com';
+	if (argv.drc) {
+		var firebase_url = 'https://drc-hubo.firebaseIO.com';
+	}
+	console.log('Using Firebase: ' + firebase_url);
+
+	// NOTE: The limitations of a free developer Firebase account: 5 GB Data Transfer, 50 Max Connections, 100 MB Data Storage
+	var Firebase = require('firebase');
+	// Open Firebase connection
+	var huboRef = new Firebase(firebase_url);
 }
-console.log('Using Firebase: ' + firebase_url);
-
-// NOTE: The limitations of a free developer Firebase account: 5 GB Data Transfer, 50 Max Connections, 100 MB Data Storage
-var Firebase = require('firebase');
-// Open Firebase connection
-var huboRef = new Firebase(firebase_url);
 
 // Communicate with ACH
 var hubo_ach = require('hubo-ach-readonly');
-
-// var path = require('path');
-
-// var util = require('util');
-//var coffeescript = require('connect-coffee-script');
-// var fs = require('fs');
+// TODO: Build this global into the module
+var hubo_ach_ready = false;
 var state = {};
 var serial_state = '';
 var old_state = serial_state + 'not_equal';
 var updateID = null;
 var main = function() {
-    var r = hubo_ach.init();
-    if (!r) {
-        console.log("Error initializing hubo-ach-readonly module. Likely cause: hubo-daemon is not running.")
-        return
-    }
-    updateID = setInterval(update,1000/hz);
+	resetHuboAch();
+    if (argv.socketio) {
+		app.listen(6060);
+		// Send initial position
+		io.sockets.on('connection', function (socket) {
+		  socket.emit('serial_state', serial_state);
+		  // Register listener
+		  socket.on('reset-ach', function (data) {
+		    resetHuboAch();
+		  });
+		});
+	}
+	resetTimer();
+    updateID = setInterval(update,1000/argv.hz);
+}
+
+var countErrors = function(status) {
+	return (
+		status.jam +
+		status.pwmSaturated +
+		status.bigError +
+		status.encError +
+		status.driverFault +
+		status.motorFail0 +
+		status.motorFail1 +
+		status.posMinError +
+		status.posMaxError +
+		status.velError +
+		status.accError //+
+		//status.tempError
+		)
 }
 
 var serialize = function() {
 	var datastring = '{';
+	datastring += '"time":' + state.time.toFixed(3);
+
+	datastring += ',';	
+	datastring += '"power":';
+	datastring += '{ "voltage":' + state.power.voltage.toFixed(3);
+	datastring += ', "current":' + state.power.current.toFixed(3);
+	datastring += ', "power":'   + state.power.power.toFixed(3);
+	datastring += '}';
+
+	datastring += ',';
 	datastring += '"ft":[';
 	datastring += state.ft[0].m_x.toFixed(3) + ',';
 	datastring += state.ft[0].m_y.toFixed(3) + ',';
@@ -51,7 +105,31 @@ var serialize = function() {
 	datastring += state.ft[3].f_z.toFixed(3) + ']';
 
 	datastring += ',';
-	datastring += '"joint":[';
+	datastring += '"imu":[';
+	datastring += '{ "a_x":' + state.imu[0].a_x.toFixed(3);
+	datastring += ', "a_y":' + state.imu[0].a_y.toFixed(3);
+	datastring += ', "a_z":' + state.imu[0].a_z.toFixed(3);
+	datastring += ', "w_x":' + state.imu[0].w_x.toFixed(3);
+	datastring += ', "w_y":' + state.imu[0].w_y.toFixed(3);
+	datastring += ', "w_z":' + state.imu[0].w_z.toFixed(3);
+	datastring += '},';
+	datastring += '{ "a_x":' + state.imu[1].a_x.toFixed(3);
+	datastring += ', "a_y":' + state.imu[1].a_y.toFixed(3);
+	datastring += ', "a_z":' + state.imu[1].a_z.toFixed(3);
+	datastring += ', "w_x":' + state.imu[1].w_x.toFixed(3);
+	datastring += ', "w_y":' + state.imu[1].w_y.toFixed(3);
+	datastring += ', "w_z":' + state.imu[1].w_z.toFixed(3);
+	datastring += '},';
+	datastring += '{ "a_x":' + state.imu[2].a_x.toFixed(3);
+	datastring += ', "a_y":' + state.imu[2].a_y.toFixed(3);
+	datastring += ', "a_z":' + state.imu[2].a_z.toFixed(3);
+	datastring += ', "w_x":' + state.imu[2].w_x.toFixed(3);
+	datastring += ', "w_y":' + state.imu[2].w_y.toFixed(3);
+	datastring += ', "w_z":' + state.imu[2].w_z.toFixed(3);
+	datastring += '}]';
+
+	datastring += ',';
+	datastring += '"ref":[';
 	datastring += state.joint[0].ref.toFixed(3) + ',';
 	datastring += state.joint[1].ref.toFixed(3) + ',';
 	datastring += state.joint[2].ref.toFixed(3) + ',';
@@ -95,20 +173,263 @@ var serialize = function() {
 	datastring += state.joint[40].ref.toFixed(3) + ',';
 	datastring += state.joint[41].ref.toFixed(3) + ']';
 
+	datastring += ',';
+	datastring += '"pos":[';
+	datastring += state.joint[0].pos.toFixed(3) + ',';
+	datastring += state.joint[1].pos.toFixed(3) + ',';
+	datastring += state.joint[2].pos.toFixed(3) + ',';
+	datastring += state.joint[3].pos.toFixed(3) + ',';
+	datastring += state.joint[4].pos.toFixed(3) + ',';
+	datastring += state.joint[5].pos.toFixed(3) + ',';
+	datastring += state.joint[6].pos.toFixed(3) + ',';
+	datastring += state.joint[7].pos.toFixed(3) + ',';
+	datastring += state.joint[8].pos.toFixed(3) + ',';
+	datastring += state.joint[9].pos.toFixed(3) + ',';
+	datastring += state.joint[10].pos.toFixed(3) + ',';
+	datastring += state.joint[11].pos.toFixed(3) + ',';
+	datastring += state.joint[12].pos.toFixed(3) + ',';
+	datastring += state.joint[13].pos.toFixed(3) + ',';
+	datastring += state.joint[14].pos.toFixed(3) + ',';
+	datastring += state.joint[15].pos.toFixed(3) + ',';
+	datastring += state.joint[16].pos.toFixed(3) + ',';
+	datastring += state.joint[17].pos.toFixed(3) + ',';
+	datastring += state.joint[18].pos.toFixed(3) + ',';
+	datastring += state.joint[19].pos.toFixed(3) + ',';
+	datastring += state.joint[20].pos.toFixed(3) + ',';
+	datastring += state.joint[21].pos.toFixed(3) + ',';
+	datastring += state.joint[22].pos.toFixed(3) + ',';
+	datastring += state.joint[23].pos.toFixed(3) + ',';
+	datastring += state.joint[24].pos.toFixed(3) + ',';
+	datastring += state.joint[25].pos.toFixed(3) + ',';
+	datastring += state.joint[26].pos.toFixed(3) + ',';
+	datastring += state.joint[27].pos.toFixed(3) + ',';
+	datastring += state.joint[28].pos.toFixed(3) + ',';
+	datastring += state.joint[29].pos.toFixed(3) + ',';
+	datastring += state.joint[30].pos.toFixed(3) + ',';
+	datastring += state.joint[31].pos.toFixed(3) + ',';
+	datastring += state.joint[32].pos.toFixed(3) + ',';
+	datastring += state.joint[33].pos.toFixed(3) + ',';
+	datastring += state.joint[34].pos.toFixed(3) + ',';
+	datastring += state.joint[35].pos.toFixed(3) + ',';
+	datastring += state.joint[36].pos.toFixed(3) + ',';
+	datastring += state.joint[37].pos.toFixed(3) + ',';
+	datastring += state.joint[38].pos.toFixed(3) + ',';
+	datastring += state.joint[39].pos.toFixed(3) + ',';
+	datastring += state.joint[40].pos.toFixed(3) + ',';
+	datastring += state.joint[41].pos.toFixed(3) + ']';
+
+	datastring += ',';
+	datastring += '"cur":[';
+	datastring += state.joint[0].cur.toFixed(3) + ',';
+	datastring += state.joint[1].cur.toFixed(3) + ',';
+	datastring += state.joint[2].cur.toFixed(3) + ',';
+	datastring += state.joint[3].cur.toFixed(3) + ',';
+	datastring += state.joint[4].cur.toFixed(3) + ',';
+	datastring += state.joint[5].cur.toFixed(3) + ',';
+	datastring += state.joint[6].cur.toFixed(3) + ',';
+	datastring += state.joint[7].cur.toFixed(3) + ',';
+	datastring += state.joint[8].cur.toFixed(3) + ',';
+	datastring += state.joint[9].cur.toFixed(3) + ',';
+	datastring += state.joint[10].cur.toFixed(3) + ',';
+	datastring += state.joint[11].cur.toFixed(3) + ',';
+	datastring += state.joint[12].cur.toFixed(3) + ',';
+	datastring += state.joint[13].cur.toFixed(3) + ',';
+	datastring += state.joint[14].cur.toFixed(3) + ',';
+	datastring += state.joint[15].cur.toFixed(3) + ',';
+	datastring += state.joint[16].cur.toFixed(3) + ',';
+	datastring += state.joint[17].cur.toFixed(3) + ',';
+	datastring += state.joint[18].cur.toFixed(3) + ',';
+	datastring += state.joint[19].cur.toFixed(3) + ',';
+	datastring += state.joint[20].cur.toFixed(3) + ',';
+	datastring += state.joint[21].cur.toFixed(3) + ',';
+	datastring += state.joint[22].cur.toFixed(3) + ',';
+	datastring += state.joint[23].cur.toFixed(3) + ',';
+	datastring += state.joint[24].cur.toFixed(3) + ',';
+	datastring += state.joint[25].cur.toFixed(3) + ',';
+	datastring += state.joint[26].cur.toFixed(3) + ',';
+	datastring += state.joint[27].cur.toFixed(3) + ',';
+	datastring += state.joint[28].cur.toFixed(3) + ',';
+	datastring += state.joint[29].cur.toFixed(3) + ',';
+	datastring += state.joint[30].cur.toFixed(3) + ',';
+	datastring += state.joint[31].cur.toFixed(3) + ',';
+	datastring += state.joint[32].cur.toFixed(3) + ',';
+	datastring += state.joint[33].cur.toFixed(3) + ',';
+	datastring += state.joint[34].cur.toFixed(3) + ',';
+	datastring += state.joint[35].cur.toFixed(3) + ',';
+	datastring += state.joint[36].cur.toFixed(3) + ',';
+	datastring += state.joint[37].cur.toFixed(3) + ',';
+	datastring += state.joint[38].cur.toFixed(3) + ',';
+	datastring += state.joint[39].cur.toFixed(3) + ',';
+	datastring += state.joint[40].cur.toFixed(3) + ',';
+	datastring += state.joint[41].cur.toFixed(3) + ']';
+
+	datastring += ',';
+	datastring += '"home":[';
+	datastring += state.status[0].homeFlag + ',';
+	datastring += state.status[1].homeFlag + ',';
+	datastring += state.status[2].homeFlag + ',';
+	datastring += state.status[3].homeFlag + ',';
+	datastring += state.status[4].homeFlag + ',';
+	datastring += state.status[5].homeFlag + ',';
+	datastring += state.status[6].homeFlag + ',';
+	datastring += state.status[7].homeFlag + ',';
+	datastring += state.status[8].homeFlag + ',';
+	datastring += state.status[9].homeFlag + ',';
+	datastring += state.status[10].homeFlag + ',';
+	datastring += state.status[11].homeFlag + ',';
+	datastring += state.status[12].homeFlag + ',';
+	datastring += state.status[13].homeFlag + ',';
+	datastring += state.status[14].homeFlag + ',';
+	datastring += state.status[15].homeFlag + ',';
+	datastring += state.status[16].homeFlag + ',';
+	datastring += state.status[17].homeFlag + ',';
+	datastring += state.status[18].homeFlag + ',';
+	datastring += state.status[19].homeFlag + ',';
+	datastring += state.status[20].homeFlag + ',';
+	datastring += state.status[21].homeFlag + ',';
+	datastring += state.status[22].homeFlag + ',';
+	datastring += state.status[23].homeFlag + ',';
+	datastring += state.status[24].homeFlag + ',';
+	datastring += state.status[25].homeFlag + ',';
+	datastring += state.status[26].homeFlag + ',';
+	datastring += state.status[27].homeFlag + ',';
+	datastring += state.status[28].homeFlag + ',';
+	datastring += state.status[29].homeFlag + ',';
+	datastring += state.status[30].homeFlag + ',';
+	datastring += state.status[31].homeFlag + ',';
+	datastring += state.status[32].homeFlag + ',';
+	datastring += state.status[33].homeFlag + ',';
+	datastring += state.status[34].homeFlag + ',';
+	datastring += state.status[35].homeFlag + ',';
+	datastring += state.status[36].homeFlag + ',';
+	datastring += state.status[37].homeFlag + ',';
+	datastring += state.status[38].homeFlag + ',';
+	datastring += state.status[39].homeFlag + ',';
+	datastring += state.status[40].homeFlag + ',';
+	datastring += state.status[41].homeFlag + ']';
+
+	datastring += ',';
+	datastring += '"error":[';
+	datastring += countErrors(state.status[0]) + ',';
+	datastring += countErrors(state.status[1]) + ',';
+	datastring += countErrors(state.status[2]) + ',';
+	datastring += countErrors(state.status[3]) + ',';
+	datastring += countErrors(state.status[4]) + ',';
+	datastring += countErrors(state.status[5]) + ',';
+	datastring += countErrors(state.status[6]) + ',';
+	datastring += countErrors(state.status[7]) + ',';
+	datastring += countErrors(state.status[8]) + ',';
+	datastring += countErrors(state.status[9]) + ',';
+	datastring += countErrors(state.status[10]) + ',';
+	datastring += countErrors(state.status[11]) + ',';
+	datastring += countErrors(state.status[12]) + ',';
+	datastring += countErrors(state.status[13]) + ',';
+	datastring += countErrors(state.status[14]) + ',';
+	datastring += countErrors(state.status[15]) + ',';
+	datastring += countErrors(state.status[16]) + ',';
+	datastring += countErrors(state.status[17]) + ',';
+	datastring += countErrors(state.status[18]) + ',';
+	datastring += countErrors(state.status[19]) + ',';
+	datastring += countErrors(state.status[20]) + ',';
+	datastring += countErrors(state.status[21]) + ',';
+	datastring += countErrors(state.status[22]) + ',';
+	datastring += countErrors(state.status[23]) + ',';
+	datastring += countErrors(state.status[24]) + ',';
+	datastring += countErrors(state.status[25]) + ',';
+	datastring += countErrors(state.status[26]) + ',';
+	datastring += countErrors(state.status[27]) + ',';
+	datastring += countErrors(state.status[28]) + ',';
+	datastring += countErrors(state.status[29]) + ',';
+	datastring += countErrors(state.status[30]) + ',';
+	datastring += countErrors(state.status[31]) + ',';
+	datastring += countErrors(state.status[32]) + ',';
+	datastring += countErrors(state.status[33]) + ',';
+	datastring += countErrors(state.status[34]) + ',';
+	datastring += countErrors(state.status[35]) + ',';
+	datastring += countErrors(state.status[36]) + ',';
+	datastring += countErrors(state.status[37]) + ',';
+	datastring += countErrors(state.status[38]) + ',';
+	datastring += countErrors(state.status[39]) + ',';
+	datastring += countErrors(state.status[40]) + ',';
+	datastring += countErrors(state.status[41]) + ']';
+
 	datastring += '}';
 	return datastring;
 }
 
+var resetTimer = function() {
+	timer_jawn = {}
+	timer_jawn.last_time = -1;
+	timer_jawn.seconds_frozen = 0;
+}
+
+var checkForDeadTimer = function() {
+	// If the time hasn't updated
+	//console.log(state.time + ' == ' + timer_jawn.last_time)
+	if (state.time == timer_jawn.last_time && hubo_ach_ready) {		
+		timer_jawn.seconds_frozen += 1/argv.hz;
+		console.log('Timer frozen: ' + timer_jawn.seconds_frozen + 's');
+	} else {
+		timer_jawn.last_time = state.time;
+		timer_jawn.seconds_frozen = 0;
+	}
+	// If dead, reset
+	if (timer_jawn.seconds_frozen > 5) {
+		resetHuboAch();
+	}
+}
+
 var update = function() {
-    state = hubo_ach.getState()
-    console.log('RSP: ' + state.joint[11].ref);
-    // TODO: Serialize compare with previous state before sending.
-    serial_state = serialize();
-    console.log(serial_state);
-    if (serial_state !== old_state) {
-    	huboRef.child('serial_state').set(serial_state);
-    }
-    old_state = serial_state;
+	checkForDeadTimer();
+	if (hubo_ach_ready) {
+	    state = hubo_ach.getState()
+	    serial_state = serialize()
+	    if (serial_state !== old_state) {
+	    	//console.log(serial_state);
+	    	console.log('Publish update. t=' + state.time);
+	    	if (argv.socketio) {
+				io.sockets.emit('serial_state', serial_state);
+	    	} else {
+	    		huboRef.child('serial_state').set(serial_state);
+	    	}
+	    }
+	    old_state = serial_state;
+	}
+}
+
+var resetHuboAch = function() {
+  console.log('1...Resetting Hubo-ach...');
+  hubo_ach_ready = false;
+  try {
+    var reset_ach = exec('./restart_ach.sh', {timeout:15000}, function (error, stdout, stderr) {
+      // Print any errors. Not really useful since we directed errors to /dev/null anyway.
+      if (stderr !== null) {
+        console.log('stderr: ' + stderr);
+      }
+      if (error !== null) {
+        console.log('exec error: ' + error);
+      }
+      console.log('2...waiting a bit...');
+      setTimeout( function() {
+          console.log('3...reinitializing module...');
+          var r = hubo_ach.init();
+          if (!r) {
+            console.log("4...Error initializing hubo-ach-readonly module. We'll try again in a moment.");
+            setTimeout( resetHuboAch, 5000 );
+          } else {
+            resetTimer();
+            hubo_ach_ready = true;
+            console.log('4...Success!');
+          }
+      },2000);
+    });
+  } catch (e) {
+    console.log(e.stack);
+    hubo_ach_ready = false; 
+    // Note that hubo_ach_ready = false; forever now, so nothing will get done ever again.
+    // But the process is kept alive for debugging purposes: so we can find zombies, 
+    // file descriptor leaks, etc.
+  }
 }
 
 main();
