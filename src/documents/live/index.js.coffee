@@ -1,27 +1,23 @@
-use_socket = true;
-connection_established = false;
-hubo_loaded = false;
+# Using namespace LIVE
+LIVE = {}
+LIVE.use_socket = true;
+LIVE.connectionEstablished = $.Deferred()
 
-setUpdateHook = () ->
-  if (connection_established and hubo_loaded)
-    if (use_socket)
-      socket.on 'serial_state', (serial_state) ->
-        # console.log(serial_state)
-        window.serial_state = serial_state
-        # LED status indicator
-        flashLED()
-        updateModel(serial_state)
-
-connectToServer = () ->
-  if connection_established
-    return
-  if (use_socket)
+LIVE.connectToServer = () ->
+  if (LIVE.use_socket)
     console.log('Trying to connect to server...')
-    window.socket = io.connect(':6060', {'force new connection':true, timeout: 3000})
+    LIVE.socket = io.connect(':6060', {'force new connection':true, timeout: 3000})
+    socket = LIVE.socket
+    # Due to a design flaw in socket.io? the events won't work if the initial
+    # connection fails due to the server not running.
+    # Therefore we manually will keep trying to reconnect until we establish an
+    # initial connection.
+    connectTimeoutId = setTimeout( LIVE.connectToServer, 5000 )
+
     socket.on 'connect', () -> 
       console.log('connect')
-      connection_established = true
-      setUpdateHook()
+      window.clearTimeout(connectTimeoutId)
+      LIVE.connectionEstablished.resolve()
     # Debugging
     socket.on 'connecting', () -> console.log('connecting')
     socket.on 'disconnect', () -> console.log('disconnect')
@@ -29,17 +25,11 @@ connectToServer = () ->
     socket.on 'reconnect', () -> console.log('reconnect')
     socket.on 'reconnecting', () -> console.log('reconnecting')
     socket.on 'reconnect_failed', () -> console.log('reconnect_failed')
-    # Due to a design flaw in socket.io? the events won't work if the initial
-    # connection fails due to the server not running.
-    # Therefore we manually will keep trying to reconnect until we establish an
-    # initial connection.
-    setTimeout( connectToServer, 5000 )
   else
     #
     # Init Firebase
     #
-    window.serial_stateRef = new Firebase('http://hubo-firebase.firebaseIO.com/serial_state')
-    connection_established = true
+    serial_stateRef = new Firebase('http://hubo-firebase.firebaseIO.com/serial_state')
     # Create the Firebase update
     serial_stateRef.on 'value', (snapshot) ->
       # NOTE: With the stats library, we are timing the interval
@@ -47,28 +37,24 @@ connectToServer = () ->
       # it. Therefore, we end recording at the beginning and begin recording
       # right away.
       serial_state = snapshot.val()
-      window.serial_state = serial_state
       # console.log(serial_state)
       # LED status indicator
       flashLED()
       updateModel(serial_state)
 
-connectToServer()
-window.ledTimeoutId = null;
-flashLED = () ->
-  # Cancel the previous timeout.
-  window.clearTimeout(window.ledTimeoutId)
-  $('#led').show()
-  # If we don't get more data soon, hide the LED.
-  window.ledTimeoutId = setTimeout(()->
-    $('#led').hide()
-  , 200) # TODO: Make this a function of the update frequency. TODO: Have the server tell the client the update frequency.
+# Closure for LED Timeout
+do ->
+  ledTimeoutId = null;
+  LIVE.flashLED = () ->
+    # Cancel the previous timeout.
+    window.clearTimeout(ledTimeoutId)
+    $('#led').show()
+    # If we don't get more data soon, hide the LED.
+    ledTimeoutId = setTimeout( ()->
+      $('#led').hide()
+    , 200) # TODO: Make this a function of the update frequency. TODO: Have the server tell the client the update frequency.
 
-# TODO: make this a function
-# # http://threejs.org/docs/#Reference/Extras.Geometries/CylinderGeometry
-# rayx = new THREE.Mesh(new THREE.CylinderGeometry(.01, .01, .1, 24, 1, false),
-#  new THREE.MeshNormalMaterial())
-# c.scene.add(rayx)
+# A class to display FT sensors in the GUI
 class FT_Sensor
   constructor: (@name) ->
     # TODO: Use cylinder to make it thicker?
@@ -100,44 +86,44 @@ class FT_Sensor
 
     # temp.setRGB(fz_gradient,(1-fz_gradient),0)
     # @axis.children[2].setColor(temp.getHex())
+  computeColor = (t) ->
+    temp = new THREE.Color()
+    y = $('#color_limits .y_threshold').val()
+    if t > y
+      temp.setRGB(
+        1,
+        1-lerp(y,1,0,t),
+        0)
+    else
+      temp.setRGB(
+        lerp(0,y,0,t),
+        1,
+        0)
+    return temp
+  lerp = (min,max,zero,t) ->
+    if t > max
+      t = max
+    if t < min
+      t = min
+    if t < zero
+      return Math.min((zero-t)/(zero-min),1)
+    else
+      return Math.min((t-zero)/(max-zero),1)
 
-computeColor = (t) ->
-  temp = new THREE.Color()
-  y = $('#color_limits .y_threshold').val()
-  if t > y
-    temp.setRGB(
-      1,
-      1-lerp(y,1,0,t),
-      0)
-  else
-    temp.setRGB(
-      lerp(0,y,0,t),
-      1,
-      0)
-  return temp
-lerp = (min,max,zero,t) ->
-  if t > max
-    t = max
-  if t < min
-    t = min
-  if t < zero
-    return Math.min((zero-t)/(zero-min),1)
-  else
-    return Math.min((t-zero)/(max-zero),1)
-
+# Get the range of safe FT values from the GUI textboxes (currently hidden because they're ugly, 
+# so you are stuck with the default values).
 extractLimits = (el) ->
   o = {}
   o.mx_min = $(el).find(".m_x_min").val()
   o.mx_max = $(el).find(".m_x_max").val()
-  # console.log("mx_min: #{mx_min}")
-  # console.log("mx_max: #{mx_max}")
   o.my_min = $(el).find(".m_y_min").val()
   o.my_max = $(el).find(".m_y_max").val()
   o.fz_min = $(el).find(".f_z_min").val()
   o.fz_max = $(el).find(".f_z_max").val()
   return o
 
-adaptCanvasSize = () ->
+# Resize the canvas (to deal with tablet orientation, desktop window resizing, etc)
+adaptCanvasSize = (c) ->
   if (document.webkitIsFullScreen)
     width = $(window).width()
     height = $(window).height()
@@ -146,44 +132,57 @@ adaptCanvasSize = () ->
     height = width
   $('#hubo_container').width(width)
   $('#hubo_container').height(height)
-  hubo.canvas.resize(width, height)
+  c.resize(width, height)
+
+# Add the FPS counter
+addStats = () ->  
+  stats = new Stats()
+  stats.setMode(0); # 0: fps, 1: ms
+  $('#hubo_container').append(stats.domElement)
+  stats.domElement.style.position = 'relative'
+  stats.domElement.style.cssFloat = 'right'
+  LIVE.stats = stats
 
 #
 # MAIN
 #
 $( document ).ready () ->
   #
+  # Setup live data feed
+  #
+  LIVE.connectToServer()
+
+  #
   # Setup GUI
   #
-  window.stats = new Stats()
-  stats.setMode(0); # 0: fps, 1: ms
-  $('#hubo_container').append(stats.domElement)
-  stats.domElement.style.position = 'relative'
-  stats.domElement.style.float = 'right'
-
-  $(window).on('orientationchange resize', () ->
-    # I added a delay to this effect because I found that the size recalculation
-    # is more reliable if we wait a moment after the orientation change.
-    setTimeout(adaptCanvasSize, 500)
-  );
+  addStats()
 
   #
   # Setup Hubo-in-the-Browser
   #
-  # I appologize that this cannot be done with CSS.
-  size = Math.min($(window).width(), $(window).height())
-  $('#hubo_container').width(size)
-  $('#hubo_container').height(size)
   c = new Hubo.DefaultCanvas("#hubo_container")
+  adaptCanvasSize(c);
 
-  window.texture = THREE.ImageUtils.loadTexture('checkerboard.png', THREE.Linear)
+  # Deal with tablet screen orientation and window resizes
+  $(window).on('orientationchange resize', () ->
+    # I added a delay to this effect because I found that the size recalculation
+    # is more reliable if we wait a moment after the orientation change.
+    setTimeout(adaptCanvasSize(c), 500)
+  );
+
+  # Create a floor
+  texture = THREE.ImageUtils.loadTexture('checkerboard.png', THREE.Linear)
   texture.wrapS = THREE.RepeatWrapping;
   texture.wrapT = THREE.RepeatWrapping;
   texture.repeat.x = 20;
   texture.repeat.y = 20;
+  floorG = new THREE.PlaneGeometry(20, 20)
+  floorM = new THREE.MeshBasicMaterial({map: texture})
+  LIVE.floor = new THREE.Mesh(floorG, floorM)
+  LIVE.floor.overdraw = true;
+  c.scene.add(LIVE.floor);
 
-  window.hubo = new Hubo("hubo2", callback = ->    
-    hubo_loaded = true;
+  hubo = new Hubo("hubo2", callback = ->
     # Once the URDF is completely loaded, this function is run.
     # Add your robot to the canvas.
     c.add hubo
@@ -191,14 +190,6 @@ $( document ).ready () ->
     # hubo.canvas.controls.target=new THREE.Vector3(0,0,-0.4);
     hubo.autorender = false
     $("#load").hide()
-
-    # Create a floor
-    floorG = new THREE.PlaneGeometry(20, 20)
-    floorM = new THREE.MeshBasicMaterial({map: texture})
-    window.floor = new THREE.Mesh(floorG, floorM)
-    # window.floor = new THREE.Mesh(new THREE.PlaneGeometry(300, 300), new THREE.MeshBasicMaterial({color: 0x0000ff}));
-    floor.overdraw = true;
-    c.scene.add(floor);
 
     # Create FT display axes
     if not hubo.ft?
@@ -221,13 +212,13 @@ $( document ).ready () ->
     hubo.ft.HUBO_FT_L_FOOT.axis.position = new THREE.Vector3(-0.05,0,-0.11)
     # Place floor slightly below foot axis.
     c.render() # Needed to force foot axis matrix to update.
-    floor.position.z = hubo.ft.HUBO_FT_L_FOOT.axis.localToWorld(new THREE.Vector3(0,0,-0.01)).z
+    LIVE.floor.position.z = hubo.ft.HUBO_FT_L_FOOT.axis.localToWorld(new THREE.Vector3(0,0,-0.01)).z
     # # Looks like the wrists need some rotation too.
     # hubo.ft.HUBO_FT_R_HAND.axis.rotation.y = -Math.PI/2
     # hubo.ft.HUBO_FT_L_HAND.axis.rotation.y = -Math.PI/2
 
     updateModel = (serial_state) ->
-      if (not serial_state?)
+      if (not serial_state? or serial_state == "")
         return
 
       state = JSON.parse(serial_state);
@@ -307,16 +298,21 @@ $( document ).ready () ->
       hubo.canvas.render()
 
       # Update FPS counter
-      stats.end();
-      stats.begin();
+      LIVE.stats.end();
+      LIVE.stats.begin();
 
-    # GAH! What a horrible hack
-    window.updateModel = updateModel
-    setUpdateHook()
+    # Deferred connection established callback
+    LIVE.connectionEstablished.done () ->
+      if (LIVE.use_socket)
+        LIVE.socket.on 'serial_state', (serial_state) ->
+          LIVE.serial_state = serial_state
+          # LED status indicator
+          LIVE.flashLED()
+          updateModel(serial_state)
 
     $('input[name="angle-source"]:radio').on 'change', () ->
       console.log('Radio Changed')
-      updateModel(window.serial_state)
+      updateModel(LIVE.serial_state)
 
     $('#fullscreen-button').on 'click', () ->
       if (document.webkitFullscreenEnabled)
@@ -325,15 +321,17 @@ $( document ).ready () ->
     # Deprecated for now by server-side timeouts watching state.time.
     # Might still be needed to reestablish client connections at some point?
     # $('#fix-button').on 'click', () ->
-    #   connectToServer()
+    #   LIVE.connectToServer()
     #   console.log('Resetting hubo-ach...')
     #   socket.emit('reset-ach',{jawn: true})
 
     $(document).on 'webkitfullscreenchange', () ->
-      setTimeout(adaptCanvasSize, 500)
+      setTimeout(adaptCanvasSize(c), 500)
 
     # Update the rendering to reflect any changes to Hubo.
     c.render()
   , progress = (step, total, node) ->
     $("#load").html "Loading " + step + "/" + total
   )
+  # export to namespace
+  LIVE.hubo = hubo
