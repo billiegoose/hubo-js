@@ -1,0 +1,22 @@
+body {
+  overflow-x: scroll !important;
+}
+#hubo_container {
+  position: relative;
+  border: 1px solid #000;
+}
+table tr th {
+  text-align: left;
+  vertical-align: middle;
+}
+label.ui-slider {
+  margin-top: 0;
+  margin-bottom: 0;
+}
+@media screen and (orientation:landscape) {
+  #hubo_container {
+    float: left;
+  }
+}
+@media screen and (orientation:portrait) {
+}

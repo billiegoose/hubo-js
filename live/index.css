@@ -1,0 +1,43 @@
+body {
+  overflow-x: scroll !important;
+  font-size: x-large;
+}
+legend {
+  font-size: 18px;
+  font-weight: 700;
+  font-family: Helvetica, Arial, sans-serif;
+  line-height: 48px;
+  vertical-align: center;
+}
+.ui-field-contain .ui-controlgroup-label {
+  width: 35%;
+}
+.ui-field-contain .ui-controlgroup-controls {
+  width: 60%;
+}
+#content {
+  position: absolute;
+}
+#hubo_container {
+  position: relative;
+  border: 1px solid #000;
+}
+#controls p {
+  padding-right: 1em;
+}
+table tr th {
+  text-align: left;
+  vertical-align: middle;
+}
+label.ui-slider {
+  margin-top: 0;
+  margin-bottom: 0;
+}
+@media screen and (orientation:landscape) {
+  #hubo_container {
+    float: left;
+    margin-right: 1em;
+  }
+}
+@media screen and (orientation:portrait) {
+}

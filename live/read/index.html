@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>hubo-ach read | Hubo-js</title>
+    <meta charset="utf-8">
+    <link rel="icon" href="../../img/favicon.png">
+    <!-- Jquery makes life so much easier. Load it before everything else!-->
+    <script src="../../lib/jquery/jquery.min.js"></script><meta name="generator" content="DocPad v6.64.0" />
+    <link rel="stylesheet" type="text/css" href="index.css">
+    <!--meta(name='viewport', content='initial-scale=1.0, maximum-scale=1.0, user-scalable=0')-->
+    <meta name="viewport" content="initial-scale=1.0">
+  </head>
+  <body>
+    <table>
+      <tr> 
+        <td>Time = </td>
+        <td id="time">0000.000</td>
+      </tr>
+      <tr>
+        <th> </th>
+        <th>Ref</th>
+        <th>Enc</th>
+        <th>Cur</th>
+        <th>Home</th>
+      </tr>
+      <tr id="WST">
+        <td>WST</td>
+        <td class="ref">0.000</td>
+        <td class="pos">0.000</td>
+        <td class="cur">0.000</td>
+        <td class="home">0</td>
+      </tr>
+      <tr id="NKY">
+        <td>NKY</td>
+        <td class="ref">0.000</td>
+        <td class="pos">0.000</td>
+        <td class="cur">0.000</td>
+        <td class="home">0</td>
+      </tr>
+      <tr id="NK1">
+        <td>NK1</td>
+        <td class="ref">0.000</td>
+        <td class="pos">0.000</td>
+        <td class="cur">0.000</td>
+        <td class="home">0</td>
+      </tr>
+      <tr id="NK2">
+        <td>NK2</td>
+        <td class="ref">0.000</td>
+        <td class="pos">0.000</td>
+        <td class="cur">0.000</td>
+        <td class="home">0</td>
+      </tr>
+      <tr id="LSP">
+        <td>LSP</td>
+        <td class="ref">0.000</td>
+        <td class="pos">0.000</td>
+        <td class="cur">0.000</td>
+        <td class="home">0</td>
+      </tr>
+      <tr id="LSR">
+        <td>LSR</td>
+        <td class="ref">0.000</td>
+        <td class="pos">0.000</td>
+        <td class="cur">0.000</td>
+        <td class="home">0</td>
+      </tr>
+      <tr id="LSY">
+        <td>LSY</td>
+        <td class="ref">0.000</td>
+        <td class="pos">0.000</td>
+        <td class="cur">0.000</td>
+        <td class="home">0</td>
+      </tr>
+      <tr id="LEB">
+        <td>LEB</td>
+        <td class="ref">0.000</td>
+        <td class="pos">0.000</td>
+        <td class="cur">0.000</td>
+        <td class="home">0</td>
+      </tr>
+      <tr id="LWY">
+        <td>LWY</td>
+        <td class="ref">0.000</td>
+        <td class="pos">0.000</td>
+        <td class="cur">0.000</td>
+        <td class="home">0</td>
+      </tr>
+      <tr id="LWR">
+        <td>LWR</td>
+        <td class="ref">0.000</td>
+        <td class="pos">0.000</td>
+        <td class="cur">0.000</td>
+        <td class="home">0</td>
+      </tr>
+      <tr id="LWP">
+        <td>LWP</td>
+        <td class="ref">0.000</td>
+        <td class="pos">0.000</td>
+        <td class="cur">0.000</td>
+        <td class="home">0</td>
+      </tr>
+      <tr id="RSP">
+        <td>RSP</td>
+        <td class="ref">0.000</td>
+        <td class="pos">0.000</td>
+        <td class="cur">0.000</td>
+        <td class="home">0</td>
+      </tr>
+      <tr id="RSR">
+        <td>RSR</td>
+        <td class="ref">0.000</td>
+        <td class="pos">0.000</td>
+        <td class="cur">0.000</td>
+        <td class="home">0</td>
+      </tr>
+      <tr id="RSY">
+        <td>RSY</td>
+        <td class="ref">0.000</td>
+        <td class="pos">0.000</td>
+        <td class="cur">0.000</td>
+        <td class="home">0</td>
+      </tr>
+      <tr id="REB">
+        <td>REB</td>
+        <td class="ref">0.000</td>
+        <td class="pos">0.000</td>
+        <td class="cur">0.000</td>
+        <td class="home">0</td>
+      </tr>
+      <tr id="RWY">
+        <td>RWY</td>
+        <td class="ref">0.000</td>
+        <td class="pos">0.000</td>
+        <td class="cur">0.000</td>
+        <td class="home">0</td>
+      </tr>
+      <tr id="RWR">
+        <td>RWR</td>
+        <td class="ref">0.000</td>
+        <td class="pos">0.000</td>
+        <td class="cur">0.000</td>
+        <td class="home">0</td>
+      </tr>
+      <tr id="RWP">
+        <td>RWP</td>
+        <td class="ref">0.000</td>
+        <td class="pos">0.000</td>
+        <td class="cur">0.000</td>
+        <td class="home">0</td>
+      </tr>
+      <tr id="LHY">
+        <td>LHY</td>
+        <td class="ref">0.000</td>
+        <td class="pos">0.000</td>
+        <td class="cur">0.000</td>
+        <td class="home">0</td>
+      </tr>
+      <tr id="LHR">
+        <td>LHR</td>
+        <td class="ref">0.000</td>
+        <td class="pos">0.000</td>
+        <td class="cur">0.000</td>
+        <td class="home">0</td>
+      </tr>
+      <tr id="LHP">
+        <td>LHP</td>
+        <td class="ref">0.000</td>
+        <td class="pos">0.000</td>
+        <td class="cur">0.000</td>
+        <td class="home">0</td>
+      </tr>
+      <tr id="LKN">
+        <td>LKN</td>
+        <td class="ref">0.000</td>
+        <td class="pos">0.000</td>
+        <td class="cur">0.000</td>
+        <td class="home">0</td>
+      </tr>
+      <tr id="LAP">
+        <td>LAP</td>
+        <td class="ref">0.000</td>
+        <td class="pos">0.000</td>
+        <td class="cur">0.000</td>
+        <td class="home">0</td>
+      </tr>
+      <tr id="LAR">
+        <td>LAR</td>
+        <td class="ref">0.000</td>
+        <td class="pos">0.000</td>
+        <td class="cur">0.000</td>
+        <td class="home">0</td>
+      </tr>
+      <tr id="RHY">
+        <td>RHY</td>
+        <td class="ref">0.000</td>
+        <td class="pos">0.000</td>
+        <td class="cur">0.000</td>
+        <td class="home">0</td>
+      </tr>
+      <tr id="RHR">
+        <td>RHR</td>
+        <td class="ref">0.000</td>
+        <td class="pos">0.000</td>
+        <td class="cur">0.000</td>
+        <td class="home">0</td>
+      </tr>
+      <tr id="RHP">
+        <td>RHP</td>
+        <td class="ref">0.000</td>
+        <td class="pos">0.000</td>
+        <td class="cur">0.000</td>
+        <td class="home">0</td>
+      </tr>
+      <tr id="RKN">
+        <td>RKN</td>
+        <td class="ref">0.000</td>
+        <td class="pos">0.000</td>
+        <td class="cur">0.000</td>
+        <td class="home">0</td>
+      </tr>
+      <tr id="RAP">
+        <td>RAP</td>
+        <td class="ref">0.000</td>
+        <td class="pos">0.000</td>
+        <td class="cur">0.000</td>
+        <td class="home">0</td>
+      </tr>
+      <tr id="RAR">
+        <td>RAR</td>
+        <td class="ref">0.000</td>
+        <td class="pos">0.000</td>
+        <td class="cur">0.000</td>
+        <td class="home">0</td>
+      </tr>
+      <tr id="RF1">
+        <td>RF1</td>
+        <td class="ref">0.000</td>
+        <td class="pos">0.000</td>
+        <td class="cur">0.000</td>
+        <td class="home">0</td>
+      </tr>
+      <tr id="RF2">
+        <td>RF2</td>
+        <td class="ref">0.000</td>
+        <td class="pos">0.000</td>
+        <td class="cur">0.000</td>
+        <td class="home">0</td>
+      </tr>
+      <tr id="RF3">
+        <td>RF3</td>
+        <td class="ref">0.000</td>
+        <td class="pos">0.000</td>
+        <td class="cur">0.000</td>
+        <td class="home">0</td>
+      </tr>
+      <tr id="RF4">
+        <td>RF4</td>
+        <td class="ref">0.000</td>
+        <td class="pos">0.000</td>
+        <td class="cur">0.000</td>
+        <td class="home">0</td>
+      </tr>
+      <tr id="RF5">
+        <td>RF5</td>
+        <td class="ref">0.000</td>
+        <td class="pos">0.000</td>
+        <td class="cur">0.000</td>
+        <td class="home">0</td>
+      </tr>
+      <tr id="LF1">
+        <td>LF1</td>
+        <td class="ref">0.000</td>
+        <td class="pos">0.000</td>
+        <td class="cur">0.000</td>
+        <td class="home">0</td>
+      </tr>
+      <tr id="LF2">
+        <td>LF2</td>
+        <td class="ref">0.000</td>
+        <td class="pos">0.000</td>
+        <td class="cur">0.000</td>
+        <td class="home">0</td>
+      </tr>
+      <tr id="LF3">
+        <td>LF3</td>
+        <td class="ref">0.000</td>
+        <td class="pos">0.000</td>
+        <td class="cur">0.000</td>
+        <td class="home">0</td>
+      </tr>
+      <tr id="LF4">
+        <td>LF4</td>
+        <td class="ref">0.000</td>
+        <td class="pos">0.000</td>
+        <td class="cur">0.000</td>
+        <td class="home">0</td>
+      </tr>
+      <tr id="LF5">
+        <td>LF5</td>
+        <td class="ref">0.000</td>
+        <td class="pos">0.000</td>
+        <td class="cur">0.000</td>
+        <td class="home">0</td>
+      </tr>
+      <tr>
+        <th> </th>
+        <th>Mx</th>
+        <th>My</th>
+        <th>Fz</th>
+      </tr>
+      <tr id="RF">
+        <td>RF</td>
+        <td class="m_x"></td>
+        <td class="m_y"></td>
+        <td class="f_z"></td>
+      </tr>
+      <tr id="LF">
+        <td>LF</td>
+        <td class="m_x"></td>
+        <td class="m_y"></td>
+        <td class="f_z"></td>
+      </tr>
+      <tr id="RH">
+        <td>RH</td>
+        <td class="m_x"></td>
+        <td class="m_y"></td>
+        <td class="f_z"></td>
+      </tr>
+      <tr id="LH">
+        <td>LH</td>
+        <td class="m_x"></td>
+        <td class="m_y"></td>
+        <td class="f_z"></td>
+      </tr>
+      <tr>
+        <th> </th>
+        <th>Ax</th>
+        <th>Ay</th>
+        <th>Az</th>
+      </tr>
+      <tr id="IMU0">
+        <td>IMU0</td>
+        <td class="a_x"></td>
+        <td class="a_y"></td>
+        <td class="a_z">       </td>
+      </tr>
+      <tr id="IMU1">
+        <td>IMU1</td>
+        <td class="a_x"></td>
+        <td class="a_y"></td>
+        <td class="a_z">      </td>
+      </tr>
+      <tr>
+        <th> </th>
+        <th>V</th>
+        <th>I</th>
+        <th>P</th>
+      </tr>
+      <tr id="PWR">
+        <td>PWR</td>
+        <td class="v"></td>
+        <td class="i"></td>
+        <td class="p"></td>
+      </tr>
+    </table>
+    <script>window.local_root = '../../'</script>
+    <script src="../../lib/socket.io/socket.io.js"></script>
+    <script src="index.js"></script>
+  </body>
+</html>

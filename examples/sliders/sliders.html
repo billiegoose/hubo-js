@@ -5,7 +5,8 @@
     <meta charset="utf-8">
     <link rel="icon" href="../../img/favicon.png">
     <!-- Jquery makes life so much easier. Load it before everything else!-->
-    <script src="../../lib/jquery/jquery.min.js"></script><meta http-equiv="X-Powered-By" content="DocPad v6.49.1"/>
+    <script src="../../lib/jquery/jquery.min.js"></script><meta name="generator" content="DocPad v6.64.0" />
+    <link rel="stylesheet" type="text/css" href="../../lib/jquery-ui/jquery-ui.custom.css">
     <link rel="stylesheet" type="text/css" href="light.css">
   </head>
   <body>
@@ -74,13 +75,13 @@
                 </tr>
                 <tr>
                   <td>
-                    <div data-name="REP" class="joint">
+                    <div data-name="REB" class="joint">
                       <div>Right Elbow Pitch: </div>
                       <div class="joint_slider"></div><span class="joint_txt"></span>
                     </div>
                   </td>
                   <td>
-                    <div data-name="LEP" class="joint">
+                    <div data-name="LEB" class="joint">
                       <div>Left Elbow Pitch: </div>
                       <div class="joint_slider"></div><span class="joint_txt"></span>
                     </div>
@@ -162,13 +163,13 @@
                 </tr>
                 <tr>
                   <td>
-                    <div data-name="RKP" class="joint">
+                    <div data-name="RKN" class="joint">
                       <div>Right Knee Pitch: </div>
                       <div class="joint_slider"></div><span class="joint_txt"></span>
                     </div>
                   </td>
                   <td>
-                    <div data-name="LKP" class="joint">
+                    <div data-name="LKN" class="joint">
                       <div>Left Knee Pitch: </div>
                       <div class="joint_slider"></div><span class="joint_txt"></span>
                     </div>
@@ -230,6 +231,20 @@
                   <td>
                     <div data-name="NK2" class="joint">
                       <div>Neck 2: </div>
+                      <div class="joint_slider"></div><span class="joint_txt"></span>
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <div data-name="HNP" class="joint">
+                      <div>Neck Pitch: </div>
+                      <div class="joint_slider"></div><span class="joint_txt">                   </span>
+                    </div>
+                  </td>
+                  <td>
+                    <div data-name="HNR" class="joint">
+                      <div>Neck Roll: </div>
                       <div class="joint_slider"></div><span class="joint_txt"></span>
                     </div>
                   </td>
@@ -319,6 +334,7 @@
     <script src="../../lib/three/three.min.js"></script>
     <script src="../../lib/three/Detector.js"></script>
     <script src="../../lib/three/ColladaLoader.js"></script>
+    <script src="../../lib/three/STLLoader.js"></script>
     <script src="../../lib/three/TrackballControls.js"></script>
     <!-- Our code -->
     <script src="../../lib/dict/dict.js"></script>

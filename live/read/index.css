@@ -1,0 +1,19 @@
+body {
+  font-family: monospace;
+}
+table {
+  width: 100%;
+}
+table tr:nth-child(odd) {
+  background-color: #fff;
+}
+table tr:nth-child(even) {
+  background-color: #eee;
+}
+table td {
+  width: 20%;
+  text-align: left;
+}
+table th {
+  text-align: left;
+}
