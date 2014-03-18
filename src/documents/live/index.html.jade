@@ -37,6 +37,15 @@ block body
                 label(for="pos") Encoder
                 input#ref(type="radio",name="angle-source",value="ref")
                 label(for="ref") Reference
+        tr
+          td
+            div(data-role='fieldcontain', style="width:100%")
+              fieldset(data-role="controlgroup", data-type="horizontal")
+                legend Show Current:
+                input#off(type="radio",name="current-source",value="off",checked="checked")
+                label(for="off") Off
+                input#on(type="radio",name="current-source",value="on")
+                label(for="on") On                
         //-th
         //-  label(for="fullscreen-toggle") Fullscreen Mode:
         //-td
