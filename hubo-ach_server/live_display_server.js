@@ -15,6 +15,9 @@ var argv = require ("argp").createParser ({ once: true })
         .option ({ short: "f", long: "hz", 
         	metavar: "FREQUENCY", type: Number, default: 10,
         	description: "State publishing frequency" })
+        .option ({ short: "a", long: "address", metavar: "IP_ADDRESS", type: String, 
+        	description: "The IP or /etc/hosts name to use with ach network daemon."})
+        .option ({ short: "l", long: "local", description: "Use localhost instead of 'hubo' for IP. Takes presidence over address argument."})
         .help ()
         .version ("0.0.2")
     .argv ();
@@ -45,7 +48,17 @@ var serial_state = '';
 var old_state = serial_state + 'not_equal';
 var updateID = null;
 var main = function() {
-	resetHuboAch();
+	if (argv.local) {	
+		var r = hubo_ach.init();
+		if (!r) {
+		console.log("Error initializing hubo-ach-readonly module. Exiting immediately.");
+		process.exit(1);
+		}
+	    hubo_ach_ready = true;
+	} else {
+		resetHuboAch();
+	}
+
     if (argv.socketio) {
 		app.listen(6060);
 		// Send initial position
@@ -398,10 +411,17 @@ var update = function() {
 }
 
 var resetHuboAch = function() {
+  if (argv.local) {
+  	return;
+  }
   console.log('1...Resetting Hubo-ach...');
   hubo_ach_ready = false;
   try {
-    var reset_ach = exec('./restart_ach.sh', {timeout:15000}, function (error, stdout, stderr) {
+  	var command = ('./restart_ach.sh');
+  	if (argv.address) {
+  		command += ' ' + argv.address;
+  	}
+    var reset_ach = exec(command, {timeout:15000}, function (error, stdout, stderr) {
       // Print any errors. Not really useful since we directed errors to /dev/null anyway.
       if (stderr !== null) {
         console.log('stderr: ' + stderr);
