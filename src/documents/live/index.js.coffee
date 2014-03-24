@@ -6,7 +6,7 @@ LIVE.connectionEstablished = $.Deferred()
 LIVE.connectToServer = () ->
   if (LIVE.use_socket)
     console.log('Trying to connect to server...')
-    LIVE.socket = io.connect(':6060', {'force new connection':true, timeout: 3000})
+    LIVE.socket = io.connect('hubovision.us:6060', {'force new connection':true, timeout: 3000})
     socket = LIVE.socket
     # Due to a design flaw in socket.io? the events won't work if the initial
     # connection fails due to the server not running.
@@ -54,6 +54,19 @@ do ->
       $('#led').hide()
     , 200) # TODO: Make this a function of the update frequency. TODO: Have the server tell the client the update frequency.
 
+# Everybody needs a lerp (Linear intERPolation) every now and then.
+# Mine is special, because it considers relative distance from 'zero' to be 
+# the thing being measured. (E.g. 0 is green, -5 or +10 are red type of scenarios.)
+lerp = (min,max,zero,t) ->
+  if t > max
+    t = max
+  if t < min
+    t = min
+  if t < zero
+    return Math.min((zero-t)/(zero-min),1)
+  else
+    return Math.min((t-zero)/(max-zero),1)
+
 # A class to display FT sensors in the GUI
 class FT_Sensor
   constructor: (@name) ->
@@ -100,15 +113,6 @@ class FT_Sensor
         1,
         0)
     return temp
-  lerp = (min,max,zero,t) ->
-    if t > max
-      t = max
-    if t < min
-      t = min
-    if t < zero
-      return Math.min((zero-t)/(zero-min),1)
-    else
-      return Math.min((t-zero)/(max-zero),1)
 
 # Get the range of safe FT values from the GUI textboxes (currently hidden because they're ugly, 
 # so you are stuck with the default values).
@@ -225,6 +229,7 @@ $( document ).ready () ->
       # console.log(state);
 
       jointType = $('input[name="angle-source"]:checked').val() #'ref' # or 'pos' 
+      showCurrent = $('input[name="current-source"]:checked').val() #'off' # or 'on' 
 
       # FT
       hand_limits = extractLimits($('#ft_hand_limits'))
@@ -295,6 +300,52 @@ $( document ).ready () ->
       hubo.motors["LF3"].value = state[jointType][39]
       hubo.motors["LF4"].value = state[jointType][40]
       hubo.motors["LF5"].value = state[jointType][41]
+
+      # Current
+      if (showCurrent == 'on')
+        hubo.joints["WST"].child.color.setRGB(0.866667+100*state.cur[ 0]*state.cur[ 0],0.866667+50*state.cur[ 0]*state.cur[ 0],0.866667)
+        hubo.joints["NKY"].child.color.setRGB(0.866667+100*state.cur[ 1]*state.cur[ 1],0.866667+50*state.cur[ 1]*state.cur[ 1],0.866667)
+      # hubo.joints["NK1"].child.color.setRGB(0.866667+100*state.cur[ 2]*state.cur[ 2],0.866667+50*state.cur[ 2]*state.cur[ 2],0.866667)
+      # hubo.joints["NK2"].child.color.setRGB(0.866667+100*state.cur[ 3]*state.cur[ 3],0.866667+50*state.cur[ 3]*state.cur[ 3],0.866667)
+        hubo.joints["LSP"].child.color.setRGB(0.866667+100*state.cur[ 4]*state.cur[ 4],0.866667+50*state.cur[ 4]*state.cur[ 4],0.866667)
+        hubo.joints["LSR"].child.color.setRGB(0.866667+100*state.cur[ 5]*state.cur[ 5],0.866667+50*state.cur[ 5]*state.cur[ 5],0.866667)
+        hubo.joints["LSY"].child.color.setRGB(0.866667+100*state.cur[ 6]*state.cur[ 6],0.866667+50*state.cur[ 6]*state.cur[ 6],0.866667)
+        hubo.joints["LEB"].child.color.setRGB(0.866667+100*state.cur[ 7]*state.cur[ 7],0.866667+50*state.cur[ 7]*state.cur[ 7],0.866667)
+        hubo.joints["LWY"].child.color.setRGB(0.866667+100*state.cur[ 8]*state.cur[ 8],0.866667+50*state.cur[ 8]*state.cur[ 8],0.866667)
+      # hubo.joints["LWR"].child.color.setRGB(0.866667+100*state.cur[ 9]*state.cur[ 9],0.866667+50*state.cur[ 9]*state.cur[ 9],0.866667)
+        hubo.joints["LWP"].child.color.setRGB(0.866667+100*state.cur[10]*state.cur[10],0.866667+50*state.cur[10]*state.cur[10],0.866667)
+        hubo.joints["RSP"].child.color.setRGB(0.866667+100*state.cur[11]*state.cur[11],0.866667+50*state.cur[11]*state.cur[11],0.866667)
+        hubo.joints["RSR"].child.color.setRGB(0.866667+100*state.cur[12]*state.cur[12],0.866667+50*state.cur[12]*state.cur[12],0.866667)
+        hubo.joints["RSY"].child.color.setRGB(0.866667+100*state.cur[13]*state.cur[13],0.866667+50*state.cur[13]*state.cur[13],0.866667)
+        hubo.joints["REB"].child.color.setRGB(0.866667+100*state.cur[14]*state.cur[14],0.866667+50*state.cur[14]*state.cur[14],0.866667)
+        hubo.joints["RWY"].child.color.setRGB(0.866667+100*state.cur[15]*state.cur[15],0.866667+50*state.cur[15]*state.cur[15],0.866667)
+      # hubo.joints["RWR"].child.color.setRGB(0.866667+100*state.cur[16]*state.cur[16],0.866667+50*state.cur[16]*state.cur[16],0.866667)
+        hubo.joints["RWP"].child.color.setRGB(0.866667+100*state.cur[17]*state.cur[17],0.866667+50*state.cur[17]*state.cur[17],0.866667)
+        # mind the gap
+        hubo.joints["LHY"].child.color.setRGB(0.866667+100*state.cur[19]*state.cur[19],0.866667+50*state.cur[19]*state.cur[19],0.866667)
+        hubo.joints["LHR"].child.color.setRGB(0.866667+100*state.cur[20]*state.cur[20],0.866667+50*state.cur[20]*state.cur[20],0.866667)
+        hubo.joints["LHP"].child.color.setRGB(0.866667+100*state.cur[21]*state.cur[21],0.866667+50*state.cur[21]*state.cur[21],0.866667)
+        hubo.joints["LKN"].child.color.setRGB(0.866667+100*state.cur[22]*state.cur[22],0.866667+50*state.cur[22]*state.cur[22],0.866667)
+        hubo.joints["LAP"].child.color.setRGB(0.866667+100*state.cur[23]*state.cur[23],0.866667+50*state.cur[23]*state.cur[23],0.866667)
+        hubo.joints["LAR"].child.color.setRGB(0.866667+100*state.cur[24]*state.cur[24],0.866667+50*state.cur[24]*state.cur[24],0.866667)
+        # mind the gap
+        hubo.joints["RHY"].child.color.setRGB(0.866667+100*state.cur[26]*state.cur[26],0.866667+50*state.cur[26]*state.cur[26],0.866667)
+        hubo.joints["RHR"].child.color.setRGB(0.866667+100*state.cur[27]*state.cur[27],0.866667+50*state.cur[27]*state.cur[27],0.866667)
+        hubo.joints["RHP"].child.color.setRGB(0.866667+100*state.cur[28]*state.cur[28],0.866667+50*state.cur[28]*state.cur[28],0.866667)
+        hubo.joints["RKN"].child.color.setRGB(0.866667+100*state.cur[29]*state.cur[29],0.866667+50*state.cur[29]*state.cur[29],0.866667)
+        hubo.joints["RAP"].child.color.setRGB(0.866667+100*state.cur[30]*state.cur[30],0.866667+50*state.cur[30]*state.cur[30],0.866667)
+        hubo.joints["RAR"].child.color.setRGB(0.866667+100*state.cur[31]*state.cur[31],0.866667+50*state.cur[31]*state.cur[31],0.866667)
+        # hubo.joints["RF1"].child.color.setRGB(0.866667+100*state.cur[32]*state.cur[32],0.866667+state.cur[32]*5,0.866667)
+        # hubo.joints["RF2"].child.color.setRGB(0.866667+100*state.cur[33]*state.cur[33],0.866667+state.cur[33]*5,0.866667)
+        # hubo.joints["RF3"].child.color.setRGB(0.866667+100*state.cur[34]*state.cur[34],0.866667+state.cur[34]*5,0.866667)
+        # hubo.joints["RF4"].child.color.setRGB(0.866667+100*state.cur[35]*state.cur[35],0.866667+state.cur[35]*5,0.866667)
+        # hubo.joints["RF5"].child.color.setRGB(0.866667+100*state.cur[36]*state.cur[36],0.866667+state.cur[36]*5,0.866667)
+        # hubo.joints["LF1"].child.color.setRGB(0.866667+100*state.cur[37]*state.cur[37],0.866667+state.cur[37]*5,0.866667)
+        # hubo.joints["LF2"].child.color.setRGB(0.866667+100*state.cur[38]*state.cur[38],0.866667+state.cur[38]*5,0.866667)
+        # hubo.joints["LF3"].child.color.setRGB(0.866667+100*state.cur[39]*state.cur[39],0.866667+state.cur[39]*5,0.866667)
+        # hubo.joints["LF4"].child.color.setRGB(0.866667+100*state.cur[40]*state.cur[40],0.866667+state.cur[40]*5,0.866667)
+        # hubo.joints["LF5"].child.color.setRGB(0.866667+100*state.cur[41]*state.cur[41],0.866667+state.cur[41]*5,0.866667)
+      
       hubo.canvas.render()
 
       # Update FPS counter
@@ -313,6 +364,12 @@ $( document ).ready () ->
     $('input[name="angle-source"]:radio').on 'change', () ->
       console.log('Radio Changed')
       updateModel(LIVE.serial_state)
+
+    $('input[name="current-source"]:radio').on 'change', () ->
+      # Reset Hubo's color to gray. Technically only needed when turning 
+      # current visualization off, but doesn't hurt.
+      for link in hubo.links.asArray()
+        link.unhighlight()
 
     $('#fullscreen-button').on 'click', () ->
       if (document.webkitFullscreenEnabled)
