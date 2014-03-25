@@ -27,7 +27,7 @@ block body
       div(style="display: inline-block")
         button#fullscreen-button Fullscreen
       br
-      table(style="width:400px")
+      table(style="width:500px")
         tr
           td
             div(data-role='fieldcontain', style="width:100%")
@@ -44,8 +44,10 @@ block body
                 legend Power Usage:
                 input#off(type="radio",name="current-source",value="off",checked="checked")
                 label(for="off") Off
-                input#on(type="radio",name="current-source",value="on")
-                label(for="on") On                
+                input#glow(type="radio",name="current-source",value="glow")
+                label(for="glow") Glow          
+                input#circles(type="radio",name="current-source",value="circles")
+                label(for="circles") Circles
         //-th
         //-  label(for="fullscreen-toggle") Fullscreen Mode:
         //-td
