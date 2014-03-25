@@ -114,6 +114,20 @@ class FT_Sensor
         0)
     return temp
 
+class LIVE.PowerCircle
+  constructor: (opts) ->
+    if opts?
+      {name, radius, segments, color} = opts
+    name ?= 'circle'
+    radius ?= 5
+    segments ?= 32
+    color ?= 0xff8800
+
+    material = new THREE.MeshBasicMaterial({color: color, side: THREE.DoubleSide});
+    circleGeometry = new THREE.CircleGeometry( radius, segments ); 
+    @object = new THREE.Mesh( circleGeometry, material);
+    @object.name = name
+
 # Get the range of safe FT values from the GUI textboxes (currently hidden because they're ugly, 
 # so you are stuck with the default values).
 extractLimits = (el) ->
@@ -146,6 +160,11 @@ addStats = () ->
   stats.domElement.style.position = 'relative'
   stats.domElement.style.cssFloat = 'right'
   LIVE.stats = stats
+
+LIVE.setCircleVisibility = (val) ->
+  for joint in LIVE.hubo.joints.asArray()
+    if joint.circle?
+      joint.circle.object.visible = val
 
 #
 # MAIN
@@ -220,6 +239,64 @@ $( document ).ready () ->
     # # Looks like the wrists need some rotation too.
     # hubo.ft.HUBO_FT_R_HAND.axis.rotation.y = -Math.PI/2
     # hubo.ft.HUBO_FT_L_HAND.axis.rotation.y = -Math.PI/2
+
+    # Test of new power consumption circles.
+    # TODO: Do we have to place all of these by hand?
+    power_circle_data = 
+      REB:
+        py: -0.08
+        rx: 90*Math.PI/180
+      RSP:
+        py: -0.15
+        rx: 90*Math.PI/180
+      RSR:
+        px: 0.05
+        ry: 90*Math.PI/180
+      RSY:
+        pz: -0.05  
+        r: 0.07
+      RWY:
+        pz: 0.05
+        r: 0.07
+      RWP:
+        py: -0.07
+        rx: 90*Math.PI/180
+      RHP:
+        py: -0.03
+        rx: 90*Math.PI/180
+      RHR:
+        px: 0.05
+        ry: 90*Math.PI/180
+      RHY:
+        pz: -0.015
+        r: 0.08 
+      RKN:
+        py: -0.07
+        rx: 90*Math.PI/180
+      RAR:
+        px: 0.04
+        ry: 90*Math.PI/180
+      RAP:
+        py: -0.04
+        rx: 90*Math.PI/180
+    for k, v of power_circle_data
+      r = v.r ? 0.05
+      circle = new LIVE.PowerCircle(name: 'circle', radius: r)
+      o = circle.object
+      if (v.px?)
+        o.position.x = v.px
+      if (v.py?)
+        o.position.y = v.py
+      if (v.pz?)
+        o.position.z = v.pz
+      if (v.rx?)
+        o.rotation.x = v.rx
+      if (v.ry?)
+        o.rotation.y = v.ry
+      if (hubo.joints[k]?)        
+        hubo.joints[k].circle = circle
+        hubo.joints[k].child.add(o)
+    LIVE.setCircleVisibility(false)
 
     updateModel = (serial_state) ->
       if (not serial_state? or serial_state == "")
@@ -314,13 +391,13 @@ $( document ).ready () ->
         hubo.joints["LWY"].child.color.setRGB(0.866667+100*state.cur[ 8]*state.cur[ 8],0.866667+50*state.cur[ 8]*state.cur[ 8],0.866667)
       # hubo.joints["LWR"].child.color.setRGB(0.866667+100*state.cur[ 9]*state.cur[ 9],0.866667+50*state.cur[ 9]*state.cur[ 9],0.866667)
         hubo.joints["LWP"].child.color.setRGB(0.866667+100*state.cur[10]*state.cur[10],0.866667+50*state.cur[10]*state.cur[10],0.866667)
-        hubo.joints["RSP"].child.color.setRGB(0.866667+100*state.cur[11]*state.cur[11],0.866667+50*state.cur[11]*state.cur[11],0.866667)
-        hubo.joints["RSR"].child.color.setRGB(0.866667+100*state.cur[12]*state.cur[12],0.866667+50*state.cur[12]*state.cur[12],0.866667)
-        hubo.joints["RSY"].child.color.setRGB(0.866667+100*state.cur[13]*state.cur[13],0.866667+50*state.cur[13]*state.cur[13],0.866667)
-        hubo.joints["REB"].child.color.setRGB(0.866667+100*state.cur[14]*state.cur[14],0.866667+50*state.cur[14]*state.cur[14],0.866667)
-        hubo.joints["RWY"].child.color.setRGB(0.866667+100*state.cur[15]*state.cur[15],0.866667+50*state.cur[15]*state.cur[15],0.866667)
+        # hubo.joints["RSP"].child.color.setRGB(0.866667+100*state.cur[11]*state.cur[11],0.866667+50*state.cur[11]*state.cur[11],0.866667)
+        # hubo.joints["RSR"].child.color.setRGB(0.866667+100*state.cur[12]*state.cur[12],0.866667+50*state.cur[12]*state.cur[12],0.866667)
+        # hubo.joints["RSY"].child.color.setRGB(0.866667+100*state.cur[13]*state.cur[13],0.866667+50*state.cur[13]*state.cur[13],0.866667)
+        # hubo.joints["REB"].child.color.setRGB(0.866667+100*state.cur[14]*state.cur[14],0.866667+50*state.cur[14]*state.cur[14],0.866667)
+        # hubo.joints["RWY"].child.color.setRGB(0.866667+100*state.cur[15]*state.cur[15],0.866667+50*state.cur[15]*state.cur[15],0.866667)
       # hubo.joints["RWR"].child.color.setRGB(0.866667+100*state.cur[16]*state.cur[16],0.866667+50*state.cur[16]*state.cur[16],0.866667)
-        hubo.joints["RWP"].child.color.setRGB(0.866667+100*state.cur[17]*state.cur[17],0.866667+50*state.cur[17]*state.cur[17],0.866667)
+        # hubo.joints["RWP"].child.color.setRGB(0.866667+100*state.cur[17]*state.cur[17],0.866667+50*state.cur[17]*state.cur[17],0.866667)
         # mind the gap
         hubo.joints["LHY"].child.color.setRGB(0.866667+100*state.cur[19]*state.cur[19],0.866667+50*state.cur[19]*state.cur[19],0.866667)
         hubo.joints["LHR"].child.color.setRGB(0.866667+100*state.cur[20]*state.cur[20],0.866667+50*state.cur[20]*state.cur[20],0.866667)
@@ -329,22 +406,56 @@ $( document ).ready () ->
         hubo.joints["LAP"].child.color.setRGB(0.866667+100*state.cur[23]*state.cur[23],0.866667+50*state.cur[23]*state.cur[23],0.866667)
         hubo.joints["LAR"].child.color.setRGB(0.866667+100*state.cur[24]*state.cur[24],0.866667+50*state.cur[24]*state.cur[24],0.866667)
         # mind the gap
-        hubo.joints["RHY"].child.color.setRGB(0.866667+100*state.cur[26]*state.cur[26],0.866667+50*state.cur[26]*state.cur[26],0.866667)
-        hubo.joints["RHR"].child.color.setRGB(0.866667+100*state.cur[27]*state.cur[27],0.866667+50*state.cur[27]*state.cur[27],0.866667)
-        hubo.joints["RHP"].child.color.setRGB(0.866667+100*state.cur[28]*state.cur[28],0.866667+50*state.cur[28]*state.cur[28],0.866667)
-        hubo.joints["RKN"].child.color.setRGB(0.866667+100*state.cur[29]*state.cur[29],0.866667+50*state.cur[29]*state.cur[29],0.866667)
-        hubo.joints["RAP"].child.color.setRGB(0.866667+100*state.cur[30]*state.cur[30],0.866667+50*state.cur[30]*state.cur[30],0.866667)
-        hubo.joints["RAR"].child.color.setRGB(0.866667+100*state.cur[31]*state.cur[31],0.866667+50*state.cur[31]*state.cur[31],0.866667)
-        # hubo.joints["RF1"].child.color.setRGB(0.866667+100*state.cur[32]*state.cur[32],0.866667+state.cur[32]*5,0.866667)
-        # hubo.joints["RF2"].child.color.setRGB(0.866667+100*state.cur[33]*state.cur[33],0.866667+state.cur[33]*5,0.866667)
-        # hubo.joints["RF3"].child.color.setRGB(0.866667+100*state.cur[34]*state.cur[34],0.866667+state.cur[34]*5,0.866667)
-        # hubo.joints["RF4"].child.color.setRGB(0.866667+100*state.cur[35]*state.cur[35],0.866667+state.cur[35]*5,0.866667)
-        # hubo.joints["RF5"].child.color.setRGB(0.866667+100*state.cur[36]*state.cur[36],0.866667+state.cur[36]*5,0.866667)
-        # hubo.joints["LF1"].child.color.setRGB(0.866667+100*state.cur[37]*state.cur[37],0.866667+state.cur[37]*5,0.866667)
-        # hubo.joints["LF2"].child.color.setRGB(0.866667+100*state.cur[38]*state.cur[38],0.866667+state.cur[38]*5,0.866667)
-        # hubo.joints["LF3"].child.color.setRGB(0.866667+100*state.cur[39]*state.cur[39],0.866667+state.cur[39]*5,0.866667)
-        # hubo.joints["LF4"].child.color.setRGB(0.866667+100*state.cur[40]*state.cur[40],0.866667+state.cur[40]*5,0.866667)
-        # hubo.joints["LF5"].child.color.setRGB(0.866667+100*state.cur[41]*state.cur[41],0.866667+state.cur[41]*5,0.866667)
+        # hubo.joints["RHY"].child.color.setRGB(0.866667+100*state.cur[26]*state.cur[26],0.866667+50*state.cur[26]*state.cur[26],0.866667)
+        # hubo.joints["RHR"].child.color.setRGB(0.866667+100*state.cur[27]*state.cur[27],0.866667+50*state.cur[27]*state.cur[27],0.866667)
+        # hubo.joints["RHP"].child.color.setRGB(0.866667+100*state.cur[28]*state.cur[28],0.866667+50*state.cur[28]*state.cur[28],0.866667)
+        # hubo.joints["RKN"].child.color.setRGB(0.866667+100*state.cur[29]*state.cur[29],0.866667+50*state.cur[29]*state.cur[29],0.866667)
+        # hubo.joints["RAP"].child.color.setRGB(0.866667+100*state.cur[30]*state.cur[30],0.866667+50*state.cur[30]*state.cur[30],0.866667)
+        # hubo.joints["RAR"].child.color.setRGB(0.866667+100*state.cur[31]*state.cur[31],0.866667+50*state.cur[31]*state.cur[31],0.866667)
+
+        # New power visualization
+        # hubo.joints["WST"].circle.object.material.color.setRGB(0.866667+100*state.cur[ 0]*state.cur[ 0],0.866667+50*state.cur[ 0]*state.cur[ 0],0.866667)
+        # hubo.joints["NKY"].circle.object.material.color.setRGB(0.866667+100*state.cur[ 1]*state.cur[ 1],0.866667+50*state.cur[ 1]*state.cur[ 1],0.866667)
+      # hubo.joints["NK1"].circle.object.material.color.setRGB(0.866667+100*state.cur[ 2]*state.cur[ 2],0.866667+50*state.cur[ 2]*state.cur[ 2],0.866667)
+      # hubo.joints["NK2"].circle.object.material.color.setRGB(0.866667+100*state.cur[ 3]*state.cur[ 3],0.866667+50*state.cur[ 3]*state.cur[ 3],0.866667)
+        # hubo.joints["LSP"].circle.object.material.color.setRGB(0.866667+100*state.cur[ 4]*state.cur[ 4],0.866667+50*state.cur[ 4]*state.cur[ 4],0.866667)
+        # hubo.joints["LSR"].circle.object.material.color.setRGB(0.866667+100*state.cur[ 5]*state.cur[ 5],0.866667+50*state.cur[ 5]*state.cur[ 5],0.866667)
+        # hubo.joints["LSY"].circle.object.material.color.setRGB(0.866667+100*state.cur[ 6]*state.cur[ 6],0.866667+50*state.cur[ 6]*state.cur[ 6],0.866667)
+        # hubo.joints["LEB"].circle.object.material.color.setRGB(0.866667+100*state.cur[ 7]*state.cur[ 7],0.866667+50*state.cur[ 7]*state.cur[ 7],0.866667)
+        # hubo.joints["LWY"].circle.object.material.color.setRGB(0.866667+100*state.cur[ 8]*state.cur[ 8],0.866667+50*state.cur[ 8]*state.cur[ 8],0.866667)
+      # hubo.joints["LWR"].circle.object.material.color.setRGB(0.866667+100*state.cur[ 9]*state.cur[ 9],0.866667+50*state.cur[ 9]*state.cur[ 9],0.866667)
+        # hubo.joints["LWP"].circle.object.material.color.setRGB(0.866667+100*state.cur[10]*state.cur[10],0.866667+50*state.cur[10]*state.cur[10],0.866667)
+        hubo.joints["RSP"].circle.object.material.color.setRGB(100*state.cur[11]*state.cur[11],50*state.cur[11]*state.cur[11],0)
+        hubo.joints["RSR"].circle.object.material.color.setRGB(100*state.cur[12]*state.cur[12],50*state.cur[12]*state.cur[12],0)
+        hubo.joints["RSY"].circle.object.material.color.setRGB(100*state.cur[13]*state.cur[13],50*state.cur[13]*state.cur[13],0)
+        hubo.joints["REB"].circle.object.material.color.setRGB(100*state.cur[14]*state.cur[14],50*state.cur[14]*state.cur[14],0)
+        hubo.joints["RWY"].circle.object.material.color.setRGB(100*state.cur[15]*state.cur[15],50*state.cur[15]*state.cur[15],0)
+      # hubo.joints["RWR"].circle.object.material.color.setRGB(100*state.cur[16]*state.cur[16],50*state.cur[16]*state.cur[16],0)
+        hubo.joints["RWP"].circle.object.material.color.setRGB(100*state.cur[17]*state.cur[17],50*state.cur[17]*state.cur[17],0)
+        # mind the gap
+        # hubo.joints["LHY"].circle.object.material.color.setRGB(100*state.cur[19]*state.cur[19],50*state.cur[19]*state.cur[19],0)
+        # hubo.joints["LHR"].circle.object.material.color.setRGB(100*state.cur[20]*state.cur[20],50*state.cur[20]*state.cur[20],0)
+        # hubo.joints["LHP"].circle.object.material.color.setRGB(100*state.cur[21]*state.cur[21],50*state.cur[21]*state.cur[21],0)
+        # hubo.joints["LKN"].circle.object.material.color.setRGB(100*state.cur[22]*state.cur[22],50*state.cur[22]*state.cur[22],0)
+        # hubo.joints["LAP"].circle.object.material.color.setRGB(100*state.cur[23]*state.cur[23],50*state.cur[23]*state.cur[23],0)
+        # hubo.joints["LAR"].circle.object.material.color.setRGB(100*state.cur[24]*state.cur[24],50*state.cur[24]*state.cur[24],0)
+        # mind the gap
+        hubo.joints["RHY"].circle.object.material.color.setRGB(100*state.cur[26]*state.cur[26],50*state.cur[26]*state.cur[26],0)
+        hubo.joints["RHR"].circle.object.material.color.setRGB(100*state.cur[27]*state.cur[27],50*state.cur[27]*state.cur[27],0)
+        hubo.joints["RHP"].circle.object.material.color.setRGB(100*state.cur[28]*state.cur[28],50*state.cur[28]*state.cur[28],0)
+        hubo.joints["RKN"].circle.object.material.color.setRGB(100*state.cur[29]*state.cur[29],50*state.cur[29]*state.cur[29],0)
+        hubo.joints["RAP"].circle.object.material.color.setRGB(100*state.cur[30]*state.cur[30],50*state.cur[30]*state.cur[30],0)
+        hubo.joints["RAR"].circle.object.material.color.setRGB(100*state.cur[31]*state.cur[31],50*state.cur[31]*state.cur[31],0)
+        # hubo.joints["RF1"].circle.object.material.color.setRGB(0.866667+100*state.cur[32]*state.cur[32],0.866667+state.cur[32]*5,0.866667)
+        # hubo.joints["RF2"].circle.object.material.color.setRGB(0.866667+100*state.cur[33]*state.cur[33],0.866667+state.cur[33]*5,0.866667)
+        # hubo.joints["RF3"].circle.object.material.color.setRGB(0.866667+100*state.cur[34]*state.cur[34],0.866667+state.cur[34]*5,0.866667)
+        # hubo.joints["RF4"].circle.object.material.color.setRGB(0.866667+100*state.cur[35]*state.cur[35],0.866667+state.cur[35]*5,0.866667)
+        # hubo.joints["RF5"].circle.object.material.color.setRGB(0.866667+100*state.cur[36]*state.cur[36],0.866667+state.cur[36]*5,0.866667)
+        # hubo.joints["LF1"].circle.object.material.color.setRGB(0.866667+100*state.cur[37]*state.cur[37],0.866667+state.cur[37]*5,0.866667)
+        # hubo.joints["LF2"].circle.object.material.color.setRGB(0.866667+100*state.cur[38]*state.cur[38],0.866667+state.cur[38]*5,0.866667)
+        # hubo.joints["LF3"].circle.object.material.color.setRGB(0.866667+100*state.cur[39]*state.cur[39],0.866667+state.cur[39]*5,0.866667)
+        # hubo.joints["LF4"].circle.object.material.color.setRGB(0.866667+100*state.cur[40]*state.cur[40],0.866667+state.cur[40]*5,0.866667)
+        # hubo.joints["LF5"].circle.object.material.color.setRGB(0.866667+100*state.cur[41]*state.cur[41],0.866667+state.cur[41]*5,0.866667)
       
       hubo.canvas.render()
 
@@ -370,6 +481,12 @@ $( document ).ready () ->
       # current visualization off, but doesn't hurt.
       for link in hubo.links.asArray()
         link.unhighlight()
+      if @value == 'on'
+        LIVE.setCircleVisibility(true)
+        hubo.canvas.render()
+      else if @value == 'off'
+        LIVE.setCircleVisibility(false)
+        hubo.canvas.render()
 
     $('#fullscreen-button').on 'click', () ->
       if (document.webkitFullscreenEnabled)
