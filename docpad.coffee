@@ -19,6 +19,7 @@ docpadConfig = {
       compileOptions:
         bare: on
         header: on
+        sourceMap: on
     stylus:
       stylusLibraries:
         nib: on
