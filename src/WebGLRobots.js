@@ -295,6 +295,8 @@ WebGLRobots.Robot = function() {
                     var ext = filename.match(/\.[^\.]+$/)[0];
                     // TODO: Add useful messages if the loaders error
                     if (ext === ".dae") {
+                        console.log('filename: ' + filename);
+                        console.log('Collada support has been deprecated. Use STL.');
                         // Load mesh
                         var loader = new THREE.ColladaLoader();
                         loader.load(filename, 
