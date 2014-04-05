@@ -1,9 +1,9 @@
 [submodule "src/files/data/hubo-trajectories"]
 	path = src/files/data/hubo-trajectories
-	url = http://github.com/wmhilton/hubo-trajectories
+	url = https://github.com/wmhilton/hubo-trajectories
 [submodule "src/files/data/hubo-urdf"]
 	path = src/files/data/hubo-urdf
-	url = http://github.com/wmhilton/hubo-urdf
+	url = https://github.com/wmhilton/hubo-urdf
 [submodule "src/files/drc/drchubo-urdf"]
 	path = src/files/drc/drchubo-urdf
 	url = https://bitbucket.org/wmhilton/drchubo-urdf
