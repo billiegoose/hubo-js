@@ -6,7 +6,13 @@ LIVE.connectionEstablished = $.Deferred()
 LIVE.connectToServer = () ->
   if (LIVE.use_socket)
     console.log('Trying to connect to server...')
-    LIVE.socket = io.connect('hubovision.us:6060', {'force new connection':true, timeout: 3000})
+    if (window.document.domain == "wmhilton.com") 
+      # wmhilton.com behavior. The socketio server is running on Serenity at Drexel.
+      server_address = 'hubovision.us:6060'
+    else 
+      # Default behavior. The socketio server is running on same computer as HTML server.
+      server_address = ':6060' 
+    LIVE.socket = io.connect(server_address, {'force new connection':true, timeout: 3000})
     socket = LIVE.socket
     # Due to a design flaw in socket.io? the events won't work if the initial
     # connection fails due to the server not running.
