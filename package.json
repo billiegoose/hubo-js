@@ -24,7 +24,7 @@
     "docpad-plugin-livereload": "~2.6.0"
   },
   "scripts": {
-    "start": "node node_modules\\docpad\\bin\\docpad run",
-    "test": "node node_modules\\docpad\\bin\\docpad generate --env static"
+    "start": "\"node_modules/.bin/docpad\" run",
+    "test": "\"node_modules/.bin/docpad\" generate --env static"
   }
 }
