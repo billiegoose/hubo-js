@@ -20,7 +20,7 @@
     </visual>
     <collision>
       <geometry>
-        <mesh filename="./meshes/Body_Torso_col.dae"/>
+        <mesh filename="./meshes/Body_Torso.stl"/>
       </geometry>
     </collision>
   </link>
@@ -28,7 +28,7 @@
   <link name="Body_Neck">
     <collision>
         <geometry>
-        <mesh filename="./meshes/Body_Neck_col.dae"/>
+        <mesh filename="./meshes/Body_Neck.stl"/>
       </geometry>
     </collision>
     <visual>
@@ -75,7 +75,7 @@
     </visual>
     <collision>
       <geometry>
-        <mesh filename="./meshes/Body_LSP_col.dae"/>
+        <mesh filename="./meshes/Body_LSP.stl"/>
       </geometry>
     </collision>
   </link>
@@ -95,7 +95,7 @@
     </visual>
     <collision>
       <geometry>
-        <mesh filename="./meshes/Body_LSR_col.dae"/>
+        <mesh filename="./meshes/Body_LSR.stl"/>
       </geometry>
     </collision>
   </link>
@@ -115,7 +115,7 @@
     </visual>
     <collision>
       <geometry>
-        <mesh filename="./meshes/Body_LSY_col.dae"/>
+        <mesh filename="./meshes/Body_LSY.stl"/>
       </geometry>
     </collision>
   </link>
@@ -127,7 +127,7 @@
     </inertial>
     <visual>
       <geometry>
-        <mesh filename="./meshes/Body_LEB_vis.dae"/>
+        <mesh filename="./meshes/Body_LEB.stl"/>
       </geometry>
       <material name="random">
         <color rgba="0.866667 0.866667 0.866667 1"/>
@@ -135,7 +135,7 @@
     </visual>
     <collision>
       <geometry>
-        <mesh filename="./meshes/Body_LEB_col.dae"/>
+        <mesh filename="./meshes/Body_LEB.stl"/>
       </geometry>
     </collision>
   </link>
@@ -155,7 +155,7 @@
     </visual>
     <collision>
       <geometry>
-        <mesh filename="./meshes/Body_LWY_col.dae"/>
+        <mesh filename="./meshes/Body_LWY.stl"/>
       </geometry>
     </collision>
   </link>
@@ -175,7 +175,7 @@
     </visual>
     <collision>
       <geometry>
-        <mesh filename="./meshes/Body_LWP_col.dae"/>
+        <mesh filename="./meshes/Body_LWP.stl"/>
       </geometry>
     </collision>
   </link>
@@ -187,7 +187,7 @@
     </inertial>
     <visual>
       <geometry>
-        <mesh filename="./meshes/proximal.dae"/>
+        <mesh filename="./meshes/proximal.stl"/>
       </geometry>
       <material name="random">
         <color rgba="0.866667 0.866667 0.866667 1"/>
@@ -195,7 +195,7 @@
     </visual>
     <collision>
       <geometry>
-        <mesh filename="./meshes/proximal.dae"/>
+        <mesh filename="./meshes/proximal.stl"/>
       </geometry>
     </collision>
   </link>
@@ -207,7 +207,7 @@
     </inertial>
     <visual>
       <geometry>
-        <mesh filename="./meshes/medial_distal.dae"/>
+        <mesh filename="./meshes/medial_distal.stl"/>
       </geometry>
       <material name="random">
         <color rgba="0.866667 0.866667 0.866667 1"/>
@@ -215,7 +215,7 @@
     </visual>
     <collision>
       <geometry>
-        <mesh filename="./meshes/medial_distal.dae"/>
+        <mesh filename="./meshes/medial_distal.stl"/>
       </geometry>
     </collision>
   </link>
@@ -227,7 +227,7 @@
     </inertial>
     <visual>
       <geometry>
-        <mesh filename="./meshes/medial_distal.dae"/>
+        <mesh filename="./meshes/medial_distal.stl"/>
       </geometry>
       <material name="random">
         <color rgba="0.866667 0.866667 0.866667 1"/>
@@ -235,7 +235,7 @@
     </visual>
     <collision>
       <geometry>
-        <mesh filename="./meshes/medial_distal.dae"/>
+        <mesh filename="./meshes/medial_distal.stl"/>
       </geometry>
     </collision>
   </link>
@@ -247,7 +247,7 @@
     </inertial>
     <visual>
       <geometry>
-        <mesh filename="./meshes/proximal.dae"/>
+        <mesh filename="./meshes/proximal.stl"/>
       </geometry>
       <material name="random">
         <color rgba="0.866667 0.866667 0.866667 1"/>
@@ -255,7 +255,7 @@
     </visual>
     <collision>
       <geometry>
-        <mesh filename="./meshes/proximal.dae"/>
+        <mesh filename="./meshes/proximal.stl"/>
       </geometry>
     </collision>
   </link>
@@ -267,7 +267,7 @@
     </inertial>
     <visual>
       <geometry>
-        <mesh filename="./meshes/medial_distal.dae"/>
+        <mesh filename="./meshes/medial_distal.stl"/>
       </geometry>
       <material name="random">
         <color rgba="0.866667 0.866667 0.866667 1"/>
@@ -275,7 +275,7 @@
     </visual>
     <collision>
       <geometry>
-        <mesh filename="./meshes/medial_distal.dae"/>
+        <mesh filename="./meshes/medial_distal.stl"/>
       </geometry>
     </collision>
   </link>
@@ -287,7 +287,7 @@
     </inertial>
     <visual>
       <geometry>
-        <mesh filename="./meshes/medial_distal.dae"/>
+        <mesh filename="./meshes/medial_distal.stl"/>
       </geometry>
       <material name="random">
         <color rgba="0.866667 0.866667 0.866667 1"/>
@@ -295,7 +295,7 @@
     </visual>
     <collision>
       <geometry>
-        <mesh filename="./meshes/medial_distal.dae"/>
+        <mesh filename="./meshes/medial_distal.stl"/>
       </geometry>
     </collision>
   </link>
@@ -307,7 +307,7 @@
     </inertial>
     <visual>
       <geometry>
-        <mesh filename="./meshes/proximal.dae"/>
+        <mesh filename="./meshes/proximal.stl"/>
       </geometry>
       <material name="random">
         <color rgba="0.866667 0.866667 0.866667 1"/>
@@ -315,7 +315,7 @@
     </visual>
     <collision>
       <geometry>
-        <mesh filename="./meshes/proximal.dae"/>
+        <mesh filename="./meshes/proximal.stl"/>
       </geometry>
     </collision>
   </link>
@@ -327,7 +327,7 @@
     </inertial>
     <visual>
       <geometry>
-        <mesh filename="./meshes/medial_distal.dae"/>
+        <mesh filename="./meshes/medial_distal.stl"/>
       </geometry>
       <material name="random">
         <color rgba="0.866667 0.866667 0.866667 1"/>
@@ -335,7 +335,7 @@
     </visual>
     <collision>
       <geometry>
-        <mesh filename="./meshes/medial_distal.dae"/>
+        <mesh filename="./meshes/medial_distal.stl"/>
       </geometry>
     </collision>
   </link>
@@ -347,7 +347,7 @@
     </inertial>
     <visual>
       <geometry>
-        <mesh filename="./meshes/medial_distal.dae"/>
+        <mesh filename="./meshes/medial_distal.stl"/>
       </geometry>
       <material name="random">
         <color rgba="0.866667 0.866667 0.866667 1"/>
@@ -355,7 +355,7 @@
     </visual>
     <collision>
       <geometry>
-        <mesh filename="./meshes/medial_distal.dae"/>
+        <mesh filename="./meshes/medial_distal.stl"/>
       </geometry>
     </collision>
   </link>
@@ -367,7 +367,7 @@
     </inertial>
     <visual>
       <geometry>
-        <mesh filename="./meshes/proximal.dae"/>
+        <mesh filename="./meshes/proximal.stl"/>
       </geometry>
       <material name="random">
         <color rgba="0.866667 0.866667 0.866667 1"/>
@@ -375,7 +375,7 @@
     </visual>
     <collision>
       <geometry>
-        <mesh filename="./meshes/proximal.dae"/>
+        <mesh filename="./meshes/proximal.stl"/>
       </geometry>
     </collision>
   </link>
@@ -387,7 +387,7 @@
     </inertial>
     <visual>
       <geometry>
-        <mesh filename="./meshes/medial_distal.dae"/>
+        <mesh filename="./meshes/medial_distal.stl"/>
       </geometry>
       <material name="random">
         <color rgba="0.866667 0.866667 0.866667 1"/>
@@ -395,7 +395,7 @@
     </visual>
     <collision>
       <geometry>
-        <mesh filename="./meshes/medial_distal.dae"/>
+        <mesh filename="./meshes/medial_distal.stl"/>
       </geometry>
     </collision>
   </link>
@@ -407,7 +407,7 @@
     </inertial>
     <visual>
       <geometry>
-        <mesh filename="./meshes/medial_distal.dae"/>
+        <mesh filename="./meshes/medial_distal.stl"/>
       </geometry>
       <material name="random">
         <color rgba="0.866667 0.866667 0.866667 1"/>
@@ -415,7 +415,7 @@
     </visual>
     <collision>
       <geometry>
-        <mesh filename="./meshes/medial_distal.dae"/>
+        <mesh filename="./meshes/medial_distal.stl"/>
       </geometry>
     </collision>
   </link>
@@ -427,7 +427,7 @@
     </inertial>
     <visual>
       <geometry>
-        <mesh filename="./meshes/proximal.dae"/>
+        <mesh filename="./meshes/proximal.stl"/>
       </geometry>
       <material name="random">
         <color rgba="0.866667 0.866667 0.866667 1"/>
@@ -435,7 +435,7 @@
     </visual>
     <collision>
       <geometry>
-        <mesh filename="./meshes/proximal.dae"/>
+        <mesh filename="./meshes/proximal.stl"/>
       </geometry>
     </collision>
   </link>
@@ -447,7 +447,7 @@
     </inertial>
     <visual>
       <geometry>
-        <mesh filename="./meshes/medial_distal.dae"/>
+        <mesh filename="./meshes/medial_distal.stl"/>
       </geometry>
       <material name="random">
         <color rgba="0.866667 0.866667 0.866667 1"/>
@@ -455,7 +455,7 @@
     </visual>
     <collision>
       <geometry>
-        <mesh filename="./meshes/medial_distal.dae"/>
+        <mesh filename="./meshes/medial_distal.stl"/>
       </geometry>
     </collision>
   </link>
@@ -467,7 +467,7 @@
     </inertial>
     <visual>
       <geometry>
-        <mesh filename="./meshes/medial_distal.dae"/>
+        <mesh filename="./meshes/medial_distal.stl"/>
       </geometry>
       <material name="random">
         <color rgba="0.866667 0.866667 0.866667 1"/>
@@ -475,7 +475,7 @@
     </visual>
     <collision>
       <geometry>
-        <mesh filename="./meshes/medial_distal.dae"/>
+        <mesh filename="./meshes/medial_distal.stl"/>
       </geometry>
     </collision>
   </link>
@@ -495,7 +495,7 @@
     </visual>
     <collision>
       <geometry>
-        <mesh filename="./meshes/Body_RSP_col.dae"/>
+        <mesh filename="./meshes/Body_RSP.stl"/>
       </geometry>
     </collision>
   </link>
@@ -515,7 +515,7 @@
     </visual>
     <collision>
       <geometry>
-        <mesh filename="./meshes/Body_RSR_col.dae"/>
+        <mesh filename="./meshes/Body_RSR.stl"/>
       </geometry>
     </collision>
   </link>
@@ -535,7 +535,7 @@
     </visual>
     <collision>
       <geometry>
-        <mesh filename="./meshes/Body_RSY_col.dae"/>
+        <mesh filename="./meshes/Body_RSY.stl"/>
       </geometry>
     </collision>
   </link>
@@ -555,7 +555,7 @@
     </visual>
     <collision>
       <geometry>
-        <mesh filename="./meshes/Body_REB_col.dae"/>
+        <mesh filename="./meshes/Body_REB.stl"/>
       </geometry>
     </collision>
   </link>
@@ -575,7 +575,7 @@
     </visual>
     <collision>
       <geometry>
-        <mesh filename="./meshes/Body_RWY_col.dae"/>
+        <mesh filename="./meshes/Body_RWY.stl"/>
       </geometry>
     </collision>
   </link>
@@ -595,7 +595,7 @@
     </visual>
     <collision>
       <geometry>
-        <mesh filename="./meshes/Body_RWP_col.dae"/>
+        <mesh filename="./meshes/Body_RWP.stl"/>
       </geometry>
     </collision>
   </link>
@@ -607,7 +607,7 @@
     </inertial>
     <visual>
       <geometry>
-        <mesh filename="./meshes/proximal.dae"/>
+        <mesh filename="./meshes/proximal.stl"/>
       </geometry>
       <material name="random">
         <color rgba="0.866667 0.866667 0.866667 1"/>
@@ -615,7 +615,7 @@
     </visual>
     <collision>
       <geometry>
-        <mesh filename="./meshes/proximal.dae"/>
+        <mesh filename="./meshes/proximal.stl"/>
       </geometry>
     </collision>
   </link>
@@ -627,7 +627,7 @@
     </inertial>
     <visual>
       <geometry>
-        <mesh filename="./meshes/medial_distal.dae"/>
+        <mesh filename="./meshes/medial_distal.stl"/>
       </geometry>
       <material name="random">
         <color rgba="0.866667 0.866667 0.866667 1"/>
@@ -635,7 +635,7 @@
     </visual>
     <collision>
       <geometry>
-        <mesh filename="./meshes/medial_distal.dae"/>
+        <mesh filename="./meshes/medial_distal.stl"/>
       </geometry>
     </collision>
   </link>
@@ -647,7 +647,7 @@
     </inertial>
     <visual>
       <geometry>
-        <mesh filename="./meshes/medial_distal.dae"/>
+        <mesh filename="./meshes/medial_distal.stl"/>
       </geometry>
       <material name="random">
         <color rgba="0.866667 0.866667 0.866667 1"/>
@@ -655,7 +655,7 @@
     </visual>
     <collision>
       <geometry>
-        <mesh filename="./meshes/medial_distal.dae"/>
+        <mesh filename="./meshes/medial_distal.stl"/>
       </geometry>
     </collision>
   </link>
@@ -667,7 +667,7 @@
     </inertial>
     <visual>
       <geometry>
-        <mesh filename="./meshes/proximal.dae"/>
+        <mesh filename="./meshes/proximal.stl"/>
       </geometry>
       <material name="random">
         <color rgba="0.866667 0.866667 0.866667 1"/>
@@ -675,7 +675,7 @@
     </visual>
     <collision>
       <geometry>
-        <mesh filename="./meshes/proximal.dae"/>
+        <mesh filename="./meshes/proximal.stl"/>
       </geometry>
     </collision>
   </link>
@@ -687,7 +687,7 @@
     </inertial>
     <visual>
       <geometry>
-        <mesh filename="./meshes/medial_distal.dae"/>
+        <mesh filename="./meshes/medial_distal.stl"/>
       </geometry>
       <material name="random">
         <color rgba="0.866667 0.866667 0.866667 1"/>
@@ -695,7 +695,7 @@
     </visual>
     <collision>
       <geometry>
-        <mesh filename="./meshes/medial_distal.dae"/>
+        <mesh filename="./meshes/medial_distal.stl"/>
       </geometry>
     </collision>
   </link>
@@ -707,7 +707,7 @@
     </inertial>
     <visual>
       <geometry>
-        <mesh filename="./meshes/medial_distal.dae"/>
+        <mesh filename="./meshes/medial_distal.stl"/>
       </geometry>
       <material name="random">
         <color rgba="0.866667 0.866667 0.866667 1"/>
@@ -715,7 +715,7 @@
     </visual>
     <collision>
       <geometry>
-        <mesh filename="./meshes/medial_distal.dae"/>
+        <mesh filename="./meshes/medial_distal.stl"/>
       </geometry>
     </collision>
   </link>
@@ -727,7 +727,7 @@
     </inertial>
     <visual>
       <geometry>
-        <mesh filename="./meshes/proximal.dae"/>
+        <mesh filename="./meshes/proximal.stl"/>
       </geometry>
       <material name="random">
         <color rgba="0.866667 0.866667 0.866667 1"/>
@@ -735,7 +735,7 @@
     </visual>
     <collision>
       <geometry>
-        <mesh filename="./meshes/proximal.dae"/>
+        <mesh filename="./meshes/proximal.stl"/>
       </geometry>
     </collision>
   </link>
@@ -747,7 +747,7 @@
     </inertial>
     <visual>
       <geometry>
-        <mesh filename="./meshes/medial_distal.dae"/>
+        <mesh filename="./meshes/medial_distal.stl"/>
       </geometry>
       <material name="random">
         <color rgba="0.866667 0.866667 0.866667 1"/>
@@ -755,7 +755,7 @@
     </visual>
     <collision>
       <geometry>
-        <mesh filename="./meshes/medial_distal.dae"/>
+        <mesh filename="./meshes/medial_distal.stl"/>
       </geometry>
     </collision>
   </link>
@@ -767,7 +767,7 @@
     </inertial>
     <visual>
       <geometry>
-        <mesh filename="./meshes/medial_distal.dae"/>
+        <mesh filename="./meshes/medial_distal.stl"/>
       </geometry>
       <material name="random">
         <color rgba="0.866667 0.866667 0.866667 1"/>
@@ -775,7 +775,7 @@
     </visual>
     <collision>
       <geometry>
-        <mesh filename="./meshes/medial_distal.dae"/>
+        <mesh filename="./meshes/medial_distal.stl"/>
       </geometry>
     </collision>
   </link>
@@ -787,7 +787,7 @@
     </inertial>
     <visual>
       <geometry>
-        <mesh filename="./meshes/proximal.dae"/>
+        <mesh filename="./meshes/proximal.stl"/>
       </geometry>
       <material name="random">
         <color rgba="0.866667 0.866667 0.866667 1"/>
@@ -795,7 +795,7 @@
     </visual>
     <collision>
       <geometry>
-        <mesh filename="./meshes/proximal.dae"/>
+        <mesh filename="./meshes/proximal.stl"/>
       </geometry>
     </collision>
   </link>
@@ -807,7 +807,7 @@
     </inertial>
     <visual>
       <geometry>
-        <mesh filename="./meshes/medial_distal.dae"/>
+        <mesh filename="./meshes/medial_distal.stl"/>
       </geometry>
       <material name="random">
         <color rgba="0.866667 0.866667 0.866667 1"/>
@@ -815,7 +815,7 @@
     </visual>
     <collision>
       <geometry>
-        <mesh filename="./meshes/medial_distal.dae"/>
+        <mesh filename="./meshes/medial_distal.stl"/>
       </geometry>
     </collision>
   </link>
@@ -827,7 +827,7 @@
     </inertial>
     <visual>
       <geometry>
-        <mesh filename="./meshes/medial_distal.dae"/>
+        <mesh filename="./meshes/medial_distal.stl"/>
       </geometry>
       <material name="random">
         <color rgba="0.866667 0.866667 0.866667 1"/>
@@ -835,7 +835,7 @@
     </visual>
     <collision>
       <geometry>
-        <mesh filename="./meshes/medial_distal.dae"/>
+        <mesh filename="./meshes/medial_distal.stl"/>
       </geometry>
     </collision>
   </link>
@@ -847,7 +847,7 @@
     </inertial>
     <visual>
       <geometry>
-        <mesh filename="./meshes/proximal.dae"/>
+        <mesh filename="./meshes/proximal.stl"/>
       </geometry>
       <material name="random">
         <color rgba="0.866667 0.866667 0.866667 1"/>
@@ -855,7 +855,7 @@
     </visual>
     <collision>
       <geometry>
-        <mesh filename="./meshes/proximal.dae"/>
+        <mesh filename="./meshes/proximal.stl"/>
       </geometry>
     </collision>
   </link>
@@ -867,7 +867,7 @@
     </inertial>
     <visual>
       <geometry>
-        <mesh filename="./meshes/medial_distal.dae"/>
+        <mesh filename="./meshes/medial_distal.stl"/>
       </geometry>
       <material name="random">
         <color rgba="0.866667 0.866667 0.866667 1"/>
@@ -875,7 +875,7 @@
     </visual>
     <collision>
       <geometry>
-        <mesh filename="./meshes/medial_distal.dae"/>
+        <mesh filename="./meshes/medial_distal.stl"/>
       </geometry>
     </collision>
   </link>
@@ -887,7 +887,7 @@
     </inertial>
     <visual>
       <geometry>
-        <mesh filename="./meshes/medial_distal.dae"/>
+        <mesh filename="./meshes/medial_distal.stl"/>
       </geometry>
       <material name="random">
         <color rgba="0.866667 0.866667 0.866667 1"/>
@@ -895,7 +895,7 @@
     </visual>
     <collision>
       <geometry>
-        <mesh filename="./meshes/medial_distal.dae"/>
+        <mesh filename="./meshes/medial_distal.stl"/>
       </geometry>
     </collision>
   </link>
@@ -915,7 +915,7 @@
     </visual>
     <collision>
       <geometry>
-        <mesh filename="./meshes/Body_Hip_col.dae"/>
+        <mesh filename="./meshes/Body_Hip.stl"/>
       </geometry>
     </collision>
   </link>
@@ -927,7 +927,7 @@
     </inertial>
     <visual>
       <geometry>
-        <mesh filename="./meshes/Body_LHY_vis.dae"/>
+        <mesh filename="./meshes/Body_LHY.stl"/>
       </geometry>
       <material name="random">
         <color rgba="0.866667 0.866667 0.866667 1"/>
@@ -935,7 +935,7 @@
     </visual>
     <collision>
       <geometry>
-        <mesh filename="./meshes/Body_LHY_col.dae"/>
+        <mesh filename="./meshes/Body_LHY.stl"/>
       </geometry>
     </collision>
   </link>
@@ -947,7 +947,7 @@
     </inertial>
     <visual>
       <geometry>
-        <mesh filename="./meshes/Body_LHR_vis.dae"/>
+        <mesh filename="./meshes/Body_LHR.stl"/>
       </geometry>
       <material name="random">
         <color rgba="0.866667 0.866667 0.866667 1"/>
@@ -955,7 +955,7 @@
     </visual>
     <collision>
       <geometry>
-        <mesh filename="./meshes/Body_LHR_col.dae"/>
+        <mesh filename="./meshes/Body_LHR.stl"/>
       </geometry>
     </collision>
   </link>
@@ -967,7 +967,7 @@
     </inertial>
     <visual>
       <geometry>
-        <mesh filename="./meshes/Body_LHP_vis.dae"/>
+        <mesh filename="./meshes/Body_LHP.stl"/>
       </geometry>
       <material name="random">
         <color rgba="0.866667 0.866667 0.866667 1"/>
@@ -975,7 +975,7 @@
     </visual>
     <collision>
       <geometry>
-        <mesh filename="./meshes/Body_LHP_col.dae"/>
+        <mesh filename="./meshes/Body_LHP.stl"/>
       </geometry>
     </collision>
   </link>
@@ -995,7 +995,7 @@
     </visual>
     <collision>
       <geometry>
-        <mesh filename="./meshes/Body_LKN_col.dae"/>
+        <mesh filename="./meshes/Body_LKN.stl"/>
       </geometry>
     </collision>
   </link>
@@ -1007,7 +1007,7 @@
     </inertial>
     <visual>
       <geometry>
-        <mesh filename="./meshes/Body_LAP_vis.dae"/>
+        <mesh filename="./meshes/Body_LAP.stl"/>
       </geometry>
       <material name="random">
         <color rgba="0.866667 0.866667 0.866667 1"/>
@@ -1015,7 +1015,7 @@
     </visual>
     <collision>
       <geometry>
-        <mesh filename="./meshes/Body_LAP_col.dae"/>
+        <mesh filename="./meshes/Body_LAP.stl"/>
       </geometry>
     </collision>
   </link>
@@ -1027,7 +1027,7 @@
     </inertial>
     <visual>
       <geometry>
-        <mesh filename="./meshes/Body_LAR_vis.dae"/>
+        <mesh filename="./meshes/Body_LAR.stl"/>
       </geometry>
       <material name="random">
         <color rgba="0.866667 0.866667 0.866667 1"/>
@@ -1035,7 +1035,7 @@
     </visual>
     <collision>
       <geometry>
-        <mesh filename="./meshes/Body_LAR_col.dae"/>
+        <mesh filename="./meshes/Body_LAR.stl"/>
       </geometry>
     </collision>
   </link>
@@ -1055,7 +1055,7 @@
     </visual>
     <collision>
       <geometry>
-        <mesh filename="./meshes/Body_RHY_col.dae"/>
+        <mesh filename="./meshes/Body_RHY.stl"/>
       </geometry>
     </collision>
   </link>
@@ -1075,7 +1075,7 @@
     </visual>
     <collision>
       <geometry>
-        <mesh filename="./meshes/Body_RHR_col.dae"/>
+        <mesh filename="./meshes/Body_RHR.stl"/>
       </geometry>
     </collision>
   </link>
@@ -1095,7 +1095,7 @@
     </visual>
     <collision>
       <geometry>
-        <mesh filename="./meshes/Body_RHP_col.dae"/>
+        <mesh filename="./meshes/Body_RHP.stl"/>
       </geometry>
     </collision>
   </link>
@@ -1115,7 +1115,7 @@
     </visual>
     <collision>
       <geometry>
-        <mesh filename="./meshes/Body_RKN_col.dae"/>
+        <mesh filename="./meshes/Body_RKN.stl"/>
       </geometry>
     </collision>
   </link>
@@ -1135,7 +1135,7 @@
     </visual>
     <collision>
       <geometry>
-        <mesh filename="./meshes/Body_RAP_col.dae"/>
+        <mesh filename="./meshes/Body_RAP.stl"/>
       </geometry>
     </collision>
   </link>
@@ -1155,7 +1155,7 @@
     </visual>
     <collision>
       <geometry>
-        <mesh filename="./meshes/Body_RAR_col.dae"/>
+        <mesh filename="./meshes/Body_RAR.stl"/>
       </geometry>
     </collision>
   </link>

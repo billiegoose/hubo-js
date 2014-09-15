@@ -1,0 +1,16 @@
+.container {
+  width: 200px;
+  height: 200px;
+  border: 1px solid #000;
+  position: relative;
+}
+.container canvas {
+  border: 1px solid #000;
+  left: 0px;
+  top: 0px;
+}
+.container .caption {
+  position: absolute;
+  left: 1em;
+  top: 1em;
+}

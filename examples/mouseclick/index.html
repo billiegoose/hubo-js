@@ -32,8 +32,11 @@
     <!-- Used for rendering 3D Hubo -->
     <script src="../../lib/three/three.min.js"></script>
     <script src="../../lib/three/Detector.js"></script>
-    <script src="../../lib/three/ColladaLoader.js"></script>
-    <script src="../../lib/three/STLLoader.js"></script>
+    <!-- I migrated the hubo model from Collada to binary STL, which is twice as compact.-->
+    <!-- script(src='../../lib/three/ColladaLoader.js')-->
+    <!-- I modified STLLoader.js to use BufferGeometry, which uses less memory.-->
+    <!-- script(src='../../lib/three/STLLoader.js')-->
+    <script src="../../src/BufferSTLLoader.js"></script>
     <script src="../../lib/three/TrackballControls.js"></script>
     <!-- Our code -->
     <script src="../../lib/dict/dict.js"></script>
