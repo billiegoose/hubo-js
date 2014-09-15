@@ -3,7 +3,6 @@
   "name": "hubo-js",
   "version": "0.0.0",
   "description": "",
-  "main": "node node_modules\\docpad\\bin\\docpad run",
   "author": "William Hilton <wmhilton@gmail.com> (http://github.com/wmhilton)",
   "license": "MIT",
   "homepage": "http://github.com/wmhilton/hubo-js",
@@ -24,7 +23,6 @@
     "docpad-plugin-livereload": "~2.6.0"
   },
   "scripts": {
-    "start": "\"node_modules/.bin/docpad\" run",
-    "test": "\"node_modules/.bin/docpad\" generate --env static"
+    "start": "node server.js"
   }
 }
